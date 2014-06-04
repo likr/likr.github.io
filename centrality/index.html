@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html ng-app="centrality">
+<head>
+<meta charset="utf-8"/>
+<title>Centrality</title>
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+<style>
+.domain {
+  fill: none;
+  stroke: black;
+}
+.tick line {
+  stroke: black;
+}
+svg {
+  font: 10px sans-serif;
+}
+.axis, .frame {
+  shape-rendering: crispEdges;
+}
+.axis line {
+  stroke: #ddd;
+}
+.axis path {
+  display: none;
+}
+.frame {
+  fill: none;
+  stroke: #aaa;
+}
+circle {
+  fill-opacity: .7;
+}
+circle.inactive {
+  fill: #ccc !important;
+}
+.extent {
+  fill: #000;
+  fill-opacity: .125;
+  stroke: #fff;
+}
+</style>
+</head>
+<body>
+<div class="container-fluid" ng-controller="MainController">
+  <h1>Centrality</h1>
+  <div>
+    <div class="row">
+      <div class="col-xs-6" id="grid-wrapper">
+        <svg id="grid"/>
+      </div>
+      <div class="col-xs-6">
+        <form>
+          <div class="form-group">
+            <label>Dataset</label>
+            <select class="form-control" ng-model="dataset" ng-options="d.url as d.name for d in datasets"></select>
+          </div>
+          <div class="form-group">
+            <label>Threshold</label>
+            <input type="number" class="form-control" min="0" max="1" step="0.05" ng-model="threshold"/>
+          </div>
+          <div class="form-group">
+            <label>Filter</label>
+            <select class="form-control" ng-model="centrality" ng-options="c.value as c.name for c in centralities"></select>
+          </div>
+          <div class="form-group">
+            <label>Number of visible node</label>
+            <p>{{nVisibleNode()}}</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <h2>Frequency Distribution</h2>
+  <div id="bargraphs">
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
+    </div>
+    <div class="col-xs-6">
+      <table class="table">
+        <tr>
+          <th class="col-xs-4">Name</th>
+          <th class="col-xs-4">Set Size</th>
+          <th class="col-xs-4">R with weight</th>
+        </tr>
+        <tr ng-repeat="centrality in centralities">
+          <td>{{centrality.name}}</td>
+          <td>{{centrality.setsize}}</td>
+          <td>{{centrality.R}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/d3/d3.min.js"></script>
+<script src="dagre.js"></script>
+<script src="egrid-core.js"></script>
+<script src="centrality.js"></script>
+</body>
+</html>
