@@ -117,6 +117,7 @@ def main():
     #parse('university')
     parse('visualization')
     parse('society')
+    parse('house')
 
 if __name__ == '__main__':
     main()

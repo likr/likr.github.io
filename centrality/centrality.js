@@ -133,11 +133,12 @@ var app = angular.module('centrality', []);
 
 app.controller('MainController', function($scope, $http) {
   $scope.datasets = [
-    {name: 'シャープペンシル', url: 'data/pen.json'},
-    {name: '研究環境', url: 'data/research.json'},
-    {name: 'ビジュアル分析', url: 'data/visualization.json'},
     {name: '学会満足度', url: 'data/society.json'},
-    {name: '海外旅行', url: 'data/trip.json'}
+    {name: '研究環境', url: 'data/research.json'},
+    {name: 'シャープペンシル', url: 'data/pen.json'},
+    {name: '海外旅行', url: 'data/trip.json'},
+    {name: 'ビジュアル分析', url: 'data/visualization.json'},
+    {name: '住宅居間', url: 'data/house.json'}
   ];
   $scope.centralities = [
     {value: 'weight', name: 'Weight'},
@@ -155,7 +156,7 @@ app.controller('MainController', function($scope, $http) {
   ];
 
   $scope.dataset = 'data/pen.json';
-  $scope.centrality = 'degree';
+  $scope.centrality = 'katz';
   $scope.threshold = 0;
 
   var svgSize = $('div#grid-wrapper').width();
