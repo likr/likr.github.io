@@ -108,8 +108,8 @@ function scatterMatrix(data, traits) {
     function brushmove(p) {
       var e = brush.extent();
       svg.selectAll("circle").classed("inactive", function(d) {
-        return e[0][0] > d[p.x] || d[p.x] > e[1][0]
-            || e[0][1] > d[p.y] || d[p.y] > e[1][1];
+        return e[0][0] > d[p.x] || d[p.x] > e[1][0] ||
+               e[0][1] > d[p.y] || d[p.y] > e[1][1];
       });
     }
 
@@ -125,7 +125,7 @@ function scatterMatrix(data, traits) {
     }
 
     d3.select(self.frameElement).style("height", size * n + padding + 20 + "px");
-  }
+  };
 }
 
 
@@ -175,7 +175,7 @@ app.controller('MainController', function($scope, $http) {
     $http.get($scope.dataset)
       .success(function(data) {
         var grid = graph(data.nodes, data.links);
-        var extents = {}
+        var extents = {};
         $scope.centralities.forEach(function(c) {
           extents[c.value] = d3.extent(grid.vertices(), function(u) {
             return grid.get(u)[c.value];
@@ -214,13 +214,13 @@ app.controller('MainController', function($scope, $http) {
         $scope.centralities.forEach(function(c, i) {
           var xBar = grid.vertices().reduce(function(sum, u) {
             return sum + grid.get(u)[c.value];
-          }, 0) / n
+          }, 0) / n;
           var sigmaX = grid.vertices().reduce(function(sum, u) {
             var val = (grid.get(u)[c.value] - xBar);
             return sum + val * val;
           }, 0);
           var sigmaXY = grid.vertices().reduce(function(sum, u) {
-            return sum + (grid.get(u)[c.value] - xBar) * (grid.get(u).weight - yBar)
+            return sum + (grid.get(u)[c.value] - xBar) * (grid.get(u).weight - yBar);
           }, 0);
           c.R = sigmaXY / Math.sqrt(sigmaX * sigmaY);
           var values = {};
@@ -231,7 +231,7 @@ app.controller('MainController', function($scope, $http) {
             }
             values[value]++;
           });
-          if (i % 3 == 0) {
+          if (i % 3 === 0) {
             rowSelection = bargraphsSelection
               .append('div')
               .classed('row', true);
@@ -258,14 +258,14 @@ app.controller('MainController', function($scope, $http) {
           var accLines = lines.map(function(d) {
             return {key: d.key, value: acc += d.value};
           });
-          var xExtent = d3.extent(lines, function(d) {return +d.key});
+          var xExtent = d3.extent(lines, function(d) {return +d.key;});
           var xMargin = (xExtent[1] - xExtent[0]) / 20;
           var xScale = d3.scale.linear()
             .domain([xExtent[0] - xMargin, xExtent[1] + xMargin])
             .range([0, 1])
             .nice();
           var yScale = d3.scale.linear()
-            .domain([0, Math.max(10, d3.max(lines, function(d) {return d.value}))])
+            .domain([0, Math.max(10, d3.max(lines, function(d) {return d.value;}))])
             .range([1, 0]);
           var yScale2 = d3.scale.linear()
             .domain([0, grid.vertices().length])
@@ -286,8 +286,8 @@ app.controller('MainController', function($scope, $http) {
             .tickFormat(d3.format('f'))
             .orient('right');
           var accLine = d3.svg.line()
-            .x(function(d) {return xScale(+d.key)})
-            .y(function(d) {return yScale2(d.value)});
+            .x(function(d) {return xScale(+d.key);})
+            .y(function(d) {return yScale2(d.value);});
           selection.append('g')
             .attr('transform', 'translate(' + margin + ',' + margin + ')scale(' + scale + ')')
             .selectAll('line')
