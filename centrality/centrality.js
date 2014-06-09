@@ -246,8 +246,9 @@ app.controller('MainController', function($scope, $http) {
             .append('svg')
             .attr({
               width: size,
-              height: size
-            });
+              height: size,
+            })
+            .call(d3.downloadable({filename: 'chart.svg'}));
 
           var lines = d3.entries(values);
           c.setsize = lines.length;
@@ -329,6 +330,13 @@ app.controller('MainController', function($scope, $http) {
           selection.append('g')
             .attr('transform', 'translate(' + (margin + plotSize) + ',' + margin + ')')
             .call(yAxis2);
+          selection.selectAll('.tick line')
+            .style('stroke', '#ddd');
+          selection.selectAll('path.domain')
+            .style({
+              fill: 'none',
+              stroke: 'black'
+            });
 
           //d3.select('#scatter-matrix svg')
           //  .call(scatterMatrix(
