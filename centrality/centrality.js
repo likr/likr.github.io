@@ -16,7 +16,8 @@ function scatterMatrix(data, traits) {
       .ticks(5);
   var color = d3.scale.category10();
 
-  return function(selection) {
+  return function(container) {
+    var selection = container.append('svg');
     var domainByTrait = {},
         n = traits.length;
 
@@ -125,6 +126,25 @@ function scatterMatrix(data, traits) {
     }
 
     d3.select(self.frameElement).style("height", size * n + padding + 20 + "px");
+
+    d3.selectAll('.axis line')
+      .style('stroke', '#ddd');
+    d3.selectAll('.axis path')
+      .style('display', 'none');
+    d3.selectAll('circle')
+      .style('fill-opacity', 0.5);
+    d3.selectAll('.extent')
+      .style({
+        fill: 'black',
+        'fill-opacity': 0.125,
+        stroke: 'white'
+      });
+    d3.selectAll('.frame')
+      .style({
+        fill: 'none',
+        stroke: '#aaa'
+      });
+
   };
 }
 
@@ -137,6 +157,7 @@ app.controller('MainController', function($scope, $http) {
     {name: '研究環境', url: 'data/research.json'},
     {name: 'シャープペンシル', url: 'data/pen.json'},
     {name: '海外旅行', url: 'data/trip.json'},
+    {name: '大学', url: 'data/university.json'},
     {name: 'ビジュアル分析', url: 'data/visualization.json'},
     {name: '住宅居間', url: 'data/house.json'}
   ];
@@ -146,13 +167,7 @@ app.controller('MainController', function($scope, $http) {
     {value: 'closeness', name: 'Closeness Centrality'},
     {value: 'betweenness', name: 'Betweenness Centrality'},
     {value: 'eigenvector', name: 'Eigenvector Centrality'},
-    {value: 'katz', name: 'Katz Centrality'},
-    {value: 'average', name: 'Average'},
-    {value: 'naverage', name: 'Normalized Average'},
-    {value: 'average2', name: 'Average without Katz'},
-    {value: 'naverage2', name: 'Normalized Average without Katz'},
-    {value: 'pca1', name: 'PCA1'},
-    {value: 'pca2', name: 'PCA2'}
+    {value: 'katz', name: 'Katz Centrality'}
   ];
 
   $scope.dataset = 'data/pen.json';
@@ -164,7 +179,8 @@ app.controller('MainController', function($scope, $http) {
     .enableZoom(false)
     .size([svgSize, svgSize]);
   var gridSelection = d3.select('svg#grid')
-    .call(egm.css());
+    .call(egm.css())
+    .call(d3.downloadable({filename: 'network.svg'}));
   var graph = egrid.core.graph.graph();
 
   $scope.nVisibleNode = function() {
@@ -338,11 +354,14 @@ app.controller('MainController', function($scope, $http) {
               stroke: 'black'
             });
 
-          //d3.select('#scatter-matrix svg')
-          //  .call(scatterMatrix(
-          //    data.nodes,
-          //    ['weight', 'degree', 'closeness', 'betweenness', 'eigenvector', 'katz', 'average', 'naverage']
-          //  ));
+          d3.select('#scatter-matrix svg').remove();
+          d3.select('#scatter-matrix')
+            .call(scatterMatrix(
+              data.nodes,
+              ['weight', 'degree', 'closeness', 'betweenness', 'eigenvector', 'katz']
+            ))
+            .select('svg')
+            .call(d3.downloadable({filename: 'scatterplot.svg'}));
         });
       });
   });

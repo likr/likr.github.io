@@ -4,29 +4,6 @@
 <meta charset="utf-8"/>
 <title>Centrality</title>
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
-<style>
-svg {
-  font: 10px sans-serif;
-}
-.axis, .frame {
-  shape-rendering: crispEdges;
-}
-.frame {
-  fill: none;
-  stroke: #aaa;
-}
-circle {
-  fill-opacity: .7;
-}
-circle.inactive {
-  fill: #ccc !important;
-}
-.extent {
-  fill: #000;
-  fill-opacity: .125;
-  stroke: #fff;
-}
-</style>
 </head>
 <body>
 <div class="container-fluid" ng-controller="MainController">
@@ -55,29 +32,26 @@ circle.inactive {
             <p>{{nVisibleNode()}}</p>
           </div>
         </form>
+        <table class="table">
+          <tr>
+            <th class="col-xs-4">Name</th>
+            <th class="col-xs-4">Set Size</th>
+            <th class="col-xs-4">R with weight</th>
+          </tr>
+          <tr ng-repeat="centrality in centralities">
+            <td>{{centrality.name}}</td>
+            <td>{{centrality.setsize}}</td>
+            <td>{{centrality.R}}</td>
+          </tr>
+        </table>
       </div>
     </div>
   </div>
   <h2>Frequency Distribution</h2>
   <div id="bargraphs">
   </div>
-  <div class="row">
-    <div class="col-xs-6">
-    </div>
-    <div class="col-xs-6">
-      <table class="table">
-        <tr>
-          <th class="col-xs-4">Name</th>
-          <th class="col-xs-4">Set Size</th>
-          <th class="col-xs-4">R with weight</th>
-        </tr>
-        <tr ng-repeat="centrality in centralities">
-          <td>{{centrality.name}}</td>
-          <td>{{centrality.setsize}}</td>
-          <td>{{centrality.R}}</td>
-        </tr>
-      </table>
-    </div>
+  <h2>Scatter Plot Matrix</h2>
+  <div id="scatter-matrix">
   </div>
 </div>
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
