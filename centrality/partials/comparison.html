@@ -1,0 +1,47 @@
+<div>
+  <div>
+    <div class="row">
+      <div class="col-xs-6" id="grid-wrapper">
+        <svg id="grid"/>
+      </div>
+      <div class="col-xs-6">
+        <form>
+          <div class="form-group">
+            <label>Dataset</label>
+            <select class="form-control" ng-model="dataset" ng-options="d.url as d.name for d in datasets"></select>
+          </div>
+          <div class="form-group">
+            <label>Threshold</label>
+            <input type="number" class="form-control" min="0" max="1" step="0.05" ng-model="threshold"/>
+          </div>
+          <div class="form-group">
+            <label>Filter</label>
+            <select class="form-control" ng-model="centrality" ng-options="c.value as c.name for c in centralities"></select>
+          </div>
+          <div class="form-group">
+            <label>Number of visible node</label>
+            <p>{{nVisibleNode()}}</p>
+          </div>
+        </form>
+        <table class="table">
+          <tr>
+            <th class="col-xs-4">Name</th>
+            <th class="col-xs-4">Set Size</th>
+            <th class="col-xs-4">R with weight</th>
+          </tr>
+          <tr ng-repeat="centrality in centralities">
+            <td>{{centrality.name}}</td>
+            <td>{{centrality.setsize}}</td>
+            <td>{{centrality.R}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <h2>Frequency Distribution</h2>
+  <div id="bargraphs">
+  </div>
+  <h2>Scatter Plot Matrix</h2>
+  <div id="scatter-matrix">
+  </div>
+</div>

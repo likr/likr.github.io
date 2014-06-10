@@ -144,32 +144,23 @@ function scatterMatrix(data, traits) {
         fill: 'none',
         stroke: '#aaa'
       });
-
   };
 }
 
 
-var app = angular.module('centrality', []);
+var app = angular.module('centrality', ['ui.router']);
 
-app.controller('MainController', function($scope, $http) {
-  $scope.datasets = [
-    {name: '学会満足度', url: 'data/society.json'},
-    {name: '研究環境', url: 'data/research.json'},
-    {name: 'シャープペンシル', url: 'data/pen.json'},
-    {name: '海外旅行', url: 'data/trip.json'},
-    {name: '大学', url: 'data/university.json'},
-    {name: 'ビジュアル分析', url: 'data/visualization.json'},
-    {name: '住宅居間', url: 'data/house.json'}
-  ];
-  $scope.centralities = [
-    {value: 'weight', name: 'Weight'},
-    {value: 'degree', name: 'Degree Centrality'},
-    {value: 'closeness', name: 'Closeness Centrality'},
-    {value: 'betweenness', name: 'Betweenness Centrality'},
-    {value: 'eigenvector', name: 'Eigenvector Centrality'},
-    {value: 'katz', name: 'Katz Centrality'}
-  ];
+app.factory('getGrid', function($http) {
+  return function(url, callback) {
+    var graph = egrid.core.graph.graph();
+    $http.get(url)
+      .success(function(data) {
+        callback(graph(data.nodes, data.links));
+      });
+  };
+});
 
+app.controller('ComparisonController', function($scope, getGrid) {
   $scope.dataset = 'data/pen.json';
   $scope.centrality = 'katz';
   $scope.threshold = 0;
@@ -181,189 +172,186 @@ app.controller('MainController', function($scope, $http) {
   var gridSelection = d3.select('svg#grid')
     .call(egm.css())
     .call(d3.downloadable({filename: 'network.svg'}));
-  var graph = egrid.core.graph.graph();
 
   $scope.nVisibleNode = function() {
     return gridSelection.selectAll('g.vertex').size();
   };
 
   $scope.$watch('dataset', function(oldValue, newValue) {
-    $http.get($scope.dataset)
-      .success(function(data) {
-        var grid = graph(data.nodes, data.links);
-        var extents = {};
-        $scope.centralities.forEach(function(c) {
-          extents[c.value] = d3.extent(grid.vertices(), function(u) {
-            return grid.get(u)[c.value];
-          });
-        });
-        egm
-          .vertexVisibility(function(data) {
-            var c = $scope.centrality;
-            var s = (data[c] - extents[c][0]) / (extents[c][1] - extents[c][0]);
-            return s >= $scope.threshold;
-          })
-          .vertexColor(function(data) {
-            var c = $scope.centrality;
-            var h = 240 * (extents[c][1] - data[c]) / (extents[c][1] - extents[c][0]);
-            return d3.hsl(h, 1, 0.5).toString();
-          });
-        gridSelection
-          .datum(null)
-          .call(egm)
-          .datum(grid)
-          .call(egm)
-          .call(egm.center());
-
-        var margin = 35;
-        var bargraphsSelection = d3.select('div#bargraphs');
-        bargraphsSelection.selectAll('div').remove();
-        var rowSelection;
-        var n = grid.vertices().length;
-        var yBar = grid.vertices().reduce(function(sum, u) {
-          return sum + grid.get(u).weight;
-        }, 0) / n;
-        var sigmaY = grid.vertices().reduce(function(sum, u) {
-          var val = (grid.get(u).weight - yBar);
-          return sum + val * val;
-        }, 0);
-        $scope.centralities.forEach(function(c, i) {
-          var xBar = grid.vertices().reduce(function(sum, u) {
-            return sum + grid.get(u)[c.value];
-          }, 0) / n;
-          var sigmaX = grid.vertices().reduce(function(sum, u) {
-            var val = (grid.get(u)[c.value] - xBar);
-            return sum + val * val;
-          }, 0);
-          var sigmaXY = grid.vertices().reduce(function(sum, u) {
-            return sum + (grid.get(u)[c.value] - xBar) * (grid.get(u).weight - yBar);
-          }, 0);
-          c.R = sigmaXY / Math.sqrt(sigmaX * sigmaY);
-          var values = {};
-          grid.vertices().forEach(function(u) {
-            var value = grid.get(u)[c.value];
-            if (values[value] === undefined) {
-              values[value] = 0;
-            }
-            values[value]++;
-          });
-          if (i % 3 === 0) {
-            rowSelection = bargraphsSelection
-              .append('div')
-              .classed('row', true);
-          }
-          var wrapperSelection = rowSelection
-            .append('div')
-            .classed('col-xs-4', true);
-          var size = $(wrapperSelection.node()).width();
-          var plotSize = size - margin * 2;
-          var scale = plotSize;
-          var selection = wrapperSelection
-            .append('svg')
-            .attr({
-              width: size,
-              height: size,
-            })
-            .call(d3.downloadable({filename: 'chart.svg'}));
-
-          var lines = d3.entries(values);
-          c.setsize = lines.length;
-          lines.sort(function(l1, l2) {
-            return d3.ascending(+l1.key, +l2.key);
-          });
-          var acc = 0;
-          var accLines = lines.map(function(d) {
-            return {key: d.key, value: acc += d.value};
-          });
-          var xExtent = d3.extent(lines, function(d) {return +d.key;});
-          var xMargin = (xExtent[1] - xExtent[0]) / 20;
-          var xScale = d3.scale.linear()
-            .domain([xExtent[0] - xMargin, xExtent[1] + xMargin])
-            .range([0, 1])
-            .nice();
-          var yScale = d3.scale.linear()
-            .domain([0, Math.max(10, d3.max(lines, function(d) {return d.value;}))])
-            .range([1, 0]);
-          var yScale2 = d3.scale.linear()
-            .domain([0, grid.vertices().length])
-            .range([1, 0]);
-          var xAxisScale = xScale.copy().range([0, plotSize]);
-          var yAxisScale = yScale.copy().range([plotSize, 1]);
-          var yAxisScale2 = yScale2.copy().range([plotSize, 1]);
-          var xAxis = d3.svg.axis()
-            .scale(xAxisScale)
-            .ticks(5)
-            .orient('bottom');
-          var yAxis = d3.svg.axis()
-            .scale(yAxisScale)
-            .tickFormat(d3.format('f'))
-            .orient('left');
-          var yAxis2 = d3.svg.axis()
-            .scale(yAxisScale2)
-            .tickFormat(d3.format('f'))
-            .orient('right');
-          var accLine = d3.svg.line()
-            .x(function(d) {return xScale(+d.key);})
-            .y(function(d) {return yScale2(d.value);});
-          selection.append('g')
-            .attr('transform', 'translate(' + margin + ',' + margin + ')scale(' + scale + ')')
-            .selectAll('line')
-            .data(lines)
-            .enter()
-            .append('line')
-            .attr({
-              x1: function(d) {
-                return xScale(d.key);
-              },
-              y1: 1,
-              x2: function(d) {
-                return xScale(d.key);
-              },
-              y2: function(d) {
-                return yScale(d.value);
-              },
-              stroke: 'blue',
-              'stroke-width': 1 / scale,
-              'stroke-opacity': 0.3
-            });
-          selection.select('g')
-            .append('path')
-            .attr({
-              d: accLine(accLines),
-              fill: 'none',
-              stroke: 'black',
-              'stroke-width': 1 / scale
-            });
-          selection.append('text')
-            .text(c.value)
-            .attr('transform', 'translate(' + (margin + 10) + ',' + margin + ')');
-          selection.append('g')
-            .attr('transform', 'translate(' + margin + ',' + (margin + plotSize) + ')')
-            .call(xAxis);
-          selection.append('g')
-            .attr('transform', 'translate(' + margin + ',' + margin + ')')
-            .call(yAxis);
-          selection.append('g')
-            .attr('transform', 'translate(' + (margin + plotSize) + ',' + margin + ')')
-            .call(yAxis2);
-          selection.selectAll('.tick line')
-            .style('stroke', '#ddd');
-          selection.selectAll('path.domain')
-            .style({
-              fill: 'none',
-              stroke: 'black'
-            });
-
-          d3.select('#scatter-matrix svg').remove();
-          d3.select('#scatter-matrix')
-            .call(scatterMatrix(
-              data.nodes,
-              ['weight', 'degree', 'closeness', 'betweenness', 'eigenvector', 'katz']
-            ))
-            .select('svg')
-            .call(d3.downloadable({filename: 'scatterplot.svg'}));
+    getGrid($scope.dataset, function(grid) {
+      var extents = {};
+      $scope.centralities.forEach(function(c) {
+        extents[c.value] = d3.extent(grid.vertices(), function(u) {
+          return grid.get(u)[c.value];
         });
       });
+      egm
+        .vertexVisibility(function(data) {
+          var c = $scope.centrality;
+          var s = (data[c] - extents[c][0]) / (extents[c][1] - extents[c][0]);
+          return s >= $scope.threshold;
+        })
+        .vertexColor(function(data) {
+          var c = $scope.centrality;
+          var h = 240 * (extents[c][1] - data[c]) / (extents[c][1] - extents[c][0]);
+          return d3.hsl(h, 1, 0.5).toString();
+        });
+      gridSelection
+        .datum(null)
+        .call(egm)
+        .datum(grid)
+        .call(egm)
+        .call(egm.center());
+
+      var margin = 35;
+      var bargraphsSelection = d3.select('div#bargraphs');
+      bargraphsSelection.selectAll('div').remove();
+      var rowSelection;
+      var n = grid.vertices().length;
+      var yBar = grid.vertices().reduce(function(sum, u) {
+        return sum + grid.get(u).weight;
+      }, 0) / n;
+      var sigmaY = grid.vertices().reduce(function(sum, u) {
+        var val = (grid.get(u).weight - yBar);
+        return sum + val * val;
+      }, 0);
+      $scope.centralities.forEach(function(c, i) {
+        var xBar = grid.vertices().reduce(function(sum, u) {
+          return sum + grid.get(u)[c.value];
+        }, 0) / n;
+        var sigmaX = grid.vertices().reduce(function(sum, u) {
+          var val = (grid.get(u)[c.value] - xBar);
+          return sum + val * val;
+        }, 0);
+        var sigmaXY = grid.vertices().reduce(function(sum, u) {
+          return sum + (grid.get(u)[c.value] - xBar) * (grid.get(u).weight - yBar);
+        }, 0);
+        c.R = sigmaXY / Math.sqrt(sigmaX * sigmaY);
+        var values = {};
+        grid.vertices().forEach(function(u) {
+          var value = grid.get(u)[c.value];
+          if (values[value] === undefined) {
+            values[value] = 0;
+          }
+          values[value]++;
+        });
+        if (i % 3 === 0) {
+          rowSelection = bargraphsSelection
+            .append('div')
+            .classed('row', true);
+        }
+        var wrapperSelection = rowSelection
+          .append('div')
+          .classed('col-xs-4', true);
+        var size = $(wrapperSelection.node()).width();
+        var plotSize = size - margin * 2;
+        var scale = plotSize;
+        var selection = wrapperSelection
+          .append('svg')
+          .attr({
+            width: size,
+            height: size,
+          })
+          .call(d3.downloadable({filename: 'chart.svg'}));
+
+        var lines = d3.entries(values);
+        c.setsize = lines.length;
+        lines.sort(function(l1, l2) {
+          return d3.ascending(+l1.key, +l2.key);
+        });
+        var acc = 0;
+        var accLines = lines.map(function(d) {
+          return {key: d.key, value: acc += d.value};
+        });
+        var xExtent = d3.extent(lines, function(d) {return +d.key;});
+        var xMargin = (xExtent[1] - xExtent[0]) / 20;
+        var xScale = d3.scale.linear()
+          .domain([xExtent[0] - xMargin, xExtent[1] + xMargin])
+          .range([0, 1])
+          .nice();
+        var yScale = d3.scale.linear()
+          .domain([0, Math.max(10, d3.max(lines, function(d) {return d.value;}))])
+          .range([1, 0]);
+        var yScale2 = d3.scale.linear()
+          .domain([0, grid.vertices().length])
+          .range([1, 0]);
+        var xAxisScale = xScale.copy().range([0, plotSize]);
+        var yAxisScale = yScale.copy().range([plotSize, 1]);
+        var yAxisScale2 = yScale2.copy().range([plotSize, 1]);
+        var xAxis = d3.svg.axis()
+          .scale(xAxisScale)
+          .ticks(5)
+          .orient('bottom');
+        var yAxis = d3.svg.axis()
+          .scale(yAxisScale)
+          .tickFormat(d3.format('f'))
+          .orient('left');
+        var yAxis2 = d3.svg.axis()
+          .scale(yAxisScale2)
+          .tickFormat(d3.format('f'))
+          .orient('right');
+        var accLine = d3.svg.line()
+          .x(function(d) {return xScale(+d.key);})
+          .y(function(d) {return yScale2(d.value);});
+        selection.append('g')
+          .attr('transform', 'translate(' + margin + ',' + margin + ')scale(' + scale + ')')
+          .selectAll('line')
+          .data(lines)
+          .enter()
+          .append('line')
+          .attr({
+            x1: function(d) {
+              return xScale(d.key);
+            },
+            y1: 1,
+            x2: function(d) {
+              return xScale(d.key);
+            },
+            y2: function(d) {
+              return yScale(d.value);
+            },
+            stroke: 'blue',
+            'stroke-width': 1 / scale,
+            'stroke-opacity': 0.3
+          });
+        selection.select('g')
+          .append('path')
+          .attr({
+            d: accLine(accLines),
+            fill: 'none',
+            stroke: 'black',
+            'stroke-width': 1 / scale
+          });
+        selection.append('text')
+          .text(c.value)
+          .attr('transform', 'translate(' + (margin + 10) + ',' + margin + ')');
+        selection.append('g')
+          .attr('transform', 'translate(' + margin + ',' + (margin + plotSize) + ')')
+          .call(xAxis);
+        selection.append('g')
+          .attr('transform', 'translate(' + margin + ',' + margin + ')')
+          .call(yAxis);
+        selection.append('g')
+          .attr('transform', 'translate(' + (margin + plotSize) + ',' + margin + ')')
+          .call(yAxis2);
+        selection.selectAll('.tick line')
+          .style('stroke', '#ddd');
+        selection.selectAll('path.domain')
+          .style({
+            fill: 'none',
+            stroke: 'black'
+          });
+
+        d3.select('#scatter-matrix svg').remove();
+        d3.select('#scatter-matrix')
+          .call(scatterMatrix(
+            grid.vertices().map(function(u) {return grid.get(u);}),
+            ['weight', 'degree', 'closeness', 'betweenness', 'eigenvector', 'katz']
+          ))
+          .select('svg')
+          .call(d3.downloadable({filename: 'scatterplot.svg'}));
+      });
+    });
   });
 
   $scope.$watch('centrality', function(oldValue, newValue) {
@@ -390,4 +378,81 @@ app.controller('MainController', function($scope, $http) {
         .call(egm.resize(svgSize, svgSize))
         .call(egm.center());
     });
+});
+
+app.controller('ApplicationController', function($scope, getGrid) {
+  var width = $('div#grid-wrapper').width();
+  var height = $(window).height();
+  var egm = egrid.core.egm()
+    .enableZoom(false)
+    .size([width, height]);
+  var gridSelection = d3.select('svg#grid')
+    .call(egm.css({backgroundColor: 'white'}))
+    .call(d3.downloadable({filename: 'network.svg'}));
+
+  function draw(grid) {
+    var scale = d3.scale.linear()
+      .domain(d3.extent(grid.vertices(), function(u) {
+        return grid.get(u).katz;
+      }))
+      .range([1, 10]);
+    egm.vertexScale(function(d) {
+      return scale(d.katz);
+    });
+    gridSelection
+      .datum(grid)
+      .call(egm)
+      .call(egm.center());
+  }
+
+  getGrid('data/trip.json', draw);
+
+  $scope.$watch('filter', function(newValue, oldValue) {
+  });
+
+  d3.select(window)
+    .on('resize', function() {
+      var width = $('div#grid-wrapper').width();
+      var height = $(window).height();
+      egm.size([width, height]);
+      gridSelection
+        .call(egm.resize(width, height))
+        .call(egm.center());
+    });
+});
+
+app.config(function($stateProvider, $urlRouterProvider) {
+  $stateProvider
+    .state('comparison', {
+      controller: 'ComparisonController',
+      templateUrl: 'partials/comparison.html',
+      url: '/comparison'
+    })
+    .state('application', {
+      controller: 'ApplicationController',
+      templateUrl: 'partials/application.html',
+      url: '/application'
+    });
+  $urlRouterProvider
+    .otherwise('/comparison');
+});
+
+app.run(function($rootScope) {
+  $rootScope.datasets = [
+    {name: '学会満足度', url: 'data/society.json'},
+    {name: '研究環境', url: 'data/research.json'},
+    {name: 'シャープペンシル', url: 'data/pen.json'},
+    {name: '海外旅行', url: 'data/trip.json'},
+    {name: '大学', url: 'data/university.json'},
+    {name: 'ビジュアル分析', url: 'data/visualization.json'},
+    {name: '住宅居間', url: 'data/house.json'}
+  ];
+  $rootScope.centralities = [
+    {value: 'weight', name: 'Weight'},
+    {value: 'degree', name: 'Degree Centrality'},
+    {value: 'closeness', name: 'Closeness Centrality'},
+    {value: 'betweenness', name: 'Betweenness Centrality'},
+    {value: 'eigenvector', name: 'Eigenvector Centrality'},
+    {value: 'katz', name: 'Katz Centrality'}
+  ];
 });
