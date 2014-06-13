@@ -384,7 +384,8 @@ app.controller('ApplicationController', function($scope, getGrid) {
   var width = $('div#grid-wrapper').width();
   var height = $(window).height();
   var egm = egrid.core.egm()
-    .enableZoom(false)
+    .maxTextLength(10)
+    .dagreRankSep(100)
     .size([width, height]);
   var gridSelection = d3.select('svg#grid')
     .call(egm.css({backgroundColor: 'white'}))

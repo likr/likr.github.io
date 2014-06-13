@@ -76,14 +76,14 @@
     };
   };
 
-  calculateTextSize = function(vertexText) {
+  calculateTextSize = function() {
     return function(selection) {
       var measure, measureText;
       measure = d3.select('body').append('svg');
       measureText = measure.append('text');
       selection.each(function(u) {
         var bbox;
-        measureText.text(vertexText(u.data));
+        measureText.text(u.text);
         bbox = measureText.node().getBBox();
         u.textWidth = bbox.width;
         return u.textHeight = bbox.height;
@@ -106,14 +106,14 @@
   };
 
   updateVertices = function(arg) {
-    var r, strokeWidth, vertexScale, vertexText;
+    var r, strokeWidth, vertexScale;
     r = 5;
     strokeWidth = 1;
-    vertexScale = arg.vertexScale, vertexText = arg.vertexText;
+    vertexScale = arg.vertexScale;
     return function(selection) {
       selection.enter().append('g').classed('vertex', true).call(createVertex());
       selection.exit().remove();
-      selection.call(calculateTextSize(vertexText)).each(function(u) {
+      selection.call(calculateTextSize()).each(function(u) {
         u.originalWidth = u.textWidth + 2 * r;
         u.originalHeight = u.textHeight + 2 * r;
         u.scale = vertexScale(u.data);
@@ -121,7 +121,7 @@
         return u.height = (u.originalHeight + strokeWidth) * u.scale;
       });
       selection.select('text').text(function(u) {
-        return vertexText(u.data);
+        return u.text;
       }).attr('y', function(u) {
         return -u.textHeight / 2;
       });
@@ -159,8 +159,9 @@
     };
   };
 
-  makeGrid = function(graph, pred, oldVertices) {
-    var edges, oldVerticesMap, u, v, vertices, verticesMap, w, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref2, _ref3;
+  makeGrid = function(graph, arg) {
+    var edges, maxTextLength, oldVertices, oldVerticesMap, pred, u, v, vertex, vertexText, vertices, verticesMap, w, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _ref, _ref1, _ref2, _ref3;
+    pred = arg.pred, oldVertices = arg.oldVertices, vertexText = arg.vertexText, maxTextLength = arg.maxTextLength;
     oldVerticesMap = {};
     for (_i = 0, _len = oldVertices.length; _i < _len; _i++) {
       u = oldVertices[_i];
@@ -176,19 +177,23 @@
         };
       }
     });
-    verticesMap = {};
     for (_j = 0, _len1 = vertices.length; _j < _len1; _j++) {
-      u = vertices[_j];
+      vertex = vertices[_j];
+      vertex.text = (vertexText(vertex.data)).slice(0, maxTextLength);
+    }
+    verticesMap = {};
+    for (_k = 0, _len2 = vertices.length; _k < _len2; _k++) {
+      u = vertices[_k];
       verticesMap[u.key] = u;
     }
     edges = [];
     _ref = graph.vertices();
-    for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
-      u = _ref[_k];
+    for (_l = 0, _len3 = _ref.length; _l < _len3; _l++) {
+      u = _ref[_l];
       if (pred(u)) {
         _ref1 = graph.adjacentVertices(u);
-        for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
-          v = _ref1[_l];
+        for (_m = 0, _len4 = _ref1.length; _m < _len4; _m++) {
+          v = _ref1[_m];
           if (pred(v)) {
             edges.push({
               source: verticesMap[u],
@@ -198,11 +203,11 @@
         }
       } else {
         _ref2 = graph.adjacentVertices(u);
-        for (_m = 0, _len4 = _ref2.length; _m < _len4; _m++) {
-          v = _ref2[_m];
+        for (_n = 0, _len5 = _ref2.length; _n < _len5; _n++) {
+          v = _ref2[_n];
           _ref3 = graph.invAdjacentVertices(u);
-          for (_n = 0, _len5 = _ref3.length; _n < _len5; _n++) {
-            w = _ref3[_n];
+          for (_o = 0, _len6 = _ref3.length; _o < _len6; _o++) {
+            w = _ref3[_o];
             if ((pred(v)) && (pred(w))) {
               edges.push({
                 source: verticesMap[w],
@@ -240,8 +245,8 @@
   };
 
   update = function(arg) {
-    var enableZoom, vertexScale, vertexText, vertexVisibility, zoom;
-    vertexScale = arg.vertexScale, vertexText = arg.vertexText, vertexVisibility = arg.vertexVisibility, enableZoom = arg.enableZoom, zoom = arg.zoom;
+    var enableZoom, maxTextLength, vertexScale, vertexText, vertexVisibility, zoom;
+    vertexScale = arg.vertexScale, vertexText = arg.vertexText, vertexVisibility = arg.vertexVisibility, enableZoom = arg.enableZoom, zoom = arg.zoom, maxTextLength = arg.maxTextLength;
     return function(selection) {
       return selection.each(function(graph) {
         var container, contents, edges, vertices, _ref;
@@ -254,14 +259,18 @@
           } else {
             container.select('rect.background').on('.zoom', null);
           }
-          _ref = makeGrid(graph, (function(u) {
-            return vertexVisibility(graph.get(u), u);
-          }), d3.selectAll('g.vertex').data()), vertices = _ref.vertices, edges = _ref.edges;
+          _ref = makeGrid(graph, {
+            pred: function(u) {
+              return vertexVisibility(graph.get(u), u);
+            },
+            oldVertices: d3.selectAll('g.vertex').data(),
+            vertexText: vertexText,
+            maxTextLength: maxTextLength
+          }), vertices = _ref.vertices, edges = _ref.edges;
           contents.select('g.vertices').selectAll('g.vertex').data(vertices, function(u) {
             return u.key;
           }).call(updateVertices({
-            vertexScale: vertexScale,
-            vertexText: vertexText
+            vertexScale: vertexScale
           })).on('click', onClickVertex({
             container: container,
             graph: graph
@@ -278,7 +287,9 @@
     };
   };
 
-  layout = function() {
+  layout = function(arg) {
+    var dagreEdgeSep, dagreNodeSep, dagreRankDir, dagreRankSep;
+    dagreEdgeSep = arg.dagreEdgeSep, dagreNodeSep = arg.dagreNodeSep, dagreRankSep = arg.dagreRankSep, dagreRankDir = arg.dagreRankDir;
     return function(selection) {
       return selection.each(function() {
         var container, e, edges, i, point, u, vertices, _i, _j, _k, _len, _len1, _len2, _ref, _results;
@@ -291,7 +302,7 @@
         edges.sort(function(e1, e2) {
           return d3.ascending([e1.source.key, e1.target.key], [e2.source.key, e2.target.key]);
         });
-        dagre.layout().nodes(vertices).edges(edges).lineUpTop(true).lineUpBottom(true).rankDir('LR').rankSep(200).edgeSep(20).run();
+        dagre.layout().nodes(vertices).edges(edges).lineUpTop(true).lineUpBottom(true).rankDir(dagreRankDir).nodeSep(dagreNodeSep).rankSep(dagreRankSep).edgeSep(dagreEdgeSep).run();
         for (_i = 0, _len = vertices.length; _i < _len; _i++) {
           u = vertices[_i];
           u.x = u.dagre.x;
@@ -301,18 +312,18 @@
         for (_j = 0, _len1 = edges.length; _j < _len1; _j++) {
           e = edges[_j];
           e.points = [];
-          e.points.push([e.source.x, e.source.y]);
+          e.points.push(dagreRankDir === 'LR' ? [e.source.x + e.source.width / 2, e.source.y] : [e.source.x, e.source.y + e.source.height / 2]);
           _ref = e.dagre.points;
           for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
             point = _ref[_k];
             e.points.push([point.x, point.y]);
           }
-          e.points.push([e.target.x, e.target.y]);
+          e.points.push(dagreRankDir === 'LR' ? [e.target.x - e.target.width / 2, e.target.y] : [e.target.x, e.target.y - e.target.height / 2]);
           _results.push((function() {
             var _l, _ref1, _results1;
             _results1 = [];
             for (i = _l = 1, _ref1 = edgePointsSize - e.points.length; 1 <= _ref1 ? _l <= _ref1 : _l >= _ref1; i = 1 <= _ref1 ? ++_l : --_l) {
-              _results1.push(e.points.push([e.target.x, e.target.y]));
+              _results1.push(e.points.push(e.points[e.points.length - 1]));
             }
             return _results1;
           })());
@@ -349,8 +360,14 @@
         vertexText: egm.vertexText(),
         vertexVisibility: egm.vertexVisibility(),
         enableZoom: egm.enableZoom(),
-        zoom: zoom
-      })).call(resize(egm.size()[0], egm.size()[1])).call(layout()).call(transition({
+        zoom: zoom,
+        maxTextLength: egm.maxTextLength()
+      })).call(resize(egm.size()[0], egm.size()[1])).call(layout({
+        dagreEdgeSep: egm.dagreEdgeSep(),
+        dagreNodeSep: egm.dagreNodeSep(),
+        dagreRankDir: egm.dagreRankDir(),
+        dagreRankSep: egm.dagreRankSep()
+      })).call(transition({
         vertexOpacity: egm.vertexOpacity(),
         vertexColor: egm.vertexColor()
       }));
@@ -404,8 +421,13 @@
       };
     };
     optionAttributes = {
+      dagreEdgeSep: 10,
+      dagreNodeSep: 20,
+      dagreRankDir: 'LR',
+      dagreRankSep: 30,
       enableClickVertex: true,
       enableZoom: true,
+      maxTextLength: Infinity,
       vertexColor: function() {
         return '';
       },
