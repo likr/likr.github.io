@@ -48,13 +48,16 @@ def parse(name):
             'eigenvector': eigenvector[i],
             'katz': katz[i],
         })
-    json.dump(obj, open('{0}/../data/{1}.json'.format(pathbase, name), 'w'))
+    json.dump(obj,
+              open('{0}/../data/{1}.json'.format(pathbase, name), 'w'),
+              sort_keys=True)
 
 
 def main():
     parse('pen')
     parse('research')
     parse('trip')
+    parse('trip2')
     parse('university')
     parse('visualization')
     parse('society')

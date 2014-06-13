@@ -406,7 +406,7 @@ app.controller('ApplicationController', function($scope, getGrid) {
       .call(egm.center());
   }
 
-  getGrid('data/trip.json', draw);
+  getGrid('data/trip2.json', draw);
 
   $scope.$watch('filter', function(newValue, oldValue) {
   });
@@ -444,6 +444,7 @@ app.run(function($rootScope) {
     {name: '研究環境', url: 'data/research.json'},
     {name: 'シャープペンシル', url: 'data/pen.json'},
     {name: '海外旅行', url: 'data/trip.json'},
+    {name: '海外旅行(整理)', url: 'data/trip2.json'},
     {name: '大学', url: 'data/university.json'},
     {name: 'ビジュアル分析', url: 'data/visualization.json'},
     {name: '住宅居間', url: 'data/house.json'}
