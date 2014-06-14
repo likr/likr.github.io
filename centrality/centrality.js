@@ -373,7 +373,6 @@ app.controller('ComparisonController', function($scope, getGrid) {
   d3.select(window)
     .on('resize', function() {
       var svgSize = $('div#grid-wrapper').width();
-      egm.size([svgSize, svgSize]);
       gridSelection
         .call(egm.resize(svgSize, svgSize))
         .call(egm.center());
@@ -391,15 +390,40 @@ app.controller('ApplicationController', function($scope, getGrid) {
     .call(egm.css({backgroundColor: 'white'}))
     .call(d3.downloadable({filename: 'network.svg'}));
 
+  $scope.percentage = 90;
+
   function draw(grid) {
+    var n = grid.vertices().length;
     var scale = d3.scale.linear()
       .domain(d3.extent(grid.vertices(), function(u) {
         return grid.get(u).katz;
       }))
-      .range([1, 10]);
-    egm.vertexScale(function(d) {
-      return scale(d.katz);
+      .range([1, 5]);
+
+    var vertices = grid.vertices().map(function(u) {
+      return grid.get(u);
     });
+    vertices.sort(function(v1, v2) {
+      return d3.descending(v1.katz, v2.katz);
+    });
+    var rank = 0;
+    var lastValue = Infinity;
+    vertices.forEach(function(v, i) {
+      if (v.katz == lastValue) {
+        v.rank = rank;
+      } else {
+        v.rank = rank = i;
+        lastValue = v.katz;
+      }
+    });
+
+    egm
+      .vertexVisibility(function(d) {
+        return d.rank / n < $scope.percentage / 100;
+      })
+      .vertexScale(function(d) {
+        return scale(d.katz);
+      });
     gridSelection
       .datum(grid)
       .call(egm)
@@ -408,14 +432,18 @@ app.controller('ApplicationController', function($scope, getGrid) {
 
   getGrid('data/trip2.json', draw);
 
-  $scope.$watch('filter', function(newValue, oldValue) {
+  $scope.$watch('percentage', function(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      gridSelection
+        .call(egm)
+        .call(egm.center());
+    }
   });
 
   d3.select(window)
     .on('resize', function() {
       var width = $('div#grid-wrapper').width();
       var height = $(window).height();
-      egm.size([width, height]);
       gridSelection
         .call(egm.resize(width, height))
         .call(egm.center());

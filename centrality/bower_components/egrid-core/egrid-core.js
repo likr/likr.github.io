@@ -404,7 +404,7 @@
     if (options == null) {
       options = {};
     }
-    zoom = d3.behavior.zoom();
+    zoom = d3.behavior.zoom().scaleExtent([0, 1]);
     egm = function(selection) {
       draw(egm, zoom)(selection);
     };
@@ -446,7 +446,10 @@
       size: [1, 1]
     };
     egm.css = css;
-    egm.resize = resize;
+    egm.resize = function(width, height) {
+      egm.size([width, height]);
+      return resize(width, height);
+    };
     egm.center = function() {
       return function(selection) {
         var bottom, height, left, right, scale, top, vertices, width, _ref;
