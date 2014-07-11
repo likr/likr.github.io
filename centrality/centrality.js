@@ -429,7 +429,7 @@ app.controller('ApplicationController', function($scope, getGrid) {
       .call(egm.center());
   }
 
-  getGrid('data/trip2.json', draw);
+  getGrid('data/woffice.json', draw);
 
   $scope.$watch('percentage', function(newValue, oldValue) {
     if (newValue !== oldValue) {
@@ -474,7 +474,8 @@ app.run(function($rootScope) {
     {name: '海外旅行(整理)', url: 'data/trip2.json'},
     {name: '大学', url: 'data/university.json'},
     {name: 'ビジュアル分析', url: 'data/visualization.json'},
-    {name: '住宅居間', url: 'data/house.json'}
+    {name: '住宅居間', url: 'data/house.json'},
+    {name: '女性が働きやすいオフィス', url: 'data/woffice.json'}
   ];
   $rootScope.centralities = [
     {value: 'weight', name: 'Weight'},

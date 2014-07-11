@@ -62,6 +62,7 @@ def main():
     parse('visualization')
     parse('society')
     parse('house')
+    parse('woffice')
 
 if __name__ == '__main__':
     main()
