@@ -1,0 +1,19 @@
+<div class="row">
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-xs-2 control-label">Target Date</label>
+      <div class="col-xs-10">
+        <input class="form-control" ng-model="DataManager.selectedDate" datepicker-popup="yyyy/MM/dd" show-button-bar="false"/>
+      </div>
+    </div>
+  </form>
+</div>
+<ul class="nav nav-tabs nav-justified">
+  <li ui-sref-active="active">
+    <a ui-sref="main.si">SI</a>
+  </li>
+  <li ui-sref-active="active">
+    <a ui-sref="main.hsi">HSI({{SIs.length}})</a>
+  </li>
+</ul>
+<div ui-view></div>

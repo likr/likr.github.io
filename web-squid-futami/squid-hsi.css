@@ -1,0 +1,15 @@
+#variable-map canvas, #si-map canvas {
+    border: 1px solid #ccc;
+}
+
+.axis path,
+.axis line {
+   fill: none;
+   stroke: black;
+   shape-rendering: crispEdges;
+}
+
+.axis text {
+   font-family: sans-serif;
+   font-size: 70%;
+}
