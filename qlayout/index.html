@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html ng-app="layout">
+<head>
+<meta charset="utf-8"/>
+<title>layout</title>
+<link rel="stylesheet" href="styles/lib/bootstrap.min.css"/>
+<link rel="stylesheet" href="styles/lib/d3-downloadable.css"/>
+<link rel="stylesheet" href="styles/layout.css"/>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse" type="button">
+        <span class="sr-only"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" ui-sref="app.main">layout</a>
+    </div>
+    <div class="navbar-collapse collapse">
+    </div>
+  </div>
+</nav>
+<div class="container-fluid" style="padding: 0; margin-top: 50px;">
+  <div ui-view></div>
+</div>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+</nav>
+<script src="scripts/lib/traceur-runtime.min.js"></script>
+<script src="scripts/lib/jquery.min.js"></script>
+<script src="scripts/lib/bootstrap.min.js"></script>
+<script src="scripts/lib/angular.min.js"></script>
+<script src="scripts/lib/angular-ui-router.min.js"></script>
+<script src="scripts/lib/d3.min.js"></script>
+<script src="scripts/lib/d3-downloadable.js"></script>
+<script src="scripts/dagre.js"></script>
+<script src="scripts/egrid-core.js"></script>
+<script src="scripts/layout.js"></script>
+</body>
+</html>
