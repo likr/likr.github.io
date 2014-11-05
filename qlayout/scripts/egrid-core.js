@@ -116,7 +116,7 @@
         for (_k = 0, _len2 = vertices.length; _k < _len2; _k++) {
           vertex = vertices[_k];
           node = {
-            rank: vertex.data.rank,
+            rank: vertex.data.rank * 2,
             width: vertex.width,
             height: vertex.height
           };

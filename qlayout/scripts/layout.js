@@ -38,10 +38,30 @@ var $__src_95_controllers_47_main__ = (function() {
         graph.addEdge(link.source, link.target);
       }
     }
-    var egm = egrid.core.egm().maxTextLength(10).vertexScale((function() {
-      return 3;
-    })).contentsMargin(10).contentsScaleMax(2).dagreRankSep(300).edgeInterpolate('cardinal').edgeTension(0.95).edgeWidth((function() {
-      return 3;
+    var centrality = egrid.core.network.centrality.katz(graph);
+    egrid.core.network.community.newman(graph).forEach((function(community, i) {
+      community.forEach((function(u) {
+        graph.get(u).community = i;
+      }));
+    }));
+    var scale = d3.scale.linear().domain(d3.extent(graph.vertices(), (function(u) {
+      return centrality[u];
+    }))).range([3, 15]);
+    var communityColor = d3.scale.category20();
+    var egm = egrid.core.egm().maxTextLength(10).vertexScale((function(d, u) {
+      return scale(centrality[u]);
+    })).vertexColor((function(d) {
+      return communityColor(d.community);
+    })).contentsMargin(10).contentsScaleMax(2).dagreRankSep(100).edgeColor((function(u, v) {
+      var du = graph.get(u);
+      var dv = graph.get(v);
+      if (du.community === dv.community) {
+        return communityColor(du.community);
+      } else {
+        return '#ccc';
+      }
+    })).edgeInterpolate('cardinal').edgeTension(0.95).edgeWidth((function() {
+      return 9;
     })).size([width, height]);
     var selection = d3.select('#display').datum(graph).call(egm).call(egm.center()).call(d3.downloadable({
       filename: 'layout',
