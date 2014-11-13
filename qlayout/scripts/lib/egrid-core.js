@@ -85,11 +85,11 @@
   edgePointsSize = 20;
 
   layout = function(arg) {
-    var dagreEdgeSep, dagreNodeSep, dagreRankDir, dagreRankSep, layerGroup;
-    dagreEdgeSep = arg.dagreEdgeSep, dagreNodeSep = arg.dagreNodeSep, dagreRankSep = arg.dagreRankSep, dagreRankDir = arg.dagreRankDir, layerGroup = arg.layerGroup;
+    var dagreEdgeSep, dagreNodeSep, dagreRankDir, dagreRankSep, dagreRanker, layerGroup;
+    dagreEdgeSep = arg.dagreEdgeSep, dagreNodeSep = arg.dagreNodeSep, dagreRanker = arg.dagreRanker, dagreRankSep = arg.dagreRankSep, dagreRankDir = arg.dagreRankDir, layerGroup = arg.layerGroup;
     return function(selection) {
       return selection.each(function() {
-        var adjacentVertices, container, edge, edges, g, graph, invAdjacentVertices, layerGroups, node, pred, result, u, vertex, vertexLayerGroup, vertices, _i, _j, _k, _l, _len, _len1, _len2, _len3;
+        var container, edge, edges, g, graph, layerGroups, vertex, vertexLayerGroup, vertices, _i, _j, _k, _l, _len, _len1, _len2, _len3;
         container = d3.select(this);
         vertices = container.selectAll('g.vertex').data();
         edges = container.selectAll('g.edge').data();
@@ -112,56 +112,53 @@
           edge = edges[_j];
           graph.addEdge(edge.source.key, edge.target.key, edge);
         }
-        g = new dagre.Digraph();
+        g = new graphlib.Graph({
+          multigraph: true,
+          compound: true
+        }).setGraph({
+          edgesep: dagreEdgeSep,
+          nodesep: dagreNodeSep,
+          ranker: dagreRanker,
+          rankdir: dagreRankDir,
+          ranksep: dagreRankSep
+        }).setDefaultEdgeLabel(function() {
+          return {};
+        });
         for (_k = 0, _len2 = vertices.length; _k < _len2; _k++) {
           vertex = vertices[_k];
-          node = {
+          g.setNode(vertex.key.toString(), {
             width: vertex.width,
             height: vertex.height
-          };
-          u = vertex.key;
-          adjacentVertices = graph.adjacentVertices(u);
-          invAdjacentVertices = graph.invAdjacentVertices(u);
-          pred = function(v) {
-            return vertexLayerGroup[u] !== vertexLayerGroup[v];
-          };
-          if (adjacentVertices.length === 0) {
-            node.rank = "same_" + vertexLayerGroup[u] + "_sink";
-          } else if (invAdjacentVertices.length === 0) {
-            node.rank = "same_" + vertexLayerGroup[u] + "_source";
-          } else if (adjacentVertices.every(pred)) {
-            node.rank = "same_" + vertexLayerGroup[u] + "_sink";
-          } else if (invAdjacentVertices.every(pred)) {
-            node.rank = "same_" + vertexLayerGroup[u] + "_source";
-          }
-          g.addNode(vertex.key.toString(), node);
+          });
         }
         for (_l = 0, _len3 = edges.length; _l < _len3; _l++) {
           edge = edges[_l];
-          g.addEdge(null, edge.source.key.toString(), edge.target.key.toString());
+          g.setEdge(edge.source.key.toString(), edge.target.key.toString());
         }
-        result = dagre.layout().edgeSep(dagreEdgeSep).nodeSep(dagreNodeSep).rankDir(dagreRankDir).rankSep(dagreRankSep).run(g);
-        result.eachNode(function(u, node) {
+        dagre.layout(g);
+        g.nodes().forEach(function(u) {
+          var node;
+          node = g.node(u);
           vertex = graph.get(u);
           vertex.x = node.x;
           vertex.y = node.y;
         });
-        result.eachEdge(function(_, u, v, e) {
+        g.edges().forEach(function(e) {
           var n, source, target;
-          edge = graph.get(u, v);
+          edge = graph.get(e.v, e.w);
           source = edge.source, target = edge.target;
-          edge.points = e.points.map(function(_arg) {
+          edge.points = g.edge(e.v, e.w).points.map(function(_arg) {
             var x, y;
             x = _arg.x, y = _arg.y;
             return [x, y];
           });
           n = edge.points.length;
           if (dagreRankDir === 'LR') {
-            edge.points.unshift([source.x + source.width / 2, source.y]);
-            edge.points.push([target.x - target.width / 2, target.y]);
+            edge.points[0] = [source.x + source.width / 2, source.y];
+            edge.points[n - 1] = [target.x - target.width / 2, target.y];
           } else {
-            edge.points.unshift([source.x, source.y + source.height / 2]);
-            edge.points.push([target.x, target.y - target.height / 2]);
+            edge.points[0] = [source.x, source.y + source.height / 2];
+            edge.points[n - 1] = [target.x, target.y - target.height / 2];
           }
         });
       });
@@ -219,6 +216,7 @@
         })).call(egm.resize(egm.size()[0], egm.size()[1])).call(layout({
           dagreEdgeSep: egm.dagreEdgeSep(),
           dagreNodeSep: egm.dagreNodeSep(),
+          dagreRanker: egm.dagreRanker(),
           dagreRankDir: egm.dagreRankDir(),
           dagreRankSep: egm.dagreRankSep(),
           layerGroup: egm.layerGroup()
@@ -267,6 +265,40 @@
       contentsScaleMax: 1,
       dagreEdgeSep: 10,
       dagreNodeSep: 20,
+      dagreRanker: function(g) {
+        var dfs, maxRank, u, visited, _i, _len, _ref, _results;
+        visited = {};
+        dfs = function(v) {
+          var label, rank;
+          label = g.node(v);
+          if (visited[v] != null) {
+            return label.rank;
+          }
+          visited[v] = true;
+          rank = d3.max(g.inEdges(v), function(e) {
+            return dfs(e.v) + g.edge(e).minlen;
+          });
+          if (rank === void 0) {
+            rank = 0;
+          }
+          return label.rank = rank;
+        };
+        g.sinks().forEach(dfs);
+        maxRank = d3.max(g.nodes(), function(u) {
+          return g.node(u).rank;
+        });
+        _ref = g.nodes();
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          u = _ref[_i];
+          if (g.outEdges(u).length === 0) {
+            _results.push(g.node(u).rank = maxRank);
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      },
       dagreRankDir: 'LR',
       dagreRankSep: 30,
       edgeColor: function() {

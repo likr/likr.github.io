@@ -27,6 +27,13 @@
   <div ui-view></div>
 </div>
 <nav class="navbar navbar-default navbar-fixed-bottom">
+  <ul class="nav navbar-nav">
+    <li><a ui-sref="main({data: 'data/q/trip.json', layout: 'proposed'})">Proposed Q</a></li>
+    <li><a ui-sref="main({data: 'data/l/trip.json', layout: 'proposed'})">Modified Network Simplex</a></li>
+    <li><a ui-sref="main({data: 'data/q/trip.json', layout: 'longest-path'})">Longest Path</a></li>
+    <li><a ui-sref="main({data: 'data/q/trip.json', layout: 'tight-tree'})">Tight Tree</a></li>
+    <li><a ui-sref="main({data: 'data/q/trip.json', layout: 'network-simplex'})">Network Simplex</a></li>
+  </ul>
 </nav>
 <script src="scripts/lib/traceur-runtime.min.js"></script>
 <script src="scripts/lib/jquery.min.js"></script>
@@ -35,8 +42,10 @@
 <script src="scripts/lib/angular-ui-router.min.js"></script>
 <script src="scripts/lib/d3.min.js"></script>
 <script src="scripts/lib/d3-downloadable.js"></script>
-<script src="scripts/dagre.js"></script>
-<script src="scripts/egrid-core.js"></script>
+<script src="scripts/lib/lodash.min.js"></script>
+<script src="scripts/lib/graphlib.core.min.js"></script>
+<script src="scripts/lib/dagre.core.min.js"></script>
+<script src="scripts/lib/egrid-core.js"></script>
 <script src="scripts/layout.js"></script>
 </body>
 </html>

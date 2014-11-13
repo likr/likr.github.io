@@ -14,13 +14,14 @@ var $__src_95_controllers_47_main__ = (function() {
   angular.module('layout').config((function($stateProvider) {
     $stateProvider.state('main', {
       controller: 'MainController as main',
-      resolve: {data: (function($http) {
-          return $http.get('data/data.json');
+      resolve: {data: (function($http, $stateParams) {
+          var url = $stateParams.data || 'data/q/trip.json';
+          return $http.get(url);
         })},
       templateUrl: 'partials/main.html',
-      url: '/'
+      url: '/?data&layout'
     });
-  })).controller('MainController', (($traceurRuntime.createClass)(function($window, data) {
+  })).controller('MainController', (($traceurRuntime.createClass)(function($window, $stateParams, data) {
     var width = $($window).width();
     var height = $($window).height() - 100;
     var graph = egrid.core.graph.adjacencyList();
@@ -38,31 +39,30 @@ var $__src_95_controllers_47_main__ = (function() {
         graph.addEdge(link.source, link.target);
       }
     }
-    var centrality = egrid.core.network.centrality.katz(graph);
-    egrid.core.network.community.newman(graph).forEach((function(community, i) {
-      community.forEach((function(u) {
-        graph.get(u).community = i;
-      }));
-    }));
-    var scale = d3.scale.linear().domain(d3.extent(graph.vertices(), (function(u) {
-      return centrality[u];
-    }))).range([3, 15]);
-    var communityColor = d3.scale.category20();
-    var egm = egrid.core.egm().maxTextLength(10).vertexScale((function(d, u) {
-      return scale(centrality[u]);
-    })).vertexColor((function(d) {
-      return communityColor(d.community);
-    })).contentsMargin(10).contentsScaleMax(2).dagreRankSep(100).edgeColor((function(u, v) {
-      var du = graph.get(u);
-      var dv = graph.get(v);
-      if (du.community === dv.community) {
-        return communityColor(du.community);
-      } else {
-        return '#ccc';
-      }
-    })).edgeInterpolate('cardinal').edgeTension(0.95).edgeWidth((function() {
-      return 9;
+    var egm = egrid.core.egm().backgroundColor('#fff').strokeColor('#fff').maxTextLength(10).vertexScale((function() {
+      return 2;
+    })).vertexStrokeWidth((function() {
+      return 0;
+    })).vertexColor((function() {
+      return '#00BFFF';
+    })).contentsMargin(10).contentsScaleMax(2).dagreRankSep(200).dagreEdgeSep(50).edgeColor((function() {
+      return '#6E6E6E';
+    })).edgeWidth((function() {
+      return 3;
     })).size([width, height]);
+    if ($stateParams.layout) {
+      if ($stateParams.layout === 'proposed') {
+        egm.dagreRanker((function(g) {
+          g.nodes().forEach((function(u, i) {
+            if (!u.startsWith('_')) {
+              g.node(u).rank = 2 * graph.get(i).rank;
+            }
+          }));
+        }));
+      } else {
+        egm.dagreRanker($stateParams.layout);
+      }
+    }
     var selection = d3.select('#display').datum(graph).call(egm).call(egm.center()).call(d3.downloadable({
       filename: 'layout',
       width: width,
