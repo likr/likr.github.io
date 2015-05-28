@@ -28605,16 +28605,16 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
     return animate;
   };
 
-  var addAttribute = function addAttribute(svg, circle, value0Key, valueKey, scope, attrName) {
+  var addAttribute = function addAttribute(svg, element, value0Key, valueKey, scope, attrName) {
     scope[value0Key] = scope[valueKey];
     scope.$watch(valueKey, function () {
       var duration = scope.ssDur || 1,
           delay = scope.ssDelay || 0.1,
           animate = createAnimate(attrName, scope[value0Key], scope[valueKey], svg.getCurrentTime() + delay, duration);
-      circle.appendChild(animate);
+      element.appendChild(animate);
       animate.addEventListener('endEvent', function () {
-        circle.setAttribute(attrName, scope[value0Key]);
-        circle.removeChild(animate);
+        element.setAttribute(attrName, scope[value0Key]);
+        element.removeChild(animate);
       });
       scope[value0Key] = scope[valueKey];
     });
@@ -28626,18 +28626,32 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
       ssCx: '=',
       ssCy: '=',
       ssR: '=',
+      ssX: '=',
+      ssY: '=',
+      ssWidth: '=',
+      ssHeight: '=',
+      ssFill: '=',
       ssOpacity: '=',
       ssDur: '=',
       ssDelay: '='
     },
-    link: function link(scope, element, attrs) {
-      var circle = element[0],
-          svg = circle.ownerSVGElement;
+    link: function link(scope, elementWrapper, attrs) {
+      var element = elementWrapper[0],
+          svg = element.ownerSVGElement;
 
-      addAttribute(svg, circle, 'x0', 'ssCx', scope, 'cx');
-      addAttribute(svg, circle, 'y0', 'ssCy', scope, 'cy');
-      addAttribute(svg, circle, 'r0', 'ssR', scope, 'r');
-      addAttribute(svg, circle, 'opacity0', 'ssOpacity', scope, 'opacity');
+      addAttribute(svg, element, 'fill0', 'ssFill', scope, 'fill');
+      addAttribute(svg, element, 'opacity0', 'ssOpacity', scope, 'opacity');
+      if (element.tagName === 'circle') {
+        addAttribute(svg, element, 'cx0', 'ssCx', scope, 'cx');
+        addAttribute(svg, element, 'cy0', 'ssCy', scope, 'cy');
+        addAttribute(svg, element, 'r0', 'ssR', scope, 'r');
+      }
+      if (element.tagName === 'rect') {
+        addAttribute(svg, element, 'x0', 'ssX', scope, 'x');
+        addAttribute(svg, element, 'y0', 'ssY', scope, 'y');
+        addAttribute(svg, element, 'width0', 'ssWidth', scope, 'width');
+        addAttribute(svg, element, 'height0', 'ssHeight', scope, 'height');
+      }
     }
   };
 });
@@ -28664,16 +28678,17 @@ var _shinsekai2 = _interopRequireDefault(_shinsekai);
 
 _angular2['default'].module('hoge', [_shinsekai2['default']]);
 
-_angular2['default'].module('hoge').factory('data', function ($interval) {
+_angular2['default'].module('hoge').factory('circles', function ($interval) {
   var width = 400,
       height = 400,
-      n = 200,
-      points = [];
+      n = 10,
+      circles = [];
   for (var i = 0; i < n; ++i) {
-    points.push({
+    circles.push({
       x: width / 2,
       y: height / 2,
       r: 5,
+      fill: '#000',
       opacity: 0.5,
       duration: 1,
       delay: 0
@@ -28686,15 +28701,16 @@ _angular2['default'].module('hoge').factory('data', function ($interval) {
     var _iteratorError = undefined;
 
     try {
-      for (var _iterator = _getIterator(points), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var point = _step.value;
+      for (var _iterator = _getIterator(circles), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var circle = _step.value;
 
-        point.x = Math.random() * width;
-        point.y = Math.random() * height;
-        point.r = Math.random() * 9 + 1;
-        point.opacity = Math.random();
-        point.duration = Math.random() + 0.5;
-        point.delay = Math.random() * 0.5;
+        circle.x = Math.random() * width;
+        circle.y = Math.random() * height;
+        circle.r = Math.random() * 9 + 1;
+        circle.color = 'hsl(' + Math.random() * 360 + ',100%, 50%)';
+        circle.opacity = Math.random();
+        circle.duration = Math.random() + 0.5;
+        circle.delay = Math.random() * 0.5;
       }
     } catch (err) {
       _didIteratorError = true;
@@ -28711,7 +28727,61 @@ _angular2['default'].module('hoge').factory('data', function ($interval) {
       }
     }
   }, 2000);
-  return points;
+  return circles;
+});
+
+_angular2['default'].module('hoge').factory('rects', function ($interval) {
+  var width = 400,
+      height = 400,
+      n = 10,
+      rects = [];
+  for (var i = 0; i < n; ++i) {
+    rects.push({
+      x: width / 2,
+      y: height / 2,
+      width: 5,
+      height: 5,
+      fill: '#000',
+      opacity: 0.5,
+      duration: 1,
+      delay: 0
+    });
+  }
+
+  $interval(function () {
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = _getIterator(rects), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var rect = _step2.value;
+
+        rect.x = Math.random() * width;
+        rect.y = Math.random() * height;
+        rect.width = Math.random() * 15 + 5;
+        rect.height = Math.random() * 15 + 5;
+        rect.color = 'hsl(' + Math.random() * 360 + ',100%, 50%)';
+        rect.opacity = Math.random();
+        rect.duration = Math.random() + 0.5;
+        rect.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+          _iterator2['return']();
+        }
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
+      }
+    }
+  }, 2000);
+  return rects;
 });
 
 _angular2['default'].module('hoge').directive('main', function () {
@@ -28721,10 +28791,11 @@ _angular2['default'].module('hoge').directive('main', function () {
     scope: {},
     controllerAs: 'main',
     controller: (function () {
-      var _class = function controller(data) {
+      var _class = function controller(circles, rects) {
         _classCallCheck(this, _class);
 
-        this.data = data;
+        this.circles = circles;
+        this.rects = rects;
       };
 
       return _class;
