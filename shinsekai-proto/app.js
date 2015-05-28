@@ -28138,7 +28138,9 @@ module.exports = angular;
 
 },{"./angular":1}],3:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/get-iterator"), __esModule: true };
-},{"core-js/library/fn/get-iterator":6}],4:[function(require,module,exports){
+},{"core-js/library/fn/get-iterator":7}],4:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
+},{"core-js/library/fn/object/define-property":8}],5:[function(require,module,exports){
 "use strict";
 
 exports["default"] = function (instance, Constructor) {
@@ -28148,7 +28150,7 @@ exports["default"] = function (instance, Constructor) {
 };
 
 exports.__esModule = true;
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 exports["default"] = function (obj) {
@@ -28158,12 +28160,17 @@ exports["default"] = function (obj) {
 };
 
 exports.__esModule = true;
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 require('../modules/web.dom.iterable');
 require('../modules/es6.string.iterator');
 require('../modules/core.iter-helpers');
 module.exports = require('../modules/$').core.getIterator;
-},{"../modules/$":13,"../modules/core.iter-helpers":20,"../modules/es6.string.iterator":22,"../modules/web.dom.iterable":23}],7:[function(require,module,exports){
+},{"../modules/$":15,"../modules/core.iter-helpers":22,"../modules/es6.string.iterator":24,"../modules/web.dom.iterable":25}],8:[function(require,module,exports){
+var $ = require('../../modules/$');
+module.exports = function defineProperty(it, key, desc){
+  return $.setDesc(it, key, desc);
+};
+},{"../../modules/$":15}],9:[function(require,module,exports){
 var $ = require('./$');
 function assert(condition, msg1, msg2){
   if(!condition)throw TypeError(msg2 ? msg1 + msg2 : msg1);
@@ -28182,7 +28189,7 @@ assert.inst = function(it, Constructor, name){
   return it;
 };
 module.exports = assert;
-},{"./$":13}],8:[function(require,module,exports){
+},{"./$":15}],10:[function(require,module,exports){
 var $        = require('./$')
   , TAG      = require('./$.wks')('toStringTag')
   , toString = {}.toString;
@@ -28198,7 +28205,7 @@ cof.set = function(it, tag, stat){
   if(it && !$.has(it = stat ? it : it.prototype, TAG))$.hide(it, TAG, tag);
 };
 module.exports = cof;
-},{"./$":13,"./$.wks":19}],9:[function(require,module,exports){
+},{"./$":15,"./$.wks":21}],11:[function(require,module,exports){
 var $          = require('./$')
   , global     = $.g
   , core       = $.core
@@ -28247,13 +28254,13 @@ function $def(type, name, source){
   }
 }
 module.exports = $def;
-},{"./$":13}],10:[function(require,module,exports){
+},{"./$":15}],12:[function(require,module,exports){
 module.exports = function($){
   $.FW   = false;
   $.path = $.core;
   return $;
 };
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var $def            = require('./$.def')
   , $redef          = require('./$.redef')
   , $               = require('./$')
@@ -28304,7 +28311,7 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE)
     } else $def($def.P + $def.F * $iter.BUGGY, NAME, methods);
   }
 };
-},{"./$":13,"./$.cof":8,"./$.def":9,"./$.iter":12,"./$.redef":14,"./$.wks":19}],12:[function(require,module,exports){
+},{"./$":15,"./$.cof":10,"./$.def":11,"./$.iter":14,"./$.redef":16,"./$.wks":21}],14:[function(require,module,exports){
 'use strict';
 var $                 = require('./$')
   , cof               = require('./$.cof')
@@ -28346,7 +28353,7 @@ module.exports = {
     cof.set(Constructor, NAME + ' Iterator');
   }
 };
-},{"./$":13,"./$.assert":7,"./$.cof":8,"./$.shared":15,"./$.wks":19}],13:[function(require,module,exports){
+},{"./$":15,"./$.assert":9,"./$.cof":10,"./$.shared":17,"./$.wks":21}],15:[function(require,module,exports){
 'use strict';
 var global = typeof self != 'undefined' ? self : Function('return this')()
   , core   = {}
@@ -28443,16 +28450,16 @@ var $ = module.exports = require('./$.fw')({
 /* eslint-disable no-undef */
 if(typeof __e != 'undefined')__e = core;
 if(typeof __g != 'undefined')__g = global;
-},{"./$.fw":10}],14:[function(require,module,exports){
+},{"./$.fw":12}],16:[function(require,module,exports){
 module.exports = require('./$').hide;
-},{"./$":13}],15:[function(require,module,exports){
+},{"./$":15}],17:[function(require,module,exports){
 var $      = require('./$')
   , SHARED = '__core-js_shared__'
   , store  = $.g[SHARED] || $.hide($.g, SHARED, {})[SHARED];
 module.exports = function(key){
   return store[key] || (store[key] = {});
 };
-},{"./$":13}],16:[function(require,module,exports){
+},{"./$":15}],18:[function(require,module,exports){
 // true  -> String#at
 // false -> String#codePointAt
 var $ = require('./$');
@@ -28470,14 +28477,14 @@ module.exports = function(TO_STRING){
         : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
   };
 };
-},{"./$":13}],17:[function(require,module,exports){
+},{"./$":15}],19:[function(require,module,exports){
 var sid = 0;
 function uid(key){
   return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++sid + Math.random()).toString(36));
 }
 uid.safe = require('./$').g.Symbol || uid;
 module.exports = uid;
-},{"./$":13}],18:[function(require,module,exports){
+},{"./$":15}],20:[function(require,module,exports){
 // 22.1.3.31 Array.prototype[@@unscopables]
 var $           = require('./$')
   , UNSCOPABLES = require('./$.wks')('unscopables');
@@ -28485,19 +28492,19 @@ if($.FW && !(UNSCOPABLES in []))$.hide(Array.prototype, UNSCOPABLES, {});
 module.exports = function(key){
   if($.FW)[][UNSCOPABLES][key] = true;
 };
-},{"./$":13,"./$.wks":19}],19:[function(require,module,exports){
+},{"./$":15,"./$.wks":21}],21:[function(require,module,exports){
 var global = require('./$').g
   , store  = require('./$.shared')('wks');
 module.exports = function(name){
   return store[name] || (store[name] =
     global.Symbol && global.Symbol[name] || require('./$.uid').safe('Symbol.' + name));
 };
-},{"./$":13,"./$.shared":15,"./$.uid":17}],20:[function(require,module,exports){
+},{"./$":15,"./$.shared":17,"./$.uid":19}],22:[function(require,module,exports){
 var core  = require('./$').core
   , $iter = require('./$.iter');
 core.isIterable  = $iter.is;
 core.getIterator = $iter.get;
-},{"./$":13,"./$.iter":12}],21:[function(require,module,exports){
+},{"./$":15,"./$.iter":14}],23:[function(require,module,exports){
 var $          = require('./$')
   , setUnscope = require('./$.unscope')
   , ITER       = require('./$.uid').safe('iter')
@@ -28532,7 +28539,7 @@ Iterators.Arguments = Iterators.Array;
 setUnscope('keys');
 setUnscope('values');
 setUnscope('entries');
-},{"./$":13,"./$.iter":12,"./$.iter-define":11,"./$.uid":17,"./$.unscope":18}],22:[function(require,module,exports){
+},{"./$":15,"./$.iter":14,"./$.iter-define":13,"./$.uid":19,"./$.unscope":20}],24:[function(require,module,exports){
 var set   = require('./$').set
   , $at   = require('./$.string-at')(true)
   , ITER  = require('./$.uid').safe('iter')
@@ -28553,7 +28560,7 @@ require('./$.iter-define')(String, 'String', function(iterated){
   iter.i += point.length;
   return step(0, point);
 });
-},{"./$":13,"./$.iter":12,"./$.iter-define":11,"./$.string-at":16,"./$.uid":17}],23:[function(require,module,exports){
+},{"./$":15,"./$.iter":14,"./$.iter-define":13,"./$.string-at":18,"./$.uid":19}],25:[function(require,module,exports){
 require('./es6.array.iterator');
 var $           = require('./$')
   , Iterators   = require('./$.iter').Iterators
@@ -28568,7 +28575,77 @@ if($.FW){
   if(HTC && !(ITERATOR in HTCProto))$.hide(HTCProto, ITERATOR, ArrayValues);
 }
 Iterators.NodeList = Iterators.HTMLCollection = ArrayValues;
-},{"./$":13,"./$.iter":12,"./$.wks":19,"./es6.array.iterator":21}],24:[function(require,module,exports){
+},{"./$":15,"./$.iter":14,"./$.wks":21,"./es6.array.iterator":23}],26:[function(require,module,exports){
+'use strict';
+
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
+
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+_angular2['default'].module('shinsekai', []);
+
+_angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
+  var createAnimate = function createAnimate(attr, value0, value, now, duration) {
+    var animate = $window.document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+    animate.setAttribute('attributeName', attr);
+    animate.setAttribute('dur', '' + duration + 's');
+    animate.setAttribute('fill', 'freeze');
+    animate.setAttribute('from', value0);
+    animate.setAttribute('to', value);
+    animate.setAttribute('begin', now);
+    animate.setAttribute('end', now + duration);
+    return animate;
+  };
+
+  var addAttribute = function addAttribute(svg, circle, value0Key, valueKey, scope, attrName) {
+    scope[value0Key] = scope[valueKey];
+    scope.$watch(valueKey, function () {
+      var duration = scope.ssDur || 1,
+          delay = scope.ssDelay || 0.1,
+          animate = createAnimate(attrName, scope[value0Key], scope[valueKey], svg.getCurrentTime() + delay, duration);
+      circle.appendChild(animate);
+      animate.addEventListener('endEvent', function () {
+        circle.setAttribute(attrName, scope[value0Key]);
+        circle.removeChild(animate);
+      });
+      scope[value0Key] = scope[valueKey];
+    });
+  };
+
+  return {
+    restrict: 'A',
+    scope: {
+      ssCx: '=',
+      ssCy: '=',
+      ssR: '=',
+      ssOpacity: '=',
+      ssDur: '=',
+      ssDelay: '='
+    },
+    link: function link(scope, element, attrs) {
+      var circle = element[0],
+          svg = circle.ownerSVGElement;
+
+      addAttribute(svg, circle, 'x0', 'ssCx', scope, 'cx');
+      addAttribute(svg, circle, 'y0', 'ssCy', scope, 'cy');
+      addAttribute(svg, circle, 'r0', 'ssR', scope, 'r');
+      addAttribute(svg, circle, 'opacity0', 'ssOpacity', scope, 'opacity');
+    }
+  };
+});
+
+exports['default'] = 'shinsekai';
+module.exports = exports['default'];
+
+},{"angular":2,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/interop-require-default":6}],27:[function(require,module,exports){
 'use strict';
 
 var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
@@ -28581,73 +28658,25 @@ var _angular = require('angular');
 
 var _angular2 = _interopRequireDefault(_angular);
 
-_angular2['default'].module('shinsekai', []);
+var _shinsekai = require('./shinsekai');
 
-_angular2['default'].module('shinsekai').directive('ssCircle', function ($window) {
-  var createAnimate = function createAnimate(id, attr, value0, value, now) {
-    var animate = $window.document.createElementNS('http://www.w3.org/2000/svg', 'animate');
-    animate.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + id);
-    animate.setAttribute('attributeName', attr);
-    animate.setAttribute('dur', '1s');
-    animate.setAttribute('fill', 'freeze');
-    animate.setAttribute('from', value0);
-    animate.setAttribute('to', value);
-    animate.setAttribute('begin', now);
-    animate.setAttribute('end', now + 1);
-    return animate;
-  };
+var _shinsekai2 = _interopRequireDefault(_shinsekai);
 
-  var addAttribute = function addAttribute(svg, circle, domId, value0Key, valueKey, scope, attrName) {
-    scope[value0Key] = scope[valueKey];
-    scope.$watch(valueKey, function () {
-      var animate = createAnimate(domId, attrName, scope[value0Key], scope[valueKey], svg.getCurrentTime());
-      svg.appendChild(animate);
-      animate.addEventListener('endEvent', function () {
-        circle.setAttribute(attrName, scope[value0Key]);
-        svg.removeChild(animate);
-      });
-      scope[value0Key] = scope[valueKey];
-    });
-  };
-
-  var id = 0;
-
-  return {
-    restrict: 'E',
-    replace: true,
-    template: '<circle/>',
-    templateNamespace: 'svg',
-    scope: {
-      ssCx: '=',
-      ssCy: '=',
-      ssR: '='
-    },
-    link: function link(scope, element, attrs) {
-      var circle = element[0],
-          svg = circle.ownerSVGElement;
-
-      var domId = 'ss-id-' + id++;
-      circle.setAttribute('id', domId);
-
-      addAttribute(svg, circle, domId, 'x0', 'ssCx', scope, 'cx');
-      addAttribute(svg, circle, domId, 'y0', 'ssCy', scope, 'cy');
-      addAttribute(svg, circle, domId, 'r0', 'ssR', scope, 'r');
-    }
-  };
-});
-
-_angular2['default'].module('hoge', ['shinsekai']);
+_angular2['default'].module('hoge', [_shinsekai2['default']]);
 
 _angular2['default'].module('hoge').factory('data', function ($interval) {
   var width = 400,
       height = 400,
-      n = 10,
+      n = 200,
       points = [];
   for (var i = 0; i < n; ++i) {
     points.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      r: Math.random() * 9 + 1
+      x: width / 2,
+      y: height / 2,
+      r: 5,
+      opacity: 0.5,
+      duration: 1,
+      delay: 0
     });
   }
 
@@ -28663,6 +28692,9 @@ _angular2['default'].module('hoge').factory('data', function ($interval) {
         point.x = Math.random() * width;
         point.y = Math.random() * height;
         point.r = Math.random() * 9 + 1;
+        point.opacity = Math.random();
+        point.duration = Math.random() + 0.5;
+        point.delay = Math.random() * 0.5;
       }
     } catch (err) {
       _didIteratorError = true;
@@ -28700,4 +28732,4 @@ _angular2['default'].module('hoge').directive('main', function () {
   };
 });
 
-},{"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/helpers/class-call-check":4,"babel-runtime/helpers/interop-require-default":5}]},{},[24]);
+},{"./shinsekai":26,"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/interop-require-default":6}]},{},[27]);
