@@ -28628,9 +28628,14 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
       ssR: '=',
       ssX: '=',
       ssY: '=',
+      ssX1: '=',
+      ssY1: '=',
+      ssX2: '=',
+      ssY2: '=',
       ssWidth: '=',
       ssHeight: '=',
       ssFill: '=',
+      ssStroke: '=',
       ssOpacity: '=',
       ssDur: '=',
       ssDelay: '='
@@ -28640,6 +28645,7 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
           svg = element.ownerSVGElement;
 
       addAttribute(svg, element, 'fill0', 'ssFill', scope, 'fill');
+      addAttribute(svg, element, 'stroke0', 'ssStroke', scope, 'stroke');
       addAttribute(svg, element, 'opacity0', 'ssOpacity', scope, 'opacity');
       if (element.tagName === 'circle') {
         addAttribute(svg, element, 'cx0', 'ssCx', scope, 'cx');
@@ -28651,6 +28657,12 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
         addAttribute(svg, element, 'y0', 'ssY', scope, 'y');
         addAttribute(svg, element, 'width0', 'ssWidth', scope, 'width');
         addAttribute(svg, element, 'height0', 'ssHeight', scope, 'height');
+      }
+      if (element.tagName === 'line') {
+        addAttribute(svg, element, 'x10', 'ssX1', scope, 'x1');
+        addAttribute(svg, element, 'y10', 'ssY1', scope, 'y1');
+        addAttribute(svg, element, 'x20', 'ssX2', scope, 'x2');
+        addAttribute(svg, element, 'y20', 'ssY2', scope, 'y2');
       }
     }
   };
@@ -28678,17 +28690,18 @@ var _shinsekai2 = _interopRequireDefault(_shinsekai);
 
 _angular2['default'].module('hoge', [_shinsekai2['default']]);
 
-_angular2['default'].module('hoge').factory('circles', function ($interval) {
-  var width = 400,
-      height = 400,
-      n = 10,
+_angular2['default'].module('hoge').constant('width', 500);
+_angular2['default'].module('hoge').constant('height', 500);
+
+_angular2['default'].module('hoge').factory('circles', function ($interval, width, height) {
+  var n = 10,
       circles = [];
   for (var i = 0; i < n; ++i) {
     circles.push({
       x: width / 2,
       y: height / 2,
       r: 5,
-      fill: '#000',
+      color: '#000',
       opacity: 0.5,
       duration: 1,
       delay: 0
@@ -28707,7 +28720,7 @@ _angular2['default'].module('hoge').factory('circles', function ($interval) {
         circle.x = Math.random() * width;
         circle.y = Math.random() * height;
         circle.r = Math.random() * 9 + 1;
-        circle.color = 'hsl(' + Math.random() * 360 + ',100%, 50%)';
+        circle.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
         circle.opacity = Math.random();
         circle.duration = Math.random() + 0.5;
         circle.delay = Math.random() * 0.5;
@@ -28730,10 +28743,8 @@ _angular2['default'].module('hoge').factory('circles', function ($interval) {
   return circles;
 });
 
-_angular2['default'].module('hoge').factory('rects', function ($interval) {
-  var width = 400,
-      height = 400,
-      n = 10,
+_angular2['default'].module('hoge').factory('rects', function ($interval, width, height) {
+  var n = 10,
       rects = [];
   for (var i = 0; i < n; ++i) {
     rects.push({
@@ -28741,7 +28752,7 @@ _angular2['default'].module('hoge').factory('rects', function ($interval) {
       y: height / 2,
       width: 5,
       height: 5,
-      fill: '#000',
+      color: '#000',
       opacity: 0.5,
       duration: 1,
       delay: 0
@@ -28761,7 +28772,7 @@ _angular2['default'].module('hoge').factory('rects', function ($interval) {
         rect.y = Math.random() * height;
         rect.width = Math.random() * 15 + 5;
         rect.height = Math.random() * 15 + 5;
-        rect.color = 'hsl(' + Math.random() * 360 + ',100%, 50%)';
+        rect.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
         rect.opacity = Math.random();
         rect.duration = Math.random() + 0.5;
         rect.delay = Math.random() * 0.5;
@@ -28784,6 +28795,58 @@ _angular2['default'].module('hoge').factory('rects', function ($interval) {
   return rects;
 });
 
+_angular2['default'].module('hoge').factory('lines', function ($interval, width, height) {
+  var n = 10,
+      lines = [];
+  for (var i = 0; i < n; ++i) {
+    lines.push({
+      x1: width / 2,
+      y1: height / 2,
+      x2: width / 2,
+      y2: height / 2,
+      color: '#000',
+      opacity: 0.5,
+      duration: 1,
+      delay: 0
+    });
+  }
+
+  $interval(function () {
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
+
+    try {
+      for (var _iterator3 = _getIterator(lines), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        var line = _step3.value;
+
+        line.x1 = Math.random() * width;
+        line.y1 = Math.random() * height;
+        line.x2 = Math.random() * width;
+        line.y2 = Math.random() * height;
+        line.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        line.opacity = Math.random();
+        line.duration = Math.random() + 0.5;
+        line.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError3 = true;
+      _iteratorError3 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion3 && _iterator3['return']) {
+          _iterator3['return']();
+        }
+      } finally {
+        if (_didIteratorError3) {
+          throw _iteratorError3;
+        }
+      }
+    }
+  }, 2000);
+  return lines;
+});
+
 _angular2['default'].module('hoge').directive('main', function () {
   return {
     restrict: 'E',
@@ -28791,11 +28854,14 @@ _angular2['default'].module('hoge').directive('main', function () {
     scope: {},
     controllerAs: 'main',
     controller: (function () {
-      var _class = function controller(circles, rects) {
+      var _class = function controller(width, height, circles, rects, lines) {
         _classCallCheck(this, _class);
 
+        this.width = width;
+        this.height = height;
         this.circles = circles;
         this.rects = rects;
+        this.lines = lines;
       };
 
       return _class;
