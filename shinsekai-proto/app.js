@@ -28652,9 +28652,11 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
         addAttribute(svg, element, 'cy0', 'ssCy', scope, 'cy');
         addAttribute(svg, element, 'r0', 'ssR', scope, 'r');
       }
-      if (element.tagName === 'rect') {
+      if (element.tagName === 'rect' || element.tagName === 'text') {
         addAttribute(svg, element, 'x0', 'ssX', scope, 'x');
         addAttribute(svg, element, 'y0', 'ssY', scope, 'y');
+      }
+      if (element.tagName === 'rect') {
         addAttribute(svg, element, 'width0', 'ssWidth', scope, 'width');
         addAttribute(svg, element, 'height0', 'ssHeight', scope, 'height');
       }
@@ -28795,6 +28797,55 @@ _angular2['default'].module('hoge').factory('rects', function ($interval, width,
   return rects;
 });
 
+_angular2['default'].module('hoge').factory('texts', function ($interval, width, height) {
+  var n = 10,
+      texts = [];
+  for (var i = 0; i < n; ++i) {
+    texts.push({
+      text: 'imai',
+      x: width / 2,
+      y: height / 2,
+      color: '#000',
+      opacity: 0.5,
+      duration: 1,
+      delay: 0
+    });
+  }
+
+  $interval(function () {
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
+
+    try {
+      for (var _iterator3 = _getIterator(texts), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        var text = _step3.value;
+
+        text.x = Math.random() * width;
+        text.y = Math.random() * height;
+        text.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        text.opacity = Math.random();
+        text.duration = Math.random() + 0.5;
+        text.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError3 = true;
+      _iteratorError3 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion3 && _iterator3['return']) {
+          _iterator3['return']();
+        }
+      } finally {
+        if (_didIteratorError3) {
+          throw _iteratorError3;
+        }
+      }
+    }
+  }, 2000);
+  return texts;
+});
+
 _angular2['default'].module('hoge').factory('lines', function ($interval, width, height) {
   var n = 10,
       lines = [];
@@ -28812,13 +28863,13 @@ _angular2['default'].module('hoge').factory('lines', function ($interval, width,
   }
 
   $interval(function () {
-    var _iteratorNormalCompletion3 = true;
-    var _didIteratorError3 = false;
-    var _iteratorError3 = undefined;
+    var _iteratorNormalCompletion4 = true;
+    var _didIteratorError4 = false;
+    var _iteratorError4 = undefined;
 
     try {
-      for (var _iterator3 = _getIterator(lines), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-        var line = _step3.value;
+      for (var _iterator4 = _getIterator(lines), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+        var line = _step4.value;
 
         line.x1 = Math.random() * width;
         line.y1 = Math.random() * height;
@@ -28830,16 +28881,16 @@ _angular2['default'].module('hoge').factory('lines', function ($interval, width,
         line.delay = Math.random() * 0.5;
       }
     } catch (err) {
-      _didIteratorError3 = true;
-      _iteratorError3 = err;
+      _didIteratorError4 = true;
+      _iteratorError4 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion3 && _iterator3['return']) {
-          _iterator3['return']();
+        if (!_iteratorNormalCompletion4 && _iterator4['return']) {
+          _iterator4['return']();
         }
       } finally {
-        if (_didIteratorError3) {
-          throw _iteratorError3;
+        if (_didIteratorError4) {
+          throw _iteratorError4;
         }
       }
     }
@@ -28854,7 +28905,7 @@ _angular2['default'].module('hoge').directive('main', function () {
     scope: {},
     controllerAs: 'main',
     controller: (function () {
-      var _class = function controller(width, height, circles, rects, lines) {
+      var _class = function controller(width, height, circles, rects, lines, texts) {
         _classCallCheck(this, _class);
 
         this.width = width;
@@ -28862,6 +28913,7 @@ _angular2['default'].module('hoge').directive('main', function () {
         this.circles = circles;
         this.rects = rects;
         this.lines = lines;
+        this.texts = texts;
       };
 
       return _class;
