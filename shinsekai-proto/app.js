@@ -28701,7 +28701,8 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
     line: ['x1', 'y1', 'x2', 'y2', 'fill', 'stroke', 'opacity'],
     text: ['x', 'y', 'fill', 'stroke', 'opacity'],
     path: ['d', 'fill', 'stroke', 'opacity'],
-    ellipse: ['cx', 'cy', 'rx', 'ry', 'fill', 'stroke', 'opacity']
+    ellipse: ['cx', 'cy', 'rx', 'ry', 'fill', 'stroke', 'opacity'],
+    polygon: ['points', 'fill', 'stroke', 'opacity']
   };
 
   return {
@@ -28721,6 +28722,7 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
       width: '=ssWidth',
       height: '=ssHeight',
       d: '=ssD',
+      points: '=ssPoints',
       fill: '=ssFill',
       stroke: '=ssStroke',
       opacity: '=ssOpacity',
@@ -28736,7 +28738,7 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = _getIterator(attributes[element.tagName]), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        for (var _iterator = _getIterator(attributes[element.tagName] || []), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var attrName = _step.value;
 
           addAttribute(svg, element, '' + attrName + '0', attrName, scope);
@@ -29054,7 +29056,7 @@ _angular2['default'].module('hoge').factory('lines', function ($interval, width,
 });
 
 _angular2['default'].module('hoge').factory('paths', function ($interval, width, height, delay, count) {
-  var n = 10,
+  var n = 5,
       paths = [];
   for (var i = 0; i < n; ++i) {
     paths.push({
@@ -29109,6 +29111,84 @@ _angular2['default'].module('hoge').factory('paths', function ($interval, width,
   return paths;
 });
 
+_angular2['default'].module('hoge').factory('polygons', function ($interval, width, height, delay, count) {
+  var n = 10,
+      polygons = [];
+  for (var i = 0; i < n; ++i) {
+    polygons.push({
+      points: [],
+      color: '#000',
+      opacity: 0.5,
+      duration: 1,
+      delay: 0
+    });
+    for (var j = 0; j < i + 3; ++j) {
+      polygons[i].points.push([width / 2, height / 2]);
+    }
+  }
+
+  $interval(function () {
+    var _iteratorNormalCompletion7 = true;
+    var _didIteratorError7 = false;
+    var _iteratorError7 = undefined;
+
+    try {
+      for (var _iterator7 = _getIterator(polygons), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+        var polygon = _step7.value;
+        var _iteratorNormalCompletion8 = true;
+        var _didIteratorError8 = false;
+        var _iteratorError8 = undefined;
+
+        try {
+          for (var _iterator8 = _getIterator(polygon.points), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+            var point = _step8.value;
+
+            point[0] = Math.random() * width;
+            point[1] = Math.random() * height;
+          }
+        } catch (err) {
+          _didIteratorError8 = true;
+          _iteratorError8 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion8 && _iterator8['return']) {
+              _iterator8['return']();
+            }
+          } finally {
+            if (_didIteratorError8) {
+              throw _iteratorError8;
+            }
+          }
+        }
+
+        polygon.y1 = Math.random() * height;
+        polygon.x2 = Math.random() * width;
+        polygon.y2 = Math.random() * height;
+        polygon.x3 = Math.random() * width;
+        polygon.y3 = Math.random() * height;
+        polygon.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        polygon.opacity = Math.random();
+        polygon.duration = Math.random() + 0.5;
+        polygon.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError7 = true;
+      _iteratorError7 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion7 && _iterator7['return']) {
+          _iterator7['return']();
+        }
+      } finally {
+        if (_didIteratorError7) {
+          throw _iteratorError7;
+        }
+      }
+    }
+  }, delay, count);
+  return polygons;
+});
+
 _angular2['default'].module('hoge').directive('main', function () {
   return {
     restrict: 'E',
@@ -29116,7 +29196,7 @@ _angular2['default'].module('hoge').directive('main', function () {
     scope: {},
     controllerAs: 'main',
     controller: (function () {
-      var _class = function controller(width, height, circles, ellipses, rects, lines, texts, paths) {
+      var _class = function controller(width, height, circles, ellipses, rects, lines, texts, paths, polygons) {
         _classCallCheck(this, _class);
 
         this.width = width;
@@ -29127,12 +29207,20 @@ _angular2['default'].module('hoge').directive('main', function () {
         this.lines = lines;
         this.texts = texts;
         this.paths = paths;
+        this.polygons = polygons;
       };
 
       _createClass(_class, [{
         key: 'pathFrom',
         value: function pathFrom(x, y) {
           return new _path2['default'](x, y);
+        }
+      }, {
+        key: 'points',
+        value: function points(_points) {
+          return _points.map(function (p) {
+            return '' + p[0] + ',' + p[1];
+          }).join(' ');
         }
       }]);
 
