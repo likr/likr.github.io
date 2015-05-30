@@ -28580,6 +28580,8 @@ Iterators.NodeList = Iterators.HTMLCollection = ArrayValues;
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
 
+var _getIterator = require('babel-runtime/core-js/get-iterator')['default'];
+
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 _Object$defineProperty(exports, '__esModule', {
@@ -28605,66 +28607,75 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
     return animate;
   };
 
-  var addAttribute = function addAttribute(svg, element, value0Key, valueKey, scope, attrName) {
+  var addAttribute = function addAttribute(svg, element, value0Key, valueKey, scope) {
     scope[value0Key] = scope[valueKey];
     scope.$watch(valueKey, function () {
       var duration = scope.ssDur || 1,
           delay = scope.ssDelay || 0.1,
-          animate = createAnimate(attrName, scope[value0Key], scope[valueKey], svg.getCurrentTime() + delay, duration);
+          animate = createAnimate(valueKey, scope[value0Key], scope[valueKey], svg.getCurrentTime() + delay, duration);
       element.appendChild(animate);
       animate.addEventListener('endEvent', function () {
-        element.setAttribute(attrName, scope[value0Key]);
+        element.setAttribute(valueKey, scope[value0Key]);
         element.removeChild(animate);
       });
       scope[value0Key] = scope[valueKey];
     });
   };
 
+  var attributes = {
+    circle: ['cx', 'cy', 'r', 'fill', 'stroke', 'opacity'],
+    rect: ['x', 'y', 'width', 'height', 'fill', 'stroke', 'opacity'],
+    line: ['x1', 'y1', 'x2', 'y2', 'fill', 'stroke', 'opacity'],
+    text: ['x', 'y', 'fill', 'stroke', 'opacity']
+  };
+
   return {
     restrict: 'A',
     scope: {
-      ssCx: '=',
-      ssCy: '=',
-      ssR: '=',
-      ssX: '=',
-      ssY: '=',
-      ssX1: '=',
-      ssY1: '=',
-      ssX2: '=',
-      ssY2: '=',
-      ssWidth: '=',
-      ssHeight: '=',
-      ssFill: '=',
-      ssStroke: '=',
-      ssOpacity: '=',
-      ssDur: '=',
-      ssDelay: '='
+      cx: '=ssCx',
+      cy: '=ssCy',
+      r: '=ssR',
+      x: '=ssX',
+      y: '=ssY',
+      x1: '=ssX1',
+      y1: '=ssY1',
+      x2: '=ssX2',
+      y2: '=ssY2',
+      width: '=ssWidth',
+      height: '=ssHeight',
+      fill: '=ssFill',
+      stroke: '=ssStroke',
+      opacity: '=ssOpacity',
+      dur: '=ssDur',
+      delay: '=ssDelay'
     },
     link: function link(scope, elementWrapper, attrs) {
       var element = elementWrapper[0],
           svg = element.ownerSVGElement;
 
-      addAttribute(svg, element, 'fill0', 'ssFill', scope, 'fill');
-      addAttribute(svg, element, 'stroke0', 'ssStroke', scope, 'stroke');
-      addAttribute(svg, element, 'opacity0', 'ssOpacity', scope, 'opacity');
-      if (element.tagName === 'circle') {
-        addAttribute(svg, element, 'cx0', 'ssCx', scope, 'cx');
-        addAttribute(svg, element, 'cy0', 'ssCy', scope, 'cy');
-        addAttribute(svg, element, 'r0', 'ssR', scope, 'r');
-      }
-      if (element.tagName === 'rect' || element.tagName === 'text') {
-        addAttribute(svg, element, 'x0', 'ssX', scope, 'x');
-        addAttribute(svg, element, 'y0', 'ssY', scope, 'y');
-      }
-      if (element.tagName === 'rect') {
-        addAttribute(svg, element, 'width0', 'ssWidth', scope, 'width');
-        addAttribute(svg, element, 'height0', 'ssHeight', scope, 'height');
-      }
-      if (element.tagName === 'line') {
-        addAttribute(svg, element, 'x10', 'ssX1', scope, 'x1');
-        addAttribute(svg, element, 'y10', 'ssY1', scope, 'y1');
-        addAttribute(svg, element, 'x20', 'ssX2', scope, 'x2');
-        addAttribute(svg, element, 'y20', 'ssY2', scope, 'y2');
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = _getIterator(attributes[element.tagName]), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var attrName = _step.value;
+
+          addAttribute(svg, element, '' + attrName + '0', attrName, scope);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator['return']) {
+            _iterator['return']();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
       }
     }
   };
@@ -28673,7 +28684,7 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
 exports['default'] = 'shinsekai';
 module.exports = exports['default'];
 
-},{"angular":2,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/interop-require-default":6}],27:[function(require,module,exports){
+},{"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/interop-require-default":6}],27:[function(require,module,exports){
 'use strict';
 
 var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
@@ -28694,8 +28705,10 @@ _angular2['default'].module('hoge', [_shinsekai2['default']]);
 
 _angular2['default'].module('hoge').constant('width', 500);
 _angular2['default'].module('hoge').constant('height', 500);
+_angular2['default'].module('hoge').constant('delay', 2000);
+_angular2['default'].module('hoge').constant('count', Infinity);
 
-_angular2['default'].module('hoge').factory('circles', function ($interval, width, height) {
+_angular2['default'].module('hoge').factory('circles', function ($interval, width, height, delay, count) {
   var n = 10,
       circles = [];
   for (var i = 0; i < n; ++i) {
@@ -28704,6 +28717,7 @@ _angular2['default'].module('hoge').factory('circles', function ($interval, widt
       y: height / 2,
       r: 5,
       color: '#000',
+      strokeColor: '#000',
       opacity: 0.5,
       duration: 1,
       delay: 0
@@ -28723,6 +28737,7 @@ _angular2['default'].module('hoge').factory('circles', function ($interval, widt
         circle.y = Math.random() * height;
         circle.r = Math.random() * 9 + 1;
         circle.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        circle.strokeColor = 'hsl(' + Math.random() * 360 + ',100%,50%)';
         circle.opacity = Math.random();
         circle.duration = Math.random() + 0.5;
         circle.delay = Math.random() * 0.5;
@@ -28741,11 +28756,11 @@ _angular2['default'].module('hoge').factory('circles', function ($interval, widt
         }
       }
     }
-  }, 2000);
+  }, delay, count);
   return circles;
 });
 
-_angular2['default'].module('hoge').factory('rects', function ($interval, width, height) {
+_angular2['default'].module('hoge').factory('rects', function ($interval, width, height, delay, count) {
   var n = 10,
       rects = [];
   for (var i = 0; i < n; ++i) {
@@ -28755,6 +28770,7 @@ _angular2['default'].module('hoge').factory('rects', function ($interval, width,
       width: 5,
       height: 5,
       color: '#000',
+      strokeColor: '#000',
       opacity: 0.5,
       duration: 1,
       delay: 0
@@ -28775,6 +28791,7 @@ _angular2['default'].module('hoge').factory('rects', function ($interval, width,
         rect.width = Math.random() * 15 + 5;
         rect.height = Math.random() * 15 + 5;
         rect.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        rect.strokeColor = 'hsl(' + Math.random() * 360 + ',100%,50%)';
         rect.opacity = Math.random();
         rect.duration = Math.random() + 0.5;
         rect.delay = Math.random() * 0.5;
@@ -28793,11 +28810,11 @@ _angular2['default'].module('hoge').factory('rects', function ($interval, width,
         }
       }
     }
-  }, 2000);
+  }, delay, count);
   return rects;
 });
 
-_angular2['default'].module('hoge').factory('texts', function ($interval, width, height) {
+_angular2['default'].module('hoge').factory('texts', function ($interval, width, height, delay, count) {
   var n = 10,
       texts = [];
   for (var i = 0; i < n; ++i) {
@@ -28842,11 +28859,11 @@ _angular2['default'].module('hoge').factory('texts', function ($interval, width,
         }
       }
     }
-  }, 2000);
+  }, delay, count);
   return texts;
 });
 
-_angular2['default'].module('hoge').factory('lines', function ($interval, width, height) {
+_angular2['default'].module('hoge').factory('lines', function ($interval, width, height, delay, count) {
   var n = 10,
       lines = [];
   for (var i = 0; i < n; ++i) {
@@ -28894,7 +28911,7 @@ _angular2['default'].module('hoge').factory('lines', function ($interval, width,
         }
       }
     }
-  }, 2000);
+  }, delay, count);
   return lines;
 });
 
