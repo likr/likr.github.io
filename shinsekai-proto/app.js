@@ -28138,9 +28138,9 @@ module.exports = angular;
 
 },{"./angular":1}],3:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/get-iterator"), __esModule: true };
-},{"core-js/library/fn/get-iterator":7}],4:[function(require,module,exports){
+},{"core-js/library/fn/get-iterator":8}],4:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
-},{"core-js/library/fn/object/define-property":8}],5:[function(require,module,exports){
+},{"core-js/library/fn/object/define-property":9}],5:[function(require,module,exports){
 "use strict";
 
 exports["default"] = function (instance, Constructor) {
@@ -28153,6 +28153,31 @@ exports.__esModule = true;
 },{}],6:[function(require,module,exports){
 "use strict";
 
+var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
+
+exports["default"] = (function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+
+      _Object$defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+})();
+
+exports.__esModule = true;
+},{"babel-runtime/core-js/object/define-property":4}],7:[function(require,module,exports){
+"use strict";
+
 exports["default"] = function (obj) {
   return obj && obj.__esModule ? obj : {
     "default": obj
@@ -28160,17 +28185,17 @@ exports["default"] = function (obj) {
 };
 
 exports.__esModule = true;
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 require('../modules/web.dom.iterable');
 require('../modules/es6.string.iterator');
 require('../modules/core.iter-helpers');
 module.exports = require('../modules/$').core.getIterator;
-},{"../modules/$":15,"../modules/core.iter-helpers":22,"../modules/es6.string.iterator":24,"../modules/web.dom.iterable":25}],8:[function(require,module,exports){
+},{"../modules/$":16,"../modules/core.iter-helpers":23,"../modules/es6.string.iterator":25,"../modules/web.dom.iterable":26}],9:[function(require,module,exports){
 var $ = require('../../modules/$');
 module.exports = function defineProperty(it, key, desc){
   return $.setDesc(it, key, desc);
 };
-},{"../../modules/$":15}],9:[function(require,module,exports){
+},{"../../modules/$":16}],10:[function(require,module,exports){
 var $ = require('./$');
 function assert(condition, msg1, msg2){
   if(!condition)throw TypeError(msg2 ? msg1 + msg2 : msg1);
@@ -28189,7 +28214,7 @@ assert.inst = function(it, Constructor, name){
   return it;
 };
 module.exports = assert;
-},{"./$":15}],10:[function(require,module,exports){
+},{"./$":16}],11:[function(require,module,exports){
 var $        = require('./$')
   , TAG      = require('./$.wks')('toStringTag')
   , toString = {}.toString;
@@ -28205,7 +28230,7 @@ cof.set = function(it, tag, stat){
   if(it && !$.has(it = stat ? it : it.prototype, TAG))$.hide(it, TAG, tag);
 };
 module.exports = cof;
-},{"./$":15,"./$.wks":21}],11:[function(require,module,exports){
+},{"./$":16,"./$.wks":22}],12:[function(require,module,exports){
 var $          = require('./$')
   , global     = $.g
   , core       = $.core
@@ -28254,13 +28279,13 @@ function $def(type, name, source){
   }
 }
 module.exports = $def;
-},{"./$":15}],12:[function(require,module,exports){
+},{"./$":16}],13:[function(require,module,exports){
 module.exports = function($){
   $.FW   = false;
   $.path = $.core;
   return $;
 };
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var $def            = require('./$.def')
   , $redef          = require('./$.redef')
   , $               = require('./$')
@@ -28311,7 +28336,7 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE)
     } else $def($def.P + $def.F * $iter.BUGGY, NAME, methods);
   }
 };
-},{"./$":15,"./$.cof":10,"./$.def":11,"./$.iter":14,"./$.redef":16,"./$.wks":21}],14:[function(require,module,exports){
+},{"./$":16,"./$.cof":11,"./$.def":12,"./$.iter":15,"./$.redef":17,"./$.wks":22}],15:[function(require,module,exports){
 'use strict';
 var $                 = require('./$')
   , cof               = require('./$.cof')
@@ -28353,7 +28378,7 @@ module.exports = {
     cof.set(Constructor, NAME + ' Iterator');
   }
 };
-},{"./$":15,"./$.assert":9,"./$.cof":10,"./$.shared":17,"./$.wks":21}],15:[function(require,module,exports){
+},{"./$":16,"./$.assert":10,"./$.cof":11,"./$.shared":18,"./$.wks":22}],16:[function(require,module,exports){
 'use strict';
 var global = typeof self != 'undefined' ? self : Function('return this')()
   , core   = {}
@@ -28450,16 +28475,16 @@ var $ = module.exports = require('./$.fw')({
 /* eslint-disable no-undef */
 if(typeof __e != 'undefined')__e = core;
 if(typeof __g != 'undefined')__g = global;
-},{"./$.fw":12}],16:[function(require,module,exports){
+},{"./$.fw":13}],17:[function(require,module,exports){
 module.exports = require('./$').hide;
-},{"./$":15}],17:[function(require,module,exports){
+},{"./$":16}],18:[function(require,module,exports){
 var $      = require('./$')
   , SHARED = '__core-js_shared__'
   , store  = $.g[SHARED] || $.hide($.g, SHARED, {})[SHARED];
 module.exports = function(key){
   return store[key] || (store[key] = {});
 };
-},{"./$":15}],18:[function(require,module,exports){
+},{"./$":16}],19:[function(require,module,exports){
 // true  -> String#at
 // false -> String#codePointAt
 var $ = require('./$');
@@ -28477,14 +28502,14 @@ module.exports = function(TO_STRING){
         : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
   };
 };
-},{"./$":15}],19:[function(require,module,exports){
+},{"./$":16}],20:[function(require,module,exports){
 var sid = 0;
 function uid(key){
   return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++sid + Math.random()).toString(36));
 }
 uid.safe = require('./$').g.Symbol || uid;
 module.exports = uid;
-},{"./$":15}],20:[function(require,module,exports){
+},{"./$":16}],21:[function(require,module,exports){
 // 22.1.3.31 Array.prototype[@@unscopables]
 var $           = require('./$')
   , UNSCOPABLES = require('./$.wks')('unscopables');
@@ -28492,19 +28517,19 @@ if($.FW && !(UNSCOPABLES in []))$.hide(Array.prototype, UNSCOPABLES, {});
 module.exports = function(key){
   if($.FW)[][UNSCOPABLES][key] = true;
 };
-},{"./$":15,"./$.wks":21}],21:[function(require,module,exports){
+},{"./$":16,"./$.wks":22}],22:[function(require,module,exports){
 var global = require('./$').g
   , store  = require('./$.shared')('wks');
 module.exports = function(name){
   return store[name] || (store[name] =
     global.Symbol && global.Symbol[name] || require('./$.uid').safe('Symbol.' + name));
 };
-},{"./$":15,"./$.shared":17,"./$.uid":19}],22:[function(require,module,exports){
+},{"./$":16,"./$.shared":18,"./$.uid":20}],23:[function(require,module,exports){
 var core  = require('./$').core
   , $iter = require('./$.iter');
 core.isIterable  = $iter.is;
 core.getIterator = $iter.get;
-},{"./$":15,"./$.iter":14}],23:[function(require,module,exports){
+},{"./$":16,"./$.iter":15}],24:[function(require,module,exports){
 var $          = require('./$')
   , setUnscope = require('./$.unscope')
   , ITER       = require('./$.uid').safe('iter')
@@ -28539,7 +28564,7 @@ Iterators.Arguments = Iterators.Array;
 setUnscope('keys');
 setUnscope('values');
 setUnscope('entries');
-},{"./$":15,"./$.iter":14,"./$.iter-define":13,"./$.uid":19,"./$.unscope":20}],24:[function(require,module,exports){
+},{"./$":16,"./$.iter":15,"./$.iter-define":14,"./$.uid":20,"./$.unscope":21}],25:[function(require,module,exports){
 var set   = require('./$').set
   , $at   = require('./$.string-at')(true)
   , ITER  = require('./$.uid').safe('iter')
@@ -28560,7 +28585,7 @@ require('./$.iter-define')(String, 'String', function(iterated){
   iter.i += point.length;
   return step(0, point);
 });
-},{"./$":15,"./$.iter":14,"./$.iter-define":13,"./$.string-at":18,"./$.uid":19}],25:[function(require,module,exports){
+},{"./$":16,"./$.iter":15,"./$.iter-define":14,"./$.string-at":19,"./$.uid":20}],26:[function(require,module,exports){
 require('./es6.array.iterator');
 var $           = require('./$')
   , Iterators   = require('./$.iter').Iterators
@@ -28575,7 +28600,52 @@ if($.FW){
   if(HTC && !(ITERATOR in HTCProto))$.hide(HTCProto, ITERATOR, ArrayValues);
 }
 Iterators.NodeList = Iterators.HTMLCollection = ArrayValues;
-},{"./$":15,"./$.iter":14,"./$.wks":21,"./es6.array.iterator":23}],26:[function(require,module,exports){
+},{"./$":16,"./$.iter":15,"./$.wks":22,"./es6.array.iterator":24}],27:[function(require,module,exports){
+'use strict';
+
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
+
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
+
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
+
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var Path = (function () {
+  function Path(x, y) {
+    _classCallCheck(this, Path);
+
+    this.d = 'M' + x + ',' + y;
+  }
+
+  _createClass(Path, [{
+    key: 'lineTo',
+    value: function lineTo(x, y) {
+      this.d += 'L' + x + ',' + y;
+      return this;
+    }
+  }, {
+    key: 'close',
+    value: function close() {
+      this.d += 'Z';
+      return this;
+    }
+  }, {
+    key: 'toString',
+    value: function toString() {
+      return this.d;
+    }
+  }]);
+
+  return Path;
+})();
+
+exports['default'] = Path;
+module.exports = exports['default'];
+
+},{"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6}],28:[function(require,module,exports){
 'use strict';
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
@@ -28608,6 +28678,9 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
   };
 
   var addAttribute = function addAttribute(svg, element, value0Key, valueKey, scope) {
+    if (scope[valueKey] == null) {
+      return;
+    }
     scope[value0Key] = scope[valueKey];
     scope.$watch(valueKey, function () {
       var duration = scope.ssDur || 1,
@@ -28626,7 +28699,8 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
     circle: ['cx', 'cy', 'r', 'fill', 'stroke', 'opacity'],
     rect: ['x', 'y', 'width', 'height', 'fill', 'stroke', 'opacity'],
     line: ['x1', 'y1', 'x2', 'y2', 'fill', 'stroke', 'opacity'],
-    text: ['x', 'y', 'fill', 'stroke', 'opacity']
+    text: ['x', 'y', 'fill', 'stroke', 'opacity'],
+    path: ['d', 'fill', 'stroke', 'opacity']
   };
 
   return {
@@ -28643,6 +28717,7 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
       y2: '=ssY2',
       width: '=ssWidth',
       height: '=ssHeight',
+      d: '=ssD',
       fill: '=ssFill',
       stroke: '=ssStroke',
       opacity: '=ssOpacity',
@@ -28684,8 +28759,10 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
 exports['default'] = 'shinsekai';
 module.exports = exports['default'];
 
-},{"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/interop-require-default":6}],27:[function(require,module,exports){
+},{"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/interop-require-default":7}],29:[function(require,module,exports){
 'use strict';
+
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
 
 var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
 
@@ -28700,6 +28777,10 @@ var _angular2 = _interopRequireDefault(_angular);
 var _shinsekai = require('./shinsekai');
 
 var _shinsekai2 = _interopRequireDefault(_shinsekai);
+
+var _path = require('./path');
+
+var _path2 = _interopRequireDefault(_path);
 
 _angular2['default'].module('hoge', [_shinsekai2['default']]);
 
@@ -28915,6 +28996,62 @@ _angular2['default'].module('hoge').factory('lines', function ($interval, width,
   return lines;
 });
 
+_angular2['default'].module('hoge').factory('paths', function ($interval, width, height, delay, count) {
+  var n = 10,
+      paths = [];
+  for (var i = 0; i < n; ++i) {
+    paths.push({
+      x1: width / 2,
+      y1: height / 2,
+      x2: width / 2,
+      y2: height / 2,
+      x3: width / 2,
+      y3: height / 2,
+      color: '#000',
+      opacity: 0.5,
+      duration: 1,
+      delay: 0
+    });
+  }
+
+  $interval(function () {
+    var _iteratorNormalCompletion5 = true;
+    var _didIteratorError5 = false;
+    var _iteratorError5 = undefined;
+
+    try {
+      for (var _iterator5 = _getIterator(paths), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+        var path = _step5.value;
+
+        path.x1 = Math.random() * width;
+        path.y1 = Math.random() * height;
+        path.x2 = Math.random() * width;
+        path.y2 = Math.random() * height;
+        path.x3 = Math.random() * width;
+        path.y3 = Math.random() * height;
+        path.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        path.opacity = Math.random();
+        path.duration = Math.random() + 0.5;
+        path.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError5 = true;
+      _iteratorError5 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion5 && _iterator5['return']) {
+          _iterator5['return']();
+        }
+      } finally {
+        if (_didIteratorError5) {
+          throw _iteratorError5;
+        }
+      }
+    }
+  }, delay, count);
+  return paths;
+});
+
 _angular2['default'].module('hoge').directive('main', function () {
   return {
     restrict: 'E',
@@ -28922,7 +29059,7 @@ _angular2['default'].module('hoge').directive('main', function () {
     scope: {},
     controllerAs: 'main',
     controller: (function () {
-      var _class = function controller(width, height, circles, rects, lines, texts) {
+      var _class = function controller(width, height, circles, rects, lines, texts, paths) {
         _classCallCheck(this, _class);
 
         this.width = width;
@@ -28931,11 +29068,19 @@ _angular2['default'].module('hoge').directive('main', function () {
         this.rects = rects;
         this.lines = lines;
         this.texts = texts;
+        this.paths = paths;
       };
+
+      _createClass(_class, [{
+        key: 'pathFrom',
+        value: function pathFrom(x, y) {
+          return new _path2['default'](x, y);
+        }
+      }]);
 
       return _class;
     })()
   };
 });
 
-},{"./shinsekai":26,"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/interop-require-default":6}]},{},[27]);
+},{"./path":27,"./shinsekai":28,"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6,"babel-runtime/helpers/interop-require-default":7}]},{},[29]);
