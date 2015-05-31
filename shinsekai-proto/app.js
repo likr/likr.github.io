@@ -28648,6 +28648,8 @@ module.exports = exports['default'];
 },{"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6}],28:[function(require,module,exports){
 'use strict';
 
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
+
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
 
 var _getIterator = require('babel-runtime/core-js/get-iterator')['default'];
@@ -28682,17 +28684,20 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
       return;
     }
     scope[value0Key] = scope[valueKey];
-    scope.$watch(valueKey, function () {
-      var duration = scope.ssDur || 1,
-          delay = scope.ssDelay || 0.1,
-          animate = createAnimate(valueKey, scope[value0Key], scope[valueKey], svg.getCurrentTime() + delay, duration);
-      element.appendChild(animate);
-      animate.addEventListener('endEvent', function () {
-        element.setAttribute(valueKey, scope[value0Key]);
-        element.removeChild(animate);
+    element.setAttribute(valueKey, scope[value0Key]);
+    if (scope.dur > 0 || scope.delay > 0) {
+      scope.$watch(valueKey, function () {
+        var duration = scope.ssDur || 1,
+            delay = scope.ssDelay || 0.1,
+            animate = createAnimate(valueKey, scope[value0Key], scope[valueKey], svg.getCurrentTime() + delay, duration);
+        element.appendChild(animate);
+        animate.addEventListener('endEvent', function () {
+          element.setAttribute(valueKey, scope[value0Key]);
+          element.removeChild(animate);
+        });
+        scope[value0Key] = scope[valueKey];
       });
-      scope[value0Key] = scope[valueKey];
-    });
+    }
   };
 
   var attributes = {
@@ -28762,10 +28767,34 @@ _angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
   };
 });
 
+_angular2['default'].module('shinsekai').directive('ssAxis', function () {
+  return {
+    restrict: 'A',
+    template: '\n      <line ng-if="axis.orient === \'left\'" ssvg x1="0" y1="0" x2="0" ss-y2="axis.length" stroke="#000"/>\n      <g ng-if="axis.orient === \'left\'" ng-repeat="value in axis.values">\n        <line ssvg x1="-10" ss-y1="axis.length - value" x2="0" ss-y2="axis.length - value" stroke="#000"/>\n        <text ssvg x="-10" ss-y="axis.length - value" text-anchor="end">{{value}}</text>\n      </g>\n      <line ng-if="axis.orient === \'bottom\'" ssvg x1="0" y1="0" ss-x2="axis.length" y2="0" stroke="#000"/>\n      <g ng-if="axis.orient === \'bottom\'" ng-repeat="value in axis.values">\n        <line ssvg ss-x1="value" y1="0" ss-x2="value" y2="10" stroke="#000"/>\n        <text ssvg ss-x="value" y="30" text-anchor="middle">{{value}}</text>\n      </g>\n    ',
+    scope: {},
+    bindToController: {
+      orient: '=ssOrient',
+      ticks: '=ssTicks',
+      length: '=ssLength',
+      xStart: '=ssXStart',
+      xStop: '=ssXStop'
+    },
+    controllerAs: 'axis',
+    controller: function AxisController() {
+      _classCallCheck(this, AxisController);
+
+      this.values = [];
+      for (var i = 0; i <= this.ticks; ++i) {
+        this.values.push(i * (this.xStop - this.xStart) / this.ticks + this.xStart);
+      }
+    }
+  };
+});
+
 exports['default'] = 'shinsekai';
 module.exports = exports['default'];
 
-},{"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/interop-require-default":7}],29:[function(require,module,exports){
+},{"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/interop-require-default":7}],29:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
