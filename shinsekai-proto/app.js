@@ -77,7 +77,114 @@ _angular2['default'].module(moduleName).directive('barChart', function (Transfor
 exports['default'] = moduleName;
 module.exports = exports['default'];
 
-},{"../../src":44,"angular":8,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/class-call-check":12,"babel-runtime/helpers/create-class":13,"babel-runtime/helpers/interop-require-default":14}],2:[function(require,module,exports){
+},{"../../src":45,"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/class-call-check":13,"babel-runtime/helpers/create-class":14,"babel-runtime/helpers/interop-require-default":15}],2:[function(require,module,exports){
+'use strict';
+
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
+
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
+
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
+
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _src = require('../../src');
+
+var _src2 = _interopRequireDefault(_src);
+
+var moduleName = 'shinsekai-example.line-chart';
+
+_angular2['default'].module(moduleName, [_src2['default']]);
+
+_angular2['default'].module(moduleName).factory('data', function ($interval) {
+  var data = [];
+  $interval(function () {
+    data.push({
+      a: Math.random() * 100,
+      b: Math.random() * 100,
+      c: Math.random() * 100
+    });
+  }, 150, 21);
+  return data;
+});
+
+_angular2['default'].module(moduleName).directive('lineChart', function (Path, Transform, Scale, data) {
+  var height = 500,
+      width = 800;
+  return {
+    restrict: 'E',
+    templateUrl: 'components/line-chart.html',
+    scope: {},
+    controllerAs: 'lineChart',
+    controller: (function () {
+      var _class = function controller() {
+        _classCallCheck(this, _class);
+
+        this.data = data;
+        this.variables = ['a', 'b', 'c'];
+        this.height = height;
+        this.width = width;
+        this.xScale = new Scale().domain(0, 20).range(0, width);
+        this.yScale = new Scale().domain(0, 100).range(height, 0);
+      };
+
+      _createClass(_class, [{
+        key: 'path',
+        value: function path(key) {
+          if (this.data.length < 2) {
+            return '';
+          }
+          var path = new Path(this.xScale.scale(0), this.yScale.scale(this.data[0][key]));
+          for (var i = 1; i < this.data.length; ++i) {
+            path.lineTo(this.xScale.scale(i), this.yScale.scale(this.data[i][key]));
+          }
+          return path.toString();
+        }
+      }, {
+        key: 'pathEnter',
+        value: function pathEnter(key) {
+          if (this.data.length < 2) {
+            return '';
+          }
+          var path = new Path(this.xScale.scale(0), this.yScale.scale(this.data[0][key]));
+          for (var i = 1; i < this.data.length - 1; ++i) {
+            path.lineTo(this.xScale.scale(i), this.yScale.scale(this.data[i][key]));
+          }
+          path.lineTo(this.xScale.scale(this.data.length - 1), this.yScale.scale(0));
+          return path.toString();
+        }
+      }, {
+        key: 'color',
+        value: function color(key) {
+          return ({
+            a: '#f00',
+            b: '#0f0',
+            c: '#00f'
+          })[key];
+        }
+      }, {
+        key: 'transform',
+        value: function transform() {
+          return new Transform();
+        }
+      }]);
+
+      return _class;
+    })()
+  };
+});
+exports['default'] = moduleName;
+module.exports = exports['default'];
+
+},{"../../src":45,"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/class-call-check":13,"babel-runtime/helpers/create-class":14,"babel-runtime/helpers/interop-require-default":15}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -598,7 +705,7 @@ _angular2['default'].module(moduleName).directive('random', function (Path, Scal
 exports['default'] = moduleName;
 module.exports = exports['default'];
 
-},{"../../src":44,"angular":8,"babel-runtime/core-js/get-iterator":10,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/class-call-check":12,"babel-runtime/helpers/create-class":13,"babel-runtime/helpers/interop-require-default":14}],3:[function(require,module,exports){
+},{"../../src":45,"angular":9,"babel-runtime/core-js/get-iterator":11,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/class-call-check":13,"babel-runtime/helpers/create-class":14,"babel-runtime/helpers/interop-require-default":15}],4:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -712,7 +819,7 @@ _angular2['default'].module(moduleName).directive('scatterPlot', function (Trans
 exports['default'] = moduleName;
 module.exports = exports['default'];
 
-},{"../../src":44,"angular":8,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/class-call-check":12,"babel-runtime/helpers/create-class":13,"babel-runtime/helpers/interop-require-default":14,"babel-runtime/helpers/to-consumable-array":15}],4:[function(require,module,exports){
+},{"../../src":45,"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/class-call-check":13,"babel-runtime/helpers/create-class":14,"babel-runtime/helpers/interop-require-default":15,"babel-runtime/helpers/to-consumable-array":16}],5:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -767,7 +874,7 @@ _angular2['default'].module(moduleName).directive('simple', function () {
 exports['default'] = moduleName;
 module.exports = exports['default'];
 
-},{"../../src":44,"angular":8,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/class-call-check":12,"babel-runtime/helpers/create-class":13,"babel-runtime/helpers/interop-require-default":14}],5:[function(require,module,exports){
+},{"../../src":45,"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/class-call-check":13,"babel-runtime/helpers/create-class":14,"babel-runtime/helpers/interop-require-default":15}],6:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.0
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -1760,11 +1867,11 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 require('./angular-route');
 module.exports = 'ngRoute';
 
-},{"./angular-route":5}],7:[function(require,module,exports){
+},{"./angular-route":6}],8:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.0
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -29898,17 +30005,17 @@ var minlengthDirective = function() {
 })(window, document);
 
 !window.angular.$$csp() && window.angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":7}],9:[function(require,module,exports){
+},{"./angular":8}],10:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/array/from"), __esModule: true };
-},{"core-js/library/fn/array/from":16}],10:[function(require,module,exports){
+},{"core-js/library/fn/array/from":17}],11:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/get-iterator"), __esModule: true };
-},{"core-js/library/fn/get-iterator":17}],11:[function(require,module,exports){
+},{"core-js/library/fn/get-iterator":18}],12:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
-},{"core-js/library/fn/object/define-property":18}],12:[function(require,module,exports){
+},{"core-js/library/fn/object/define-property":19}],13:[function(require,module,exports){
 "use strict";
 
 exports["default"] = function (instance, Constructor) {
@@ -29918,7 +30025,7 @@ exports["default"] = function (instance, Constructor) {
 };
 
 exports.__esModule = true;
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
@@ -29943,7 +30050,7 @@ exports["default"] = (function () {
 })();
 
 exports.__esModule = true;
-},{"babel-runtime/core-js/object/define-property":11}],14:[function(require,module,exports){
+},{"babel-runtime/core-js/object/define-property":12}],15:[function(require,module,exports){
 "use strict";
 
 exports["default"] = function (obj) {
@@ -29953,7 +30060,7 @@ exports["default"] = function (obj) {
 };
 
 exports.__esModule = true;
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 var _Array$from = require("babel-runtime/core-js/array/from")["default"];
@@ -29969,21 +30076,21 @@ exports["default"] = function (arr) {
 };
 
 exports.__esModule = true;
-},{"babel-runtime/core-js/array/from":9}],16:[function(require,module,exports){
+},{"babel-runtime/core-js/array/from":10}],17:[function(require,module,exports){
 require('../../modules/es6.string.iterator');
 require('../../modules/es6.array.from');
 module.exports = require('../../modules/$').core.Array.from;
-},{"../../modules/$":28,"../../modules/es6.array.from":36,"../../modules/es6.string.iterator":38}],17:[function(require,module,exports){
+},{"../../modules/$":29,"../../modules/es6.array.from":37,"../../modules/es6.string.iterator":39}],18:[function(require,module,exports){
 require('../modules/web.dom.iterable');
 require('../modules/es6.string.iterator');
 require('../modules/core.iter-helpers');
 module.exports = require('../modules/$').core.getIterator;
-},{"../modules/$":28,"../modules/core.iter-helpers":35,"../modules/es6.string.iterator":38,"../modules/web.dom.iterable":39}],18:[function(require,module,exports){
+},{"../modules/$":29,"../modules/core.iter-helpers":36,"../modules/es6.string.iterator":39,"../modules/web.dom.iterable":40}],19:[function(require,module,exports){
 var $ = require('../../modules/$');
 module.exports = function defineProperty(it, key, desc){
   return $.setDesc(it, key, desc);
 };
-},{"../../modules/$":28}],19:[function(require,module,exports){
+},{"../../modules/$":29}],20:[function(require,module,exports){
 var $ = require('./$');
 function assert(condition, msg1, msg2){
   if(!condition)throw TypeError(msg2 ? msg1 + msg2 : msg1);
@@ -30002,7 +30109,7 @@ assert.inst = function(it, Constructor, name){
   return it;
 };
 module.exports = assert;
-},{"./$":28}],20:[function(require,module,exports){
+},{"./$":29}],21:[function(require,module,exports){
 var $        = require('./$')
   , TAG      = require('./$.wks')('toStringTag')
   , toString = {}.toString;
@@ -30018,7 +30125,7 @@ cof.set = function(it, tag, stat){
   if(it && !$.has(it = stat ? it : it.prototype, TAG))$.hide(it, TAG, tag);
 };
 module.exports = cof;
-},{"./$":28,"./$.wks":34}],21:[function(require,module,exports){
+},{"./$":29,"./$.wks":35}],22:[function(require,module,exports){
 // Optional / simple context binding
 var assertFunction = require('./$.assert').fn;
 module.exports = function(fn, that, length){
@@ -30038,7 +30145,7 @@ module.exports = function(fn, that, length){
       return fn.apply(that, arguments);
     };
 };
-},{"./$.assert":19}],22:[function(require,module,exports){
+},{"./$.assert":20}],23:[function(require,module,exports){
 var $          = require('./$')
   , global     = $.g
   , core       = $.core
@@ -30087,13 +30194,13 @@ function $def(type, name, source){
   }
 }
 module.exports = $def;
-},{"./$":28}],23:[function(require,module,exports){
+},{"./$":29}],24:[function(require,module,exports){
 module.exports = function($){
   $.FW   = false;
   $.path = $.core;
   return $;
 };
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 var assertObject = require('./$.assert').obj;
 function close(iterator){
   var ret = iterator['return'];
@@ -30109,7 +30216,7 @@ function call(iterator, fn, value, entries){
 }
 call.close = close;
 module.exports = call;
-},{"./$.assert":19}],25:[function(require,module,exports){
+},{"./$.assert":20}],26:[function(require,module,exports){
 var $def            = require('./$.def')
   , $redef          = require('./$.redef')
   , $               = require('./$')
@@ -30160,7 +30267,7 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE)
     } else $def($def.P + $def.F * $iter.BUGGY, NAME, methods);
   }
 };
-},{"./$":28,"./$.cof":20,"./$.def":22,"./$.iter":27,"./$.redef":29,"./$.wks":34}],26:[function(require,module,exports){
+},{"./$":29,"./$.cof":21,"./$.def":23,"./$.iter":28,"./$.redef":30,"./$.wks":35}],27:[function(require,module,exports){
 var SYMBOL_ITERATOR = require('./$.wks')('iterator')
   , SAFE_CLOSING    = false;
 try {
@@ -30180,7 +30287,7 @@ module.exports = function(exec){
   } catch(e){ /* empty */ }
   return safe;
 };
-},{"./$.wks":34}],27:[function(require,module,exports){
+},{"./$.wks":35}],28:[function(require,module,exports){
 'use strict';
 var $                 = require('./$')
   , cof               = require('./$.cof')
@@ -30222,7 +30329,7 @@ module.exports = {
     cof.set(Constructor, NAME + ' Iterator');
   }
 };
-},{"./$":28,"./$.assert":19,"./$.cof":20,"./$.shared":30,"./$.wks":34}],28:[function(require,module,exports){
+},{"./$":29,"./$.assert":20,"./$.cof":21,"./$.shared":31,"./$.wks":35}],29:[function(require,module,exports){
 'use strict';
 var global = typeof self != 'undefined' ? self : Function('return this')()
   , core   = {}
@@ -30319,16 +30426,16 @@ var $ = module.exports = require('./$.fw')({
 /* eslint-disable no-undef */
 if(typeof __e != 'undefined')__e = core;
 if(typeof __g != 'undefined')__g = global;
-},{"./$.fw":23}],29:[function(require,module,exports){
+},{"./$.fw":24}],30:[function(require,module,exports){
 module.exports = require('./$').hide;
-},{"./$":28}],30:[function(require,module,exports){
+},{"./$":29}],31:[function(require,module,exports){
 var $      = require('./$')
   , SHARED = '__core-js_shared__'
   , store  = $.g[SHARED] || $.hide($.g, SHARED, {})[SHARED];
 module.exports = function(key){
   return store[key] || (store[key] = {});
 };
-},{"./$":28}],31:[function(require,module,exports){
+},{"./$":29}],32:[function(require,module,exports){
 // true  -> String#at
 // false -> String#codePointAt
 var $ = require('./$');
@@ -30346,14 +30453,14 @@ module.exports = function(TO_STRING){
         : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
   };
 };
-},{"./$":28}],32:[function(require,module,exports){
+},{"./$":29}],33:[function(require,module,exports){
 var sid = 0;
 function uid(key){
   return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++sid + Math.random()).toString(36));
 }
 uid.safe = require('./$').g.Symbol || uid;
 module.exports = uid;
-},{"./$":28}],33:[function(require,module,exports){
+},{"./$":29}],34:[function(require,module,exports){
 // 22.1.3.31 Array.prototype[@@unscopables]
 var $           = require('./$')
   , UNSCOPABLES = require('./$.wks')('unscopables');
@@ -30361,19 +30468,19 @@ if($.FW && !(UNSCOPABLES in []))$.hide(Array.prototype, UNSCOPABLES, {});
 module.exports = function(key){
   if($.FW)[][UNSCOPABLES][key] = true;
 };
-},{"./$":28,"./$.wks":34}],34:[function(require,module,exports){
+},{"./$":29,"./$.wks":35}],35:[function(require,module,exports){
 var global = require('./$').g
   , store  = require('./$.shared')('wks');
 module.exports = function(name){
   return store[name] || (store[name] =
     global.Symbol && global.Symbol[name] || require('./$.uid').safe('Symbol.' + name));
 };
-},{"./$":28,"./$.shared":30,"./$.uid":32}],35:[function(require,module,exports){
+},{"./$":29,"./$.shared":31,"./$.uid":33}],36:[function(require,module,exports){
 var core  = require('./$').core
   , $iter = require('./$.iter');
 core.isIterable  = $iter.is;
 core.getIterator = $iter.get;
-},{"./$":28,"./$.iter":27}],36:[function(require,module,exports){
+},{"./$":29,"./$.iter":28}],37:[function(require,module,exports){
 var $     = require('./$')
   , ctx   = require('./$.ctx')
   , $def  = require('./$.def')
@@ -30406,7 +30513,7 @@ $def($def.S + $def.F * !require('./$.iter-detect')(function(iter){ Array.from(it
     return result;
   }
 });
-},{"./$":28,"./$.ctx":21,"./$.def":22,"./$.iter":27,"./$.iter-call":24,"./$.iter-detect":26}],37:[function(require,module,exports){
+},{"./$":29,"./$.ctx":22,"./$.def":23,"./$.iter":28,"./$.iter-call":25,"./$.iter-detect":27}],38:[function(require,module,exports){
 var $          = require('./$')
   , setUnscope = require('./$.unscope')
   , ITER       = require('./$.uid').safe('iter')
@@ -30441,7 +30548,7 @@ Iterators.Arguments = Iterators.Array;
 setUnscope('keys');
 setUnscope('values');
 setUnscope('entries');
-},{"./$":28,"./$.iter":27,"./$.iter-define":25,"./$.uid":32,"./$.unscope":33}],38:[function(require,module,exports){
+},{"./$":29,"./$.iter":28,"./$.iter-define":26,"./$.uid":33,"./$.unscope":34}],39:[function(require,module,exports){
 var set   = require('./$').set
   , $at   = require('./$.string-at')(true)
   , ITER  = require('./$.uid').safe('iter')
@@ -30462,7 +30569,7 @@ require('./$.iter-define')(String, 'String', function(iterated){
   iter.i += point.length;
   return step(0, point);
 });
-},{"./$":28,"./$.iter":27,"./$.iter-define":25,"./$.string-at":31,"./$.uid":32}],39:[function(require,module,exports){
+},{"./$":29,"./$.iter":28,"./$.iter-define":26,"./$.string-at":32,"./$.uid":33}],40:[function(require,module,exports){
 require('./es6.array.iterator');
 var $           = require('./$')
   , Iterators   = require('./$.iter').Iterators
@@ -30477,7 +30584,7 @@ if($.FW){
   if(HTC && !(ITERATOR in HTCProto))$.hide(HTCProto, ITERATOR, ArrayValues);
 }
 Iterators.NodeList = Iterators.HTMLCollection = ArrayValues;
-},{"./$":28,"./$.iter":27,"./$.wks":34,"./es6.array.iterator":37}],40:[function(require,module,exports){
+},{"./$":29,"./$.iter":28,"./$.wks":35,"./es6.array.iterator":38}],41:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -30499,13 +30606,15 @@ var _angular2 = _interopRequireDefault(_angular);
 _angular2['default'].module('shinsekai.ss-axis', []).directive('ssAxis', [function () {
   return {
     restrict: 'A',
-    template: '\n      <line\n          stroke="#000"\n          ssvg\n          ss-x1="axis.orient === \'left\' ? 0 : axis.scale.yMin"\n          ss-y1="axis.orient === \'left\' ? axis.scale.yMin : 0"\n          ss-x2="axis.orient === \'left\' ? 0 : axis.scale.yMax"\n          ss-y2="axis.orient === \'left\' ? axis.scale.yMax : 0"/>\n      <g ng-repeat="i in axis.indices()">\n        <line\n            stroke="#000"\n            ssvg\n            ss-x1="axis.orient === \'left\' ? -10 : axis.y(i)"\n            ss-y1="axis.orient === \'left\' ? axis.y(i) : 0"\n            ss-x2="axis.orient === \'left\' ? 0 : axis.y(i)"\n            ss-y2="axis.orient === \'left\' ? axis.y(i) : 10"\n            ss-dur="0.3"\n            ss-delay="0"/>\n        <text\n            ng-attr-text-anchor="{{axis.orient === \'left\' ? \'end\' : \'middle\'}}"\n            ssvg\n            ss-x="axis.orient === \'left\' ? -10 : axis.y(i)"\n            ss-y="axis.orient === \'left\' ? axis.y(i) : 30"\n            ss-dur="0.3"\n            ss-delay="0">\n          {{axis.format(axis.x(i))}}\n        </text>\n      </g>\n    ',
+    template: '\n      <line\n          stroke="#000"\n          ss-x1="axis.orient === \'left\' ? 0 : axis.scale.yMin"\n          ss-y1="axis.orient === \'left\' ? axis.scale.yMin : 0"\n          ss-x2="axis.orient === \'left\' ? 0 : axis.scale.yMax"\n          ss-y2="axis.orient === \'left\' ? axis.scale.yMax : 0"/>\n      <g ng-repeat="i in axis.indices()">\n        <line\n            stroke="#000"\n            ss-x1="axis.orient === \'left\' ? -10 : axis.y(i)"\n            ss-y1="axis.orient === \'left\' ? axis.y(i) : 0"\n            ss-x2="axis.orient === \'left\' ? 0 : axis.y(i)"\n            ss-y2="axis.orient === \'left\' ? axis.y(i) : 10"\n            ss-dur="axis.duration"\n            ss-delay="axis.delay"/>\n        <text\n            ng-attr-text-anchor="{{axis.orient === \'left\' ? \'end\' : \'middle\'}}"\n            ss-x="axis.orient === \'left\' ? -10 : axis.y(i)"\n            ss-y="axis.orient === \'left\' ? axis.y(i) : 30"\n            ss-dur="axis.duration"\n            ss-delay="axis.delay">\n          {{axis.format(axis.x(i))}}\n        </text>\n      </g>\n    ',
     scope: {},
     bindToController: {
       orient: '=ssAxis',
       ticks: '=ssTicks',
       scale: '=ssScale',
-      format: '=ssFormat'
+      format: '=ssFormat',
+      delay: '=ssDelay',
+      duration: '=ssDur'
     },
     controllerAs: 'axis',
     controller: (function () {
@@ -30548,7 +30657,7 @@ _angular2['default'].module('shinsekai.ss-axis', []).directive('ssAxis', [functi
 exports['default'] = 'shinsekai.ss-axis';
 module.exports = exports['default'];
 
-},{"angular":8,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/class-call-check":12,"babel-runtime/helpers/create-class":13,"babel-runtime/helpers/interop-require-default":14}],41:[function(require,module,exports){
+},{"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/class-call-check":13,"babel-runtime/helpers/create-class":14,"babel-runtime/helpers/interop-require-default":15}],42:[function(require,module,exports){
 'use strict';
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
@@ -30580,12 +30689,10 @@ _angular2['default'].module('shinsekai.directives', [_svg2['default'], _transfor
 exports['default'] = 'shinsekai.directives';
 module.exports = exports['default'];
 
-},{"./axis":40,"./svg":42,"./transform":43,"angular":8,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/interop-require-default":14}],42:[function(require,module,exports){
+},{"./axis":41,"./svg":43,"./transform":44,"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/interop-require-default":15}],43:[function(require,module,exports){
 'use strict';
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
-
-var _getIterator = require('babel-runtime/core-js/get-iterator')['default'];
 
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
@@ -30623,125 +30730,91 @@ var createAnimate = function createAnimate($window, attr, value0, value, now, du
   return animate;
 };
 
-var addAttribute = function addAttribute($window, svg, element, value0Key, valueKey, scope) {
-  if (scope[valueKey] == null) {
-    return;
-  }
-  if (scope[valueKey + 'Enter'] != null) {
-    scope[value0Key] = scope[valueKey + 'Enter'];
-  } else {
-    scope[value0Key] = scope[valueKey];
-  }
-  element.setAttribute(valueKey, scope[value0Key]);
-  scope.$watch(valueKey, function () {
-    if (scope.dur > 0) {
-      (function () {
-        var duration = scope.dur,
-            delay = scope.delay || 0,
-            animate = createAnimate($window, valueKey, scope[value0Key], scope[valueKey], svg.getCurrentTime() + delay, duration);
-        element.appendChild(animate);
-        animate.addEventListener('endEvent', function () {
-          element.setAttribute(valueKey, scope[value0Key]);
-          element.removeChild(animate);
-        });
-        scope[value0Key] = scope[valueKey];
-      })();
-    } else if (scope.delay > 0) {
-      $window.setTimeout(function () {
-        element.setAttribute(valueKey, scope[valueKey]);
-      }, scope.delay * 1000);
-    } else {
-      element.setAttribute(valueKey, scope[valueKey]);
-    }
-  });
-};
-
+var all = ['circle', 'ellipse', 'rect', 'line', 'path', 'polygon', 'polyline', 'text'];
 var attributes = {
-  circle: ['cx', 'cy', 'r', 'fill', 'stroke', 'opacity'],
-  rect: ['x', 'y', 'width', 'height', 'fill', 'stroke', 'opacity'],
-  line: ['x1', 'y1', 'x2', 'y2', 'fill', 'stroke', 'opacity'],
-  text: ['x', 'y', 'fill', 'stroke', 'opacity'],
-  path: ['d', 'fill', 'stroke', 'opacity'],
-  ellipse: ['cx', 'cy', 'rx', 'ry', 'fill', 'stroke', 'opacity'],
-  polygon: ['points', 'fill', 'stroke', 'opacity'],
-  polyline: ['points', 'fill', 'stroke', 'opacity']
+  cx: ['circle', 'ellipse'],
+  cy: ['circle', 'ellipse'],
+  r: ['circle'],
+  rx: ['ellipse'],
+  ry: ['ellipse'],
+  x: ['rect', 'text'],
+  y: ['rect', 'text'],
+  width: ['rect'],
+  height: ['rect'],
+  x1: ['line'],
+  y1: ['line'],
+  x2: ['line'],
+  y2: ['line'],
+  d: ['path'],
+  points: ['polygon', 'polyline'],
+  fill: all,
+  stroke: all,
+  opacity: all
 };
 
-var isolatedScope = {
-  dur: '=ssDur',
-  delay: '=ssDelay'
+var moduleName = 'shinsekai.directives.attributes';
+
+_angular2['default'].module(moduleName, []);
+
+var directiveDefinition = function directiveDefinition(attrName, directiveName, tags) {
+  return ['$window', function ($window) {
+    return {
+      restrict: 'A',
+      link: function link(scope, elementWrapper, attrs) {
+        var element = elementWrapper[0],
+            tagName = element.tagName,
+            svg = element.ownerSVGElement;
+        if (tags.indexOf(tagName) < 0) {
+          throw new Error('' + attrName + ' is not allowed for ' + tagName);
+        }
+
+        insertDummy(svg, $window);
+
+        var oldValue = attrs[directiveName + 'Enter'] == null ? scope.$eval(attrs[directiveName]) : scope.$eval(attrs[directiveName + 'Enter']);
+        element.setAttribute(attrName, oldValue);
+        scope.$watch(attrs[directiveName], function () {
+          var dur = scope.$eval(attrs.ssDur),
+              delay = scope.$eval(attrs.ssDelay),
+              newValue = scope.$eval(attrs[directiveName]);
+          if (attrName === 'd' || attrName === 'points') {
+            if (attrs[directiveName + 'Update'] != null) {
+              oldValue = scope.$eval(attrs[directiveName + 'Update']);
+            }
+          }
+          if (dur > 0) {
+            (function () {
+              var now = delay == null ? svg.getCurrentTime() : svg.getCurrentTime() + delay,
+                  animate = createAnimate($window, attrName, oldValue, newValue, now, dur);
+              element.appendChild(animate);
+              animate.addEventListener('endEvent', function () {
+                element.setAttribute(attrName, oldValue);
+                element.removeChild(animate);
+              });
+              oldValue = newValue;
+            })();
+          } else if (delay > 0) {
+            $window.setTimeout(function () {
+              element.setAttribute(attrName, newValue);
+            }, delay * 1000);
+          } else {
+            element.setAttribute(attrName, newValue);
+          }
+        });
+      }
+    };
+  }];
 };
-for (var tagName in attributes) {
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
 
-  try {
-    for (var _iterator = _getIterator(attributes[tagName]), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var attrName = _step.value;
-
-      if (isolatedScope[attrName] == null) {
-        var val = '=ss' + capitalize(attrName);
-        isolatedScope[attrName] = val;
-        isolatedScope[attrName + 'Enter'] = val + 'Enter';
-      }
-    }
-  } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion && _iterator['return']) {
-        _iterator['return']();
-      }
-    } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
-      }
-    }
-  }
+for (var attrName in attributes) {
+  var tags = attributes[attrName],
+      directiveName = 'ss' + capitalize(attrName);
+  _angular2['default'].module(moduleName).directive(directiveName, directiveDefinition(attrName, directiveName, tags));
 }
 
-_angular2['default'].module('shinsekai.ssvg', []).directive('ssvg', ['$window', function ($window) {
-  return {
-    restrict: 'A',
-    scope: isolatedScope,
-    link: function link(scope, elementWrapper, attrs) {
-      var element = elementWrapper[0],
-          svg = element.ownerSVGElement;
-      insertDummy(svg, $window);
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = _getIterator(attributes[element.tagName] || []), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var attrName = _step2.value;
-
-          addAttribute($window, svg, element, '' + attrName + '0', attrName, scope);
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-            _iterator2['return']();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
-      }
-    }
-  };
-}]);
-
-exports['default'] = 'shinsekai.ssvg';
+exports['default'] = moduleName;
 module.exports = exports['default'];
 
-},{"angular":8,"babel-runtime/core-js/get-iterator":10,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/interop-require-default":14}],43:[function(require,module,exports){
+},{"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/interop-require-default":15}],44:[function(require,module,exports){
 'use strict';
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
@@ -30776,7 +30849,7 @@ _angular2['default'].module(moduleName, [_servicesTransform2['default']]).direct
 exports['default'] = moduleName;
 module.exports = exports['default'];
 
-},{"../services/transform":48,"angular":8,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/interop-require-default":14}],44:[function(require,module,exports){
+},{"../services/transform":49,"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/interop-require-default":15}],45:[function(require,module,exports){
 'use strict';
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
@@ -30804,7 +30877,7 @@ _angular2['default'].module('shinsekai', [_directives2['default'], _services2['d
 exports['default'] = 'shinsekai';
 module.exports = exports['default'];
 
-},{"./directives":41,"./services":45,"angular":8,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/interop-require-default":14}],45:[function(require,module,exports){
+},{"./directives":42,"./services":46,"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/interop-require-default":15}],46:[function(require,module,exports){
 'use strict';
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
@@ -30836,7 +30909,7 @@ _angular2['default'].module('shinsekai.services', [_path2['default'], _transform
 exports['default'] = 'shinsekai.services';
 module.exports = exports['default'];
 
-},{"./path":46,"./scale":47,"./transform":48,"angular":8,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/interop-require-default":14}],46:[function(require,module,exports){
+},{"./path":47,"./scale":48,"./transform":49,"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/interop-require-default":15}],47:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -30891,7 +30964,7 @@ _angular2['default'].module('shinsekai.path', []).factory('Path', [function () {
 exports['default'] = 'shinsekai.path';
 module.exports = exports['default'];
 
-},{"angular":8,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/class-call-check":12,"babel-runtime/helpers/create-class":13,"babel-runtime/helpers/interop-require-default":14}],47:[function(require,module,exports){
+},{"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/class-call-check":13,"babel-runtime/helpers/create-class":14,"babel-runtime/helpers/interop-require-default":15}],48:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -30956,7 +31029,7 @@ _angular2['default'].module('shinsekai.scale', []).factory('Scale', [function ()
 exports['default'] = 'shinsekai.scale';
 module.exports = exports['default'];
 
-},{"angular":8,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/class-call-check":12,"babel-runtime/helpers/create-class":13,"babel-runtime/helpers/interop-require-default":14}],48:[function(require,module,exports){
+},{"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/class-call-check":13,"babel-runtime/helpers/create-class":14,"babel-runtime/helpers/interop-require-default":15}],49:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -31058,7 +31131,7 @@ _angular2['default'].module('shinsekai.transform', []).factory('Transform', [fun
 exports['default'] = 'shinsekai.transform';
 module.exports = exports['default'];
 
-},{"angular":8,"babel-runtime/core-js/object/define-property":11,"babel-runtime/helpers/class-call-check":12,"babel-runtime/helpers/create-class":13,"babel-runtime/helpers/interop-require-default":14}],49:[function(require,module,exports){
+},{"angular":9,"babel-runtime/core-js/object/define-property":12,"babel-runtime/helpers/class-call-check":13,"babel-runtime/helpers/create-class":14,"babel-runtime/helpers/interop-require-default":15}],50:[function(require,module,exports){
 'use strict';
 
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
@@ -31083,13 +31156,17 @@ var _barChart = require('./bar-chart');
 
 var _barChart2 = _interopRequireDefault(_barChart);
 
+var _lineChart = require('./line-chart');
+
+var _lineChart2 = _interopRequireDefault(_lineChart);
+
 var _scatterPlot = require('./scatter-plot');
 
 var _scatterPlot2 = _interopRequireDefault(_scatterPlot);
 
 var moduleName = 'shinsekai-example';
 
-_angular2['default'].module(moduleName, [_angularRoute2['default'], _simple2['default'], _random2['default'], _barChart2['default'], _scatterPlot2['default']]);
+_angular2['default'].module(moduleName, [_angularRoute2['default'], _simple2['default'], _random2['default'], _barChart2['default'], _lineChart2['default'], _scatterPlot2['default']]);
 
 _angular2['default'].module(moduleName).config(function ($routeProvider) {
   $routeProvider.when('/simple', {
@@ -31098,6 +31175,8 @@ _angular2['default'].module(moduleName).config(function ($routeProvider) {
     template: '<random></random>'
   }).when('/bar-chart', {
     template: '<bar-chart></bar-chart>'
+  }).when('/line-chart', {
+    template: '<line-chart></line-chart>'
   }).when('/scatter-plot', {
     controller: function controller($scope, data) {
       $scope.data = data;
@@ -31113,4 +31192,4 @@ _angular2['default'].module(moduleName).config(function ($routeProvider) {
   }).otherwise('/random');
 });
 
-},{"./bar-chart":1,"./random":2,"./scatter-plot":3,"./simple":4,"angular":8,"angular-route":6,"babel-runtime/helpers/interop-require-default":14}]},{},[49]);
+},{"./bar-chart":1,"./line-chart":2,"./random":3,"./scatter-plot":4,"./simple":5,"angular":9,"angular-route":7,"babel-runtime/helpers/interop-require-default":15}]},{},[50]);
