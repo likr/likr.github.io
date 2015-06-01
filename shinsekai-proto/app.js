@@ -25,14 +25,14 @@ var moduleName = 'shinsekai-example.bar-chart';
 
 _angular2['default'].module(moduleName, [_src2['default']]);
 
-_angular2['default'].module(moduleName).directive('barChart', function (Scale) {
+_angular2['default'].module(moduleName).directive('barChart', function (Transform, Scale) {
   var height = 500,
       width = 800,
       initialLabel = 'label',
       initialValue = 50;
   return {
     restrict: 'E',
-    templateUrl: 'bar-chart.html',
+    templateUrl: 'components/bar-chart.html',
     scope: {},
     controllerAs: 'barChart',
     controller: (function () {
@@ -63,6 +63,11 @@ _angular2['default'].module(moduleName).directive('barChart', function (Scale) {
         value: function clear() {
           this.data = [];
         }
+      }, {
+        key: 'transform',
+        value: function transform() {
+          return new Transform();
+        }
       }]);
 
       return _class;
@@ -72,7 +77,7 @@ _angular2['default'].module(moduleName).directive('barChart', function (Scale) {
 exports['default'] = moduleName;
 module.exports = exports['default'];
 
-},{"../../src":32,"angular":6,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/class-call-check":9,"babel-runtime/helpers/create-class":10,"babel-runtime/helpers/interop-require-default":11}],2:[function(require,module,exports){
+},{"../../src":40,"angular":7,"babel-runtime/core-js/object/define-property":10,"babel-runtime/helpers/class-call-check":11,"babel-runtime/helpers/create-class":12,"babel-runtime/helpers/interop-require-default":13}],2:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -529,7 +534,7 @@ _angular2['default'].module(moduleName).factory('polylines', function ($interval
 _angular2['default'].module(moduleName).directive('random', function (Path, Scale) {
   return {
     restrict: 'E',
-    templateUrl: 'random.html',
+    templateUrl: 'components/random.html',
     scope: {},
     controllerAs: 'random',
     controller: (function () {
@@ -593,7 +598,119 @@ _angular2['default'].module(moduleName).directive('random', function (Path, Scal
 exports['default'] = moduleName;
 module.exports = exports['default'];
 
-},{"../../src":32,"angular":6,"babel-runtime/core-js/get-iterator":7,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/class-call-check":9,"babel-runtime/helpers/create-class":10,"babel-runtime/helpers/interop-require-default":11}],3:[function(require,module,exports){
+},{"../../src":40,"angular":7,"babel-runtime/core-js/get-iterator":9,"babel-runtime/core-js/object/define-property":10,"babel-runtime/helpers/class-call-check":11,"babel-runtime/helpers/create-class":12,"babel-runtime/helpers/interop-require-default":13}],3:[function(require,module,exports){
+'use strict';
+
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
+
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
+
+var _toConsumableArray = require('babel-runtime/helpers/to-consumable-array')['default'];
+
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
+
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _src = require('../../src');
+
+var _src2 = _interopRequireDefault(_src);
+
+var moduleName = 'shinsekai-example.scatter-plot';
+
+_angular2['default'].module(moduleName, [_src2['default']]);
+
+_angular2['default'].module(moduleName).directive('scatterPlot', function (Transform, Scale) {
+  var width = 500,
+      height = 500;
+
+  return {
+    restrict: 'E',
+    templateUrl: 'components/scatter-plot.html',
+    scope: {},
+    bindToController: {
+      data: '='
+    },
+    controllerAs: 'scatterPlot',
+    controller: (function () {
+      var _class = function controller($scope) {
+        _classCallCheck(this, _class);
+
+        this.width = width;
+        this.height = height;
+        this.variables = ['sepalLength', 'sepalWidth', 'petalLength', 'petalWidth'];
+        this.xVariable = this.variables[0];
+        this.yVariable = this.variables[1];
+        this.xScale = new Scale().range(0, width);
+        this.yScale = new Scale().range(height, 0);
+        this.updateXVariable();
+        this.updateYVariable();
+      };
+
+      _createClass(_class, [{
+        key: 'color',
+        value: function color(specy) {
+          if (specy === 'setosa') {
+            return '#f00';
+          } else if (specy === 'versicolor') {
+            return '#0f0';
+          } else if (specy === 'virginica') {
+            return '#00f';
+          }
+          return null;
+        }
+      }, {
+        key: 'transform',
+        value: function transform() {
+          return new Transform();
+        }
+      }, {
+        key: 'updateXVariable',
+        value: function updateXVariable() {
+          var _this = this;
+
+          var values = this.data.map(function (d) {
+            return d[_this.xVariable];
+          }),
+              min = Math.min.apply(Math, _toConsumableArray(values)),
+              max = Math.max.apply(Math, _toConsumableArray(values));
+          this.xScale.domain(min, max);
+        }
+      }, {
+        key: 'updateYVariable',
+        value: function updateYVariable() {
+          var _this2 = this;
+
+          var values = this.data.map(function (d) {
+            return d[_this2.yVariable];
+          }),
+              min = Math.min.apply(Math, _toConsumableArray(values)),
+              max = Math.max.apply(Math, _toConsumableArray(values));
+          this.yScale.domain(min, max);
+        }
+      }, {
+        key: 'labelFormat',
+        value: function labelFormat(x) {
+          return x.toFixed(2);
+        }
+      }]);
+
+      return _class;
+    })()
+  };
+});
+
+exports['default'] = moduleName;
+module.exports = exports['default'];
+
+},{"../../src":40,"angular":7,"babel-runtime/core-js/object/define-property":10,"babel-runtime/helpers/class-call-check":11,"babel-runtime/helpers/create-class":12,"babel-runtime/helpers/interop-require-default":13,"babel-runtime/helpers/to-consumable-array":14}],4:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.0
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -1586,11 +1703,11 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 require('./angular-route');
 module.exports = 'ngRoute';
 
-},{"./angular-route":3}],5:[function(require,module,exports){
+},{"./angular-route":4}],6:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.0
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -29724,15 +29841,17 @@ var minlengthDirective = function() {
 })(window, document);
 
 !window.angular.$$csp() && window.angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":5}],7:[function(require,module,exports){
+},{"./angular":6}],8:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/array/from"), __esModule: true };
+},{"core-js/library/fn/array/from":15}],9:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/get-iterator"), __esModule: true };
-},{"core-js/library/fn/get-iterator":12}],8:[function(require,module,exports){
+},{"core-js/library/fn/get-iterator":16}],10:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
-},{"core-js/library/fn/object/define-property":13}],9:[function(require,module,exports){
+},{"core-js/library/fn/object/define-property":17}],11:[function(require,module,exports){
 "use strict";
 
 exports["default"] = function (instance, Constructor) {
@@ -29742,7 +29861,7 @@ exports["default"] = function (instance, Constructor) {
 };
 
 exports.__esModule = true;
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
@@ -29767,7 +29886,7 @@ exports["default"] = (function () {
 })();
 
 exports.__esModule = true;
-},{"babel-runtime/core-js/object/define-property":8}],11:[function(require,module,exports){
+},{"babel-runtime/core-js/object/define-property":10}],13:[function(require,module,exports){
 "use strict";
 
 exports["default"] = function (obj) {
@@ -29777,17 +29896,37 @@ exports["default"] = function (obj) {
 };
 
 exports.__esModule = true;
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
+"use strict";
+
+var _Array$from = require("babel-runtime/core-js/array/from")["default"];
+
+exports["default"] = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return _Array$from(arr);
+  }
+};
+
+exports.__esModule = true;
+},{"babel-runtime/core-js/array/from":8}],15:[function(require,module,exports){
+require('../../modules/es6.string.iterator');
+require('../../modules/es6.array.from');
+module.exports = require('../../modules/$').core.Array.from;
+},{"../../modules/$":27,"../../modules/es6.array.from":35,"../../modules/es6.string.iterator":37}],16:[function(require,module,exports){
 require('../modules/web.dom.iterable');
 require('../modules/es6.string.iterator');
 require('../modules/core.iter-helpers');
 module.exports = require('../modules/$').core.getIterator;
-},{"../modules/$":20,"../modules/core.iter-helpers":27,"../modules/es6.string.iterator":29,"../modules/web.dom.iterable":30}],13:[function(require,module,exports){
+},{"../modules/$":27,"../modules/core.iter-helpers":34,"../modules/es6.string.iterator":37,"../modules/web.dom.iterable":38}],17:[function(require,module,exports){
 var $ = require('../../modules/$');
 module.exports = function defineProperty(it, key, desc){
   return $.setDesc(it, key, desc);
 };
-},{"../../modules/$":20}],14:[function(require,module,exports){
+},{"../../modules/$":27}],18:[function(require,module,exports){
 var $ = require('./$');
 function assert(condition, msg1, msg2){
   if(!condition)throw TypeError(msg2 ? msg1 + msg2 : msg1);
@@ -29806,7 +29945,7 @@ assert.inst = function(it, Constructor, name){
   return it;
 };
 module.exports = assert;
-},{"./$":20}],15:[function(require,module,exports){
+},{"./$":27}],19:[function(require,module,exports){
 var $        = require('./$')
   , TAG      = require('./$.wks')('toStringTag')
   , toString = {}.toString;
@@ -29822,7 +29961,27 @@ cof.set = function(it, tag, stat){
   if(it && !$.has(it = stat ? it : it.prototype, TAG))$.hide(it, TAG, tag);
 };
 module.exports = cof;
-},{"./$":20,"./$.wks":26}],16:[function(require,module,exports){
+},{"./$":27,"./$.wks":33}],20:[function(require,module,exports){
+// Optional / simple context binding
+var assertFunction = require('./$.assert').fn;
+module.exports = function(fn, that, length){
+  assertFunction(fn);
+  if(~length && that === undefined)return fn;
+  switch(length){
+    case 1: return function(a){
+      return fn.call(that, a);
+    };
+    case 2: return function(a, b){
+      return fn.call(that, a, b);
+    };
+    case 3: return function(a, b, c){
+      return fn.call(that, a, b, c);
+    };
+  } return function(/* ...args */){
+      return fn.apply(that, arguments);
+    };
+};
+},{"./$.assert":18}],21:[function(require,module,exports){
 var $          = require('./$')
   , global     = $.g
   , core       = $.core
@@ -29871,13 +30030,29 @@ function $def(type, name, source){
   }
 }
 module.exports = $def;
-},{"./$":20}],17:[function(require,module,exports){
+},{"./$":27}],22:[function(require,module,exports){
 module.exports = function($){
   $.FW   = false;
   $.path = $.core;
   return $;
 };
-},{}],18:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
+var assertObject = require('./$.assert').obj;
+function close(iterator){
+  var ret = iterator['return'];
+  if(ret !== undefined)assertObject(ret.call(iterator));
+}
+function call(iterator, fn, value, entries){
+  try {
+    return entries ? fn(assertObject(value)[0], value[1]) : fn(value);
+  } catch(e){
+    close(iterator);
+    throw e;
+  }
+}
+call.close = close;
+module.exports = call;
+},{"./$.assert":18}],24:[function(require,module,exports){
 var $def            = require('./$.def')
   , $redef          = require('./$.redef')
   , $               = require('./$')
@@ -29928,7 +30103,27 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE)
     } else $def($def.P + $def.F * $iter.BUGGY, NAME, methods);
   }
 };
-},{"./$":20,"./$.cof":15,"./$.def":16,"./$.iter":19,"./$.redef":21,"./$.wks":26}],19:[function(require,module,exports){
+},{"./$":27,"./$.cof":19,"./$.def":21,"./$.iter":26,"./$.redef":28,"./$.wks":33}],25:[function(require,module,exports){
+var SYMBOL_ITERATOR = require('./$.wks')('iterator')
+  , SAFE_CLOSING    = false;
+try {
+  var riter = [7][SYMBOL_ITERATOR]();
+  riter['return'] = function(){ SAFE_CLOSING = true; };
+  Array.from(riter, function(){ throw 2; });
+} catch(e){ /* empty */ }
+module.exports = function(exec){
+  if(!SAFE_CLOSING)return false;
+  var safe = false;
+  try {
+    var arr  = [7]
+      , iter = arr[SYMBOL_ITERATOR]();
+    iter.next = function(){ safe = true; };
+    arr[SYMBOL_ITERATOR] = function(){ return iter; };
+    exec(arr);
+  } catch(e){ /* empty */ }
+  return safe;
+};
+},{"./$.wks":33}],26:[function(require,module,exports){
 'use strict';
 var $                 = require('./$')
   , cof               = require('./$.cof')
@@ -29970,7 +30165,7 @@ module.exports = {
     cof.set(Constructor, NAME + ' Iterator');
   }
 };
-},{"./$":20,"./$.assert":14,"./$.cof":15,"./$.shared":22,"./$.wks":26}],20:[function(require,module,exports){
+},{"./$":27,"./$.assert":18,"./$.cof":19,"./$.shared":29,"./$.wks":33}],27:[function(require,module,exports){
 'use strict';
 var global = typeof self != 'undefined' ? self : Function('return this')()
   , core   = {}
@@ -30067,16 +30262,16 @@ var $ = module.exports = require('./$.fw')({
 /* eslint-disable no-undef */
 if(typeof __e != 'undefined')__e = core;
 if(typeof __g != 'undefined')__g = global;
-},{"./$.fw":17}],21:[function(require,module,exports){
+},{"./$.fw":22}],28:[function(require,module,exports){
 module.exports = require('./$').hide;
-},{"./$":20}],22:[function(require,module,exports){
+},{"./$":27}],29:[function(require,module,exports){
 var $      = require('./$')
   , SHARED = '__core-js_shared__'
   , store  = $.g[SHARED] || $.hide($.g, SHARED, {})[SHARED];
 module.exports = function(key){
   return store[key] || (store[key] = {});
 };
-},{"./$":20}],23:[function(require,module,exports){
+},{"./$":27}],30:[function(require,module,exports){
 // true  -> String#at
 // false -> String#codePointAt
 var $ = require('./$');
@@ -30094,14 +30289,14 @@ module.exports = function(TO_STRING){
         : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
   };
 };
-},{"./$":20}],24:[function(require,module,exports){
+},{"./$":27}],31:[function(require,module,exports){
 var sid = 0;
 function uid(key){
   return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++sid + Math.random()).toString(36));
 }
 uid.safe = require('./$').g.Symbol || uid;
 module.exports = uid;
-},{"./$":20}],25:[function(require,module,exports){
+},{"./$":27}],32:[function(require,module,exports){
 // 22.1.3.31 Array.prototype[@@unscopables]
 var $           = require('./$')
   , UNSCOPABLES = require('./$.wks')('unscopables');
@@ -30109,19 +30304,52 @@ if($.FW && !(UNSCOPABLES in []))$.hide(Array.prototype, UNSCOPABLES, {});
 module.exports = function(key){
   if($.FW)[][UNSCOPABLES][key] = true;
 };
-},{"./$":20,"./$.wks":26}],26:[function(require,module,exports){
+},{"./$":27,"./$.wks":33}],33:[function(require,module,exports){
 var global = require('./$').g
   , store  = require('./$.shared')('wks');
 module.exports = function(name){
   return store[name] || (store[name] =
     global.Symbol && global.Symbol[name] || require('./$.uid').safe('Symbol.' + name));
 };
-},{"./$":20,"./$.shared":22,"./$.uid":24}],27:[function(require,module,exports){
+},{"./$":27,"./$.shared":29,"./$.uid":31}],34:[function(require,module,exports){
 var core  = require('./$').core
   , $iter = require('./$.iter');
 core.isIterable  = $iter.is;
 core.getIterator = $iter.get;
-},{"./$":20,"./$.iter":19}],28:[function(require,module,exports){
+},{"./$":27,"./$.iter":26}],35:[function(require,module,exports){
+var $     = require('./$')
+  , ctx   = require('./$.ctx')
+  , $def  = require('./$.def')
+  , $iter = require('./$.iter')
+  , call  = require('./$.iter-call');
+$def($def.S + $def.F * !require('./$.iter-detect')(function(iter){ Array.from(iter); }), 'Array', {
+  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
+  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
+    var O       = Object($.assertDefined(arrayLike))
+      , mapfn   = arguments[1]
+      , mapping = mapfn !== undefined
+      , f       = mapping ? ctx(mapfn, arguments[2], 2) : undefined
+      , index   = 0
+      , length, result, step, iterator;
+    if($iter.is(O)){
+      iterator = $iter.get(O);
+      // strange IE quirks mode bug -> use typeof instead of isFunction
+      result   = new (typeof this == 'function' ? this : Array);
+      for(; !(step = iterator.next()).done; index++){
+        result[index] = mapping ? call(iterator, f, [step.value, index], true) : step.value;
+      }
+    } else {
+      // strange IE quirks mode bug -> use typeof instead of isFunction
+      result = new (typeof this == 'function' ? this : Array)(length = $.toLength(O.length));
+      for(; length > index; index++){
+        result[index] = mapping ? f(O[index], index) : O[index];
+      }
+    }
+    result.length = index;
+    return result;
+  }
+});
+},{"./$":27,"./$.ctx":20,"./$.def":21,"./$.iter":26,"./$.iter-call":23,"./$.iter-detect":25}],36:[function(require,module,exports){
 var $          = require('./$')
   , setUnscope = require('./$.unscope')
   , ITER       = require('./$.uid').safe('iter')
@@ -30156,7 +30384,7 @@ Iterators.Arguments = Iterators.Array;
 setUnscope('keys');
 setUnscope('values');
 setUnscope('entries');
-},{"./$":20,"./$.iter":19,"./$.iter-define":18,"./$.uid":24,"./$.unscope":25}],29:[function(require,module,exports){
+},{"./$":27,"./$.iter":26,"./$.iter-define":24,"./$.uid":31,"./$.unscope":32}],37:[function(require,module,exports){
 var set   = require('./$').set
   , $at   = require('./$.string-at')(true)
   , ITER  = require('./$.uid').safe('iter')
@@ -30177,7 +30405,7 @@ require('./$.iter-define')(String, 'String', function(iterated){
   iter.i += point.length;
   return step(0, point);
 });
-},{"./$":20,"./$.iter":19,"./$.iter-define":18,"./$.string-at":23,"./$.uid":24}],30:[function(require,module,exports){
+},{"./$":27,"./$.iter":26,"./$.iter-define":24,"./$.string-at":30,"./$.uid":31}],38:[function(require,module,exports){
 require('./es6.array.iterator');
 var $           = require('./$')
   , Iterators   = require('./$.iter').Iterators
@@ -30192,8 +30420,10 @@ if($.FW){
   if(HTC && !(ITERATOR in HTCProto))$.hide(HTCProto, ITERATOR, ArrayValues);
 }
 Iterators.NodeList = Iterators.HTMLCollection = ArrayValues;
-},{"./$":20,"./$.iter":19,"./$.wks":26,"./es6.array.iterator":28}],31:[function(require,module,exports){
+},{"./$":27,"./$.iter":26,"./$.wks":33,"./es6.array.iterator":36}],39:[function(require,module,exports){
 'use strict';
+
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
 
 var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
 
@@ -30212,33 +30442,52 @@ var _angular2 = _interopRequireDefault(_angular);
 _angular2['default'].module('shinsekai.ss-axis', []).directive('ssAxis', [function () {
   return {
     restrict: 'A',
-    template: '\n      <line\n          stroke="#000"\n          ssvg\n          ss-x1="axis.orient === \'left\' ? 0 : axis.scale.yMin"\n          ss-y1="axis.orient === \'left\' ? axis.scale.yMin : 0"\n          ss-x2="axis.orient === \'left\' ? 0 : axis.scale.yMax"\n          ss-y2="axis.orient === \'left\' ? axis.scale.yMax : 0"/>\n      <g ng-repeat="value in axis.values">\n        <line\n            stroke="#000"\n            ssvg\n            ss-x1="axis.orient === \'left\' ? -10 : value.y"\n            ss-y1="axis.orient === \'left\' ? value.y : 0"\n            ss-x2="axis.orient === \'left\' ? 0 : value.y"\n            ss-y2="axis.orient === \'left\' ? value.y : 10"/>\n        <text\n            ng-attr-text-anchor="{{axis.orient === \'left\' ? \'end\' : \'middle\'}}"\n            ssvg\n            ss-x="axis.orient === \'left\' ? -10 : value.y"\n            ss-y="axis.orient === \'left\' ? value.y : 30">\n          {{value.x}}\n        </text>\n      </g>\n    ',
+    template: '\n      <line\n          stroke="#000"\n          ssvg\n          ss-x1="axis.orient === \'left\' ? 0 : axis.scale.yMin"\n          ss-y1="axis.orient === \'left\' ? axis.scale.yMin : 0"\n          ss-x2="axis.orient === \'left\' ? 0 : axis.scale.yMax"\n          ss-y2="axis.orient === \'left\' ? axis.scale.yMax : 0"/>\n      <g ng-repeat="i in axis.indices">\n        <line\n            stroke="#000"\n            ssvg\n            ss-x1="axis.orient === \'left\' ? -10 : axis.y(i)"\n            ss-y1="axis.orient === \'left\' ? axis.y(i) : 0"\n            ss-x2="axis.orient === \'left\' ? 0 : axis.y(i)"\n            ss-y2="axis.orient === \'left\' ? axis.y(i) : 10"/>\n        <text\n            ng-attr-text-anchor="{{axis.orient === \'left\' ? \'end\' : \'middle\'}}"\n            ssvg\n            ss-x="axis.orient === \'left\' ? -10 : axis.y(i)"\n            ss-y="axis.orient === \'left\' ? axis.y(i) : 30">\n          {{axis.format(axis.x(i))}}\n        </text>\n      </g>\n    ',
     scope: {},
     bindToController: {
       orient: '=ssAxis',
       ticks: '=ssTicks',
-      scale: '=ssScale'
+      scale: '=ssScale',
+      format: '=ssFormat'
     },
     controllerAs: 'axis',
-    controller: function AxisController() {
-      _classCallCheck(this, AxisController);
+    controller: (function () {
+      function AxisController() {
+        _classCallCheck(this, AxisController);
 
-      this.values = [];
-      for (var i = 0; i <= this.ticks; ++i) {
-        var x = (this.scale.xMax - this.scale.xMin) * i / this.ticks;
-        this.values.push({
-          x: x,
-          y: this.scale.scale(x)
-        });
+        if (this.format == null) {
+          this.format = function (x) {
+            return x;
+          };
+        }
+
+        this.indices = [];
+        for (var i = 0; i <= this.ticks; ++i) {
+          this.indices.push(i);
+        }
       }
-    }
+
+      _createClass(AxisController, [{
+        key: 'x',
+        value: function x(i) {
+          return (this.scale.xMax - this.scale.xMin) * i / this.ticks + this.scale.xMin;
+        }
+      }, {
+        key: 'y',
+        value: function y(i) {
+          return this.scale.scale(this.x(i));
+        }
+      }]);
+
+      return AxisController;
+    })()
   };
 }]);
 
 exports['default'] = 'shinsekai.ss-axis';
 module.exports = exports['default'];
 
-},{"angular":6,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/class-call-check":9,"babel-runtime/helpers/interop-require-default":11}],32:[function(require,module,exports){
+},{"angular":7,"babel-runtime/core-js/object/define-property":10,"babel-runtime/helpers/class-call-check":11,"babel-runtime/helpers/create-class":12,"babel-runtime/helpers/interop-require-default":13}],40:[function(require,module,exports){
 'use strict';
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
@@ -30278,7 +30527,7 @@ _angular2['default'].module('shinsekai', [_svg2['default'], _axis2['default'], _
 exports['default'] = 'shinsekai';
 module.exports = exports['default'];
 
-},{"./axis":31,"./path":33,"./scale":34,"./svg":35,"./transform":36,"angular":6,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/interop-require-default":11}],33:[function(require,module,exports){
+},{"./axis":39,"./path":41,"./scale":42,"./svg":43,"./transform":44,"angular":7,"babel-runtime/core-js/object/define-property":10,"babel-runtime/helpers/interop-require-default":13}],41:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -30333,7 +30582,7 @@ _angular2['default'].module('shinsekai.path', []).factory('Path', [function () {
 exports['default'] = 'shinsekai.path';
 module.exports = exports['default'];
 
-},{"angular":6,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/class-call-check":9,"babel-runtime/helpers/create-class":10,"babel-runtime/helpers/interop-require-default":11}],34:[function(require,module,exports){
+},{"angular":7,"babel-runtime/core-js/object/define-property":10,"babel-runtime/helpers/class-call-check":11,"babel-runtime/helpers/create-class":12,"babel-runtime/helpers/interop-require-default":13}],42:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -30398,7 +30647,7 @@ _angular2['default'].module('shinsekai.scale', []).factory('Scale', [function ()
 exports['default'] = 'shinsekai.scale';
 module.exports = exports['default'];
 
-},{"angular":6,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/class-call-check":9,"babel-runtime/helpers/create-class":10,"babel-runtime/helpers/interop-require-default":11}],35:[function(require,module,exports){
+},{"angular":7,"babel-runtime/core-js/object/define-property":10,"babel-runtime/helpers/class-call-check":11,"babel-runtime/helpers/create-class":12,"babel-runtime/helpers/interop-require-default":13}],43:[function(require,module,exports){
 'use strict';
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
@@ -30551,7 +30800,7 @@ _angular2['default'].module('shinsekai.ssvg', []).directive('ssvg', ['$window', 
 exports['default'] = 'shinsekai.ssvg';
 module.exports = exports['default'];
 
-},{"angular":6,"babel-runtime/core-js/get-iterator":7,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/interop-require-default":11}],36:[function(require,module,exports){
+},{"angular":7,"babel-runtime/core-js/get-iterator":9,"babel-runtime/core-js/object/define-property":10,"babel-runtime/helpers/interop-require-default":13}],44:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -30653,7 +30902,7 @@ _angular2['default'].module('shinsekai.transform', []).factory('Transform', [fun
 exports['default'] = 'shinsekai.transform';
 module.exports = exports['default'];
 
-},{"angular":6,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/class-call-check":9,"babel-runtime/helpers/create-class":10,"babel-runtime/helpers/interop-require-default":11}],37:[function(require,module,exports){
+},{"angular":7,"babel-runtime/core-js/object/define-property":10,"babel-runtime/helpers/class-call-check":11,"babel-runtime/helpers/create-class":12,"babel-runtime/helpers/interop-require-default":13}],45:[function(require,module,exports){
 'use strict';
 
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
@@ -30674,16 +30923,32 @@ var _barChart = require('./bar-chart');
 
 var _barChart2 = _interopRequireDefault(_barChart);
 
+var _scatterPlot = require('./scatter-plot');
+
+var _scatterPlot2 = _interopRequireDefault(_scatterPlot);
+
 var moduleName = 'shinsekai-example';
 
-_angular2['default'].module(moduleName, [_angularRoute2['default'], _random2['default'], _barChart2['default']]);
+_angular2['default'].module(moduleName, [_angularRoute2['default'], _random2['default'], _barChart2['default'], _scatterPlot2['default']]);
 
 _angular2['default'].module(moduleName).config(function ($routeProvider) {
   $routeProvider.when('/random', {
     template: '<random></random>'
   }).when('/bar-chart', {
     template: '<bar-chart></bar-chart>'
+  }).when('/scatter-plot', {
+    controller: function controller($scope, data) {
+      $scope.data = data;
+    },
+    resolve: {
+      data: function data($http) {
+        return $http.get('data/iris.json').then(function (response) {
+          return response.data;
+        });
+      }
+    },
+    template: '<scatter-plot data="data"></scatter-plot>'
   }).otherwise('/random');
 });
 
-},{"./bar-chart":1,"./random":2,"angular":6,"angular-route":4,"babel-runtime/helpers/interop-require-default":11}]},{},[37]);
+},{"./bar-chart":1,"./random":2,"./scatter-plot":3,"angular":7,"angular-route":5,"babel-runtime/helpers/interop-require-default":13}]},{},[45]);
