@@ -28603,15 +28603,107 @@ Iterators.NodeList = Iterators.HTMLCollection = ArrayValues;
 },{"./$":16,"./$.iter":15,"./$.wks":22,"./es6.array.iterator":24}],27:[function(require,module,exports){
 'use strict';
 
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
+
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
+
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+_angular2['default'].module('shinsekai.ss-axis', []).directive('ssAxis', [function () {
+  return {
+    restrict: 'A',
+    template: '\n      <line\n          stroke="#000"\n          ssvg\n          ss-x1="axis.orient === \'left\' ? 0 : axis.scale.yMin"\n          ss-y1="axis.orient === \'left\' ? axis.scale.yMin : 0"\n          ss-x2="axis.orient === \'left\' ? 0 : axis.scale.yMax"\n          ss-y2="axis.orient === \'left\' ? axis.scale.yMax : 0"/>\n      <g ng-repeat="value in axis.values">\n        <line\n            stroke="#000"\n            ssvg\n            ss-x1="axis.orient === \'left\' ? -10 : value.y"\n            ss-y1="axis.orient === \'left\' ? value.y : 0"\n            ss-x2="axis.orient === \'left\' ? 0 : value.y"\n            ss-y2="axis.orient === \'left\' ? value.y : 10"/>\n        <text\n            ng-attr-text-anchor="{{axis.orient === \'left\' ? \'end\' : \'middle\'}}"\n            ssvg\n            ss-x="axis.orient === \'left\' ? -10 : value.y"\n            ss-y="axis.orient === \'left\' ? value.y : 30">\n          {{value.x}}\n        </text>\n      </g>\n    ',
+    scope: {},
+    bindToController: {
+      orient: '=ssAxis',
+      ticks: '=ssTicks',
+      scale: '=ssScale'
+    },
+    controllerAs: 'axis',
+    controller: function AxisController() {
+      _classCallCheck(this, AxisController);
+
+      this.values = [];
+      for (var i = 0; i <= this.ticks; ++i) {
+        var x = (this.scale.xMax - this.scale.xMin) * i / this.ticks;
+        this.values.push({
+          x: x,
+          y: this.scale.scale(x)
+        });
+      }
+    }
+  };
+}]);
+
+exports['default'] = 'shinsekai.ss-axis';
+module.exports = exports['default'];
+
+},{"angular":2,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/interop-require-default":7}],28:[function(require,module,exports){
+'use strict';
+
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
+
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _svg = require('./svg');
+
+var _svg2 = _interopRequireDefault(_svg);
+
+var _axis = require('./axis');
+
+var _axis2 = _interopRequireDefault(_axis);
+
+var _path = require('./path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _transform = require('./transform');
+
+var _transform2 = _interopRequireDefault(_transform);
+
+var _scale = require('./scale');
+
+var _scale2 = _interopRequireDefault(_scale);
+
+_angular2['default'].module('shinsekai', [_svg2['default'], _axis2['default'], _path2['default'], _transform2['default'], _scale2['default']]);
+
+exports['default'] = 'shinsekai';
+module.exports = exports['default'];
+
+},{"./axis":27,"./path":29,"./scale":30,"./svg":31,"./transform":32,"angular":2,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/interop-require-default":7}],29:[function(require,module,exports){
+'use strict';
+
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
 
 var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
 
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
 _Object$defineProperty(exports, '__esModule', {
   value: true
 });
+
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
 
 var Path = (function () {
   function Path(x, y) {
@@ -28642,13 +28734,80 @@ var Path = (function () {
   return Path;
 })();
 
-exports['default'] = Path;
+_angular2['default'].module('shinsekai.path', []).factory('Path', [function () {
+  return Path;
+}]);
+
+exports['default'] = 'shinsekai.path';
 module.exports = exports['default'];
 
-},{"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6}],28:[function(require,module,exports){
+},{"angular":2,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6,"babel-runtime/helpers/interop-require-default":7}],30:[function(require,module,exports){
 'use strict';
 
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
+
 var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
+
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
+
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var Scale = (function () {
+  function Scale() {
+    _classCallCheck(this, Scale);
+
+    this.xMin = 0;
+    this.xMax = 1;
+    this.yMin = 0;
+    this.yMax = 1;
+  }
+
+  _createClass(Scale, [{
+    key: 'domain',
+    value: function domain(xMin, xMax) {
+      this.xMin = xMin;
+      this.xMax = xMax;
+      return this;
+    }
+  }, {
+    key: 'range',
+    value: function range(yMin, yMax) {
+      this.yMin = yMin;
+      this.yMax = yMax;
+      return this;
+    }
+  }, {
+    key: 'scale',
+    value: function scale(x) {
+      var xMin = this.xMin;
+      var xMax = this.xMax;
+      var yMin = this.yMin;
+      var yMax = this.yMax;
+
+      return (yMax - yMin) * (x - xMin) / (xMax - xMin) + yMin;
+    }
+  }]);
+
+  return Scale;
+})();
+
+_angular2['default'].module('shinsekai.scale', []).factory('Scale', [function () {
+  return Scale;
+}]);
+
+exports['default'] = 'shinsekai.scale';
+module.exports = exports['default'];
+
+},{"angular":2,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6,"babel-runtime/helpers/interop-require-default":7}],31:[function(require,module,exports){
+'use strict';
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
 
@@ -28664,137 +28823,245 @@ var _angular = require('angular');
 
 var _angular2 = _interopRequireDefault(_angular);
 
-_angular2['default'].module('shinsekai', []);
+var capitalize = function capitalize(s) {
+  return s[0].toUpperCase() + s.substr(1);
+};
 
-_angular2['default'].module('shinsekai').directive('ssvg', function ($window) {
-  var createAnimate = function createAnimate(attr, value0, value, now, duration) {
+var insertDummy = function insertDummy(svg, $window) {
+  // insert dummy animate element for firefox implementation
+  var dummy = $window.document.getElementById('ss-dummy-animate');
+  if (dummy == null) {
     var animate = $window.document.createElementNS('http://www.w3.org/2000/svg', 'animate');
-    animate.setAttribute('attributeName', attr);
-    animate.setAttribute('dur', '' + duration + 's');
-    animate.setAttribute('fill', 'freeze');
-    animate.setAttribute('from', value0);
-    animate.setAttribute('to', value);
-    animate.setAttribute('begin', now);
-    animate.setAttribute('end', now + duration);
-    return animate;
-  };
+    animate.setAttribute('id', 'ss-dummy-animate');
+    svg.appendChild(animate);
+  }
+};
 
-  var addAttribute = function addAttribute(svg, element, value0Key, valueKey, scope) {
-    if (scope[valueKey] == null) {
-      return;
-    }
+var createAnimate = function createAnimate($window, attr, value0, value, now, duration) {
+  var animate = $window.document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+  animate.setAttribute('attributeName', attr);
+  animate.setAttribute('dur', '' + duration + 's');
+  animate.setAttribute('fill', 'freeze');
+  animate.setAttribute('from', value0);
+  animate.setAttribute('to', value);
+  animate.setAttribute('begin', now);
+  animate.setAttribute('end', now + duration);
+  return animate;
+};
+
+var addAttribute = function addAttribute($window, svg, element, value0Key, valueKey, scope) {
+  if (scope[valueKey] == null) {
+    return;
+  }
+  if (scope[valueKey + 'Enter'] != null) {
+    scope[value0Key] = scope[valueKey + 'Enter'];
+  } else {
     scope[value0Key] = scope[valueKey];
-    element.setAttribute(valueKey, scope[value0Key]);
-    if (scope.dur > 0 || scope.delay > 0) {
-      scope.$watch(valueKey, function () {
-        var duration = scope.ssDur || 1,
-            delay = scope.ssDelay || 0.1,
-            animate = createAnimate(valueKey, scope[value0Key], scope[valueKey], svg.getCurrentTime() + delay, duration);
-        element.appendChild(animate);
-        animate.addEventListener('endEvent', function () {
-          element.setAttribute(valueKey, scope[value0Key]);
-          element.removeChild(animate);
-        });
-        scope[value0Key] = scope[valueKey];
+  }
+  element.setAttribute(valueKey, scope[value0Key]);
+  if (scope.dur > 0 || scope.delay > 0) {
+    scope.$watch(valueKey, function (newValue, oldValue) {
+      var duration = scope.dur,
+          delay = scope.delay,
+          animate = createAnimate($window, valueKey, scope[value0Key], scope[valueKey], svg.getCurrentTime() + delay, duration);
+      element.appendChild(animate);
+      animate.addEventListener('endEvent', function () {
+        element.setAttribute(valueKey, scope[value0Key]);
+        element.removeChild(animate);
       });
+      scope[value0Key] = scope[valueKey];
+    });
+  }
+};
+
+var attributes = {
+  circle: ['cx', 'cy', 'r', 'fill', 'stroke', 'opacity'],
+  rect: ['x', 'y', 'width', 'height', 'fill', 'stroke', 'opacity'],
+  line: ['x1', 'y1', 'x2', 'y2', 'fill', 'stroke', 'opacity'],
+  text: ['x', 'y', 'fill', 'stroke', 'opacity'],
+  path: ['d', 'fill', 'stroke', 'opacity'],
+  ellipse: ['cx', 'cy', 'rx', 'ry', 'fill', 'stroke', 'opacity'],
+  polygon: ['points', 'fill', 'stroke', 'opacity'],
+  polyline: ['points', 'fill', 'stroke', 'opacity']
+};
+
+var isolatedScope = {
+  dur: '=ssDur',
+  delay: '=ssDelay'
+};
+for (var tagName in attributes) {
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = _getIterator(attributes[tagName]), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var attrName = _step.value;
+
+      if (isolatedScope[attrName] == null) {
+        var val = '=ss' + capitalize(attrName);
+        isolatedScope[attrName] = val;
+        isolatedScope[attrName + 'Enter'] = val + 'Enter';
+      }
     }
-  };
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator['return']) {
+        _iterator['return']();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+}
 
-  var attributes = {
-    circle: ['cx', 'cy', 'r', 'fill', 'stroke', 'opacity'],
-    rect: ['x', 'y', 'width', 'height', 'fill', 'stroke', 'opacity'],
-    line: ['x1', 'y1', 'x2', 'y2', 'fill', 'stroke', 'opacity'],
-    text: ['x', 'y', 'fill', 'stroke', 'opacity'],
-    path: ['d', 'fill', 'stroke', 'opacity'],
-    ellipse: ['cx', 'cy', 'rx', 'ry', 'fill', 'stroke', 'opacity'],
-    polygon: ['points', 'fill', 'stroke', 'opacity'],
-    polyline: ['points', 'fill', 'stroke', 'opacity']
-  };
-
+_angular2['default'].module('shinsekai.ssvg', []).directive('ssvg', ['$window', function ($window) {
   return {
     restrict: 'A',
-    scope: {
-      cx: '=ssCx',
-      cy: '=ssCy',
-      r: '=ssR',
-      rx: '=ssRx',
-      ry: '=ssRy',
-      x: '=ssX',
-      y: '=ssY',
-      x1: '=ssX1',
-      y1: '=ssY1',
-      x2: '=ssX2',
-      y2: '=ssY2',
-      width: '=ssWidth',
-      height: '=ssHeight',
-      d: '=ssD',
-      points: '=ssPoints',
-      fill: '=ssFill',
-      stroke: '=ssStroke',
-      opacity: '=ssOpacity',
-      dur: '=ssDur',
-      delay: '=ssDelay'
-    },
+    scope: isolatedScope,
     link: function link(scope, elementWrapper, attrs) {
       var element = elementWrapper[0],
           svg = element.ownerSVGElement;
-
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      insertDummy(svg, $window);
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
 
       try {
-        for (var _iterator = _getIterator(attributes[element.tagName] || []), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var attrName = _step.value;
+        for (var _iterator2 = _getIterator(attributes[element.tagName] || []), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var attrName = _step2.value;
 
-          addAttribute(svg, element, '' + attrName + '0', attrName, scope);
+          addAttribute($window, svg, element, '' + attrName + '0', attrName, scope);
         }
       } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion && _iterator['return']) {
-            _iterator['return']();
+          if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+            _iterator2['return']();
           }
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          if (_didIteratorError2) {
+            throw _iteratorError2;
           }
         }
       }
     }
   };
-});
+}]);
 
-_angular2['default'].module('shinsekai').directive('ssAxis', function () {
-  return {
-    restrict: 'A',
-    template: '\n      <line ng-if="axis.orient === \'left\'" ssvg x1="0" y1="0" x2="0" ss-y2="axis.length" stroke="#000"/>\n      <g ng-if="axis.orient === \'left\'" ng-repeat="value in axis.values">\n        <line ssvg x1="-10" ss-y1="axis.length - value" x2="0" ss-y2="axis.length - value" stroke="#000"/>\n        <text ssvg x="-10" ss-y="axis.length - value" text-anchor="end">{{value}}</text>\n      </g>\n      <line ng-if="axis.orient === \'bottom\'" ssvg x1="0" y1="0" ss-x2="axis.length" y2="0" stroke="#000"/>\n      <g ng-if="axis.orient === \'bottom\'" ng-repeat="value in axis.values">\n        <line ssvg ss-x1="value" y1="0" ss-x2="value" y2="10" stroke="#000"/>\n        <text ssvg ss-x="value" y="30" text-anchor="middle">{{value}}</text>\n      </g>\n    ',
-    scope: {},
-    bindToController: {
-      orient: '=ssOrient',
-      ticks: '=ssTicks',
-      length: '=ssLength',
-      xStart: '=ssXStart',
-      xStop: '=ssXStop'
-    },
-    controllerAs: 'axis',
-    controller: function AxisController() {
-      _classCallCheck(this, AxisController);
-
-      this.values = [];
-      for (var i = 0; i <= this.ticks; ++i) {
-        this.values.push(i * (this.xStop - this.xStart) / this.ticks + this.xStart);
-      }
-    }
-  };
-});
-
-exports['default'] = 'shinsekai';
+exports['default'] = 'shinsekai.ssvg';
 module.exports = exports['default'];
 
-},{"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/interop-require-default":7}],29:[function(require,module,exports){
+},{"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/interop-require-default":7}],32:[function(require,module,exports){
+'use strict';
+
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
+
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
+
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
+
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var Transform = (function () {
+  function Transform() {
+    _classCallCheck(this, Transform);
+
+    this.transforms = [];
+  }
+
+  _createClass(Transform, [{
+    key: 'translate',
+    value: function translate(x) {
+      var y = arguments[1] === undefined ? 0 : arguments[1];
+
+      this.transforms.push({
+        type: 'translate',
+        args: [x, y]
+      });
+      return this;
+    }
+  }, {
+    key: 'scale',
+    value: function scale(x, y) {
+      if (y == null) {
+        y = x;
+      }
+      this.transforms.push({
+        type: 'scale',
+        args: [x, y]
+      });
+      return this;
+    }
+  }, {
+    key: 'rotate',
+    value: function rotate(a, x, y) {
+      if (x != null && y != null) {
+        this.transforms.push({
+          type: 'rotate',
+          args: [a, x, y]
+        });
+      } else {
+        this.transforms.push({
+          type: 'rotate',
+          args: [a]
+        });
+      }
+      return this;
+    }
+  }, {
+    key: 'skewX',
+    value: function skewX(a) {
+      this.transforms.push({
+        type: 'skewX',
+        args: [a]
+      });
+      return this;
+    }
+  }, {
+    key: 'skewY',
+    value: function skewY(a) {
+      this.transforms.push({
+        type: 'skewY',
+        args: [a]
+      });
+      return this;
+    }
+  }, {
+    key: 'toString',
+    value: function toString() {
+      return this.transforms.map(function (t) {
+        return '' + t.type + '(' + t.args.join(',') + ')';
+      }).join('');
+    }
+  }]);
+
+  return Transform;
+})();
+
+_angular2['default'].module('shinsekai.transform', []).factory('Transform', [function () {
+  return Transform;
+}]);
+
+exports['default'] = 'shinsekai.transform';
+module.exports = exports['default'];
+
+},{"angular":2,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6,"babel-runtime/helpers/interop-require-default":7}],33:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -28809,38 +29076,25 @@ var _angular = require('angular');
 
 var _angular2 = _interopRequireDefault(_angular);
 
-var _shinsekai = require('./shinsekai');
+var _src = require('../src');
 
-var _shinsekai2 = _interopRequireDefault(_shinsekai);
+var _src2 = _interopRequireDefault(_src);
 
-var _path = require('./path');
+_angular2['default'].module('hoge', [_src2['default']]);
 
-var _path2 = _interopRequireDefault(_path);
-
-_angular2['default'].module('hoge', [_shinsekai2['default']]);
-
+_angular2['default'].module('hoge').constant('size', 100);
 _angular2['default'].module('hoge').constant('width', 800);
 _angular2['default'].module('hoge').constant('height', 800);
 _angular2['default'].module('hoge').constant('delay', 2000);
 _angular2['default'].module('hoge').constant('count', Infinity);
 
-_angular2['default'].module('hoge').factory('circles', function ($interval, width, height, delay, count) {
+_angular2['default'].module('hoge').factory('circles', function ($interval, size, delay, count) {
   var n = 10,
       circles = [];
-  for (var i = 0; i < n; ++i) {
-    circles.push({
-      x: width / 2,
-      y: height / 2,
-      r: 5,
-      color: '#000',
-      strokeColor: '#000',
-      opacity: 0.5,
-      duration: 1,
-      delay: 0
-    });
-  }
-
   $interval(function () {
+    if (circles.length < n) {
+      circles.push({});
+    }
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
@@ -28849,8 +29103,8 @@ _angular2['default'].module('hoge').factory('circles', function ($interval, widt
       for (var _iterator = _getIterator(circles), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         var circle = _step.value;
 
-        circle.x = Math.random() * width;
-        circle.y = Math.random() * height;
+        circle.x = Math.random() * size;
+        circle.y = Math.random() * size;
         circle.r = Math.random() * 9 + 1;
         circle.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
         circle.strokeColor = 'hsl(' + Math.random() * 360 + ',100%,50%)';
@@ -28876,24 +29130,13 @@ _angular2['default'].module('hoge').factory('circles', function ($interval, widt
   return circles;
 });
 
-_angular2['default'].module('hoge').factory('ellipses', function ($interval, width, height, delay, count) {
+_angular2['default'].module('hoge').factory('ellipses', function ($interval, size, delay, count) {
   var n = 10,
       ellipses = [];
-  for (var i = 0; i < n; ++i) {
-    ellipses.push({
-      x: width / 2,
-      y: height / 2,
-      rx: 5,
-      ry: 5,
-      color: '#000',
-      strokeColor: '#000',
-      opacity: 0.5,
-      duration: 1,
-      delay: 0
-    });
-  }
-
   $interval(function () {
+    if (ellipses.length < n) {
+      ellipses.push({});
+    }
     var _iteratorNormalCompletion2 = true;
     var _didIteratorError2 = false;
     var _iteratorError2 = undefined;
@@ -28902,8 +29145,8 @@ _angular2['default'].module('hoge').factory('ellipses', function ($interval, wid
       for (var _iterator2 = _getIterator(ellipses), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
         var ellipse = _step2.value;
 
-        ellipse.x = Math.random() * width;
-        ellipse.y = Math.random() * height;
+        ellipse.x = Math.random() * size;
+        ellipse.y = Math.random() * size;
         ellipse.rx = Math.random() * 9 + 1;
         ellipse.ry = Math.random() * 9 + 1;
         ellipse.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
@@ -28930,24 +29173,13 @@ _angular2['default'].module('hoge').factory('ellipses', function ($interval, wid
   return ellipses;
 });
 
-_angular2['default'].module('hoge').factory('rects', function ($interval, width, height, delay, count) {
+_angular2['default'].module('hoge').factory('rects', function ($interval, size, delay, count) {
   var n = 10,
       rects = [];
-  for (var i = 0; i < n; ++i) {
-    rects.push({
-      x: width / 2,
-      y: height / 2,
-      width: 5,
-      height: 5,
-      color: '#000',
-      strokeColor: '#000',
-      opacity: 0.5,
-      duration: 1,
-      delay: 0
-    });
-  }
-
   $interval(function () {
+    if (rects.length < n) {
+      rects.push({});
+    }
     var _iteratorNormalCompletion3 = true;
     var _didIteratorError3 = false;
     var _iteratorError3 = undefined;
@@ -28956,8 +29188,8 @@ _angular2['default'].module('hoge').factory('rects', function ($interval, width,
       for (var _iterator3 = _getIterator(rects), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
         var rect = _step3.value;
 
-        rect.x = Math.random() * width;
-        rect.y = Math.random() * height;
+        rect.x = Math.random() * size;
+        rect.y = Math.random() * size;
         rect.width = Math.random() * 15 + 5;
         rect.height = Math.random() * 15 + 5;
         rect.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
@@ -28984,22 +29216,15 @@ _angular2['default'].module('hoge').factory('rects', function ($interval, width,
   return rects;
 });
 
-_angular2['default'].module('hoge').factory('texts', function ($interval, width, height, delay, count) {
+_angular2['default'].module('hoge').factory('texts', function ($interval, size, delay, count) {
   var n = 10,
       texts = [];
-  for (var i = 0; i < n; ++i) {
-    texts.push({
-      text: 'imai',
-      x: width / 2,
-      y: height / 2,
-      color: '#000',
-      opacity: 0.5,
-      duration: 1,
-      delay: 0
-    });
-  }
-
   $interval(function () {
+    if (texts.length < n) {
+      texts.push({
+        text: 'imai'
+      });
+    }
     var _iteratorNormalCompletion4 = true;
     var _didIteratorError4 = false;
     var _iteratorError4 = undefined;
@@ -29008,8 +29233,8 @@ _angular2['default'].module('hoge').factory('texts', function ($interval, width,
       for (var _iterator4 = _getIterator(texts), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
         var text = _step4.value;
 
-        text.x = Math.random() * width;
-        text.y = Math.random() * height;
+        text.x = Math.random() * size;
+        text.y = Math.random() * size;
         text.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
         text.opacity = Math.random();
         text.duration = Math.random() + 0.5;
@@ -29033,23 +29258,13 @@ _angular2['default'].module('hoge').factory('texts', function ($interval, width,
   return texts;
 });
 
-_angular2['default'].module('hoge').factory('lines', function ($interval, width, height, delay, count) {
+_angular2['default'].module('hoge').factory('lines', function ($interval, size, delay, count) {
   var n = 10,
       lines = [];
-  for (var i = 0; i < n; ++i) {
-    lines.push({
-      x1: width / 2,
-      y1: height / 2,
-      x2: width / 2,
-      y2: height / 2,
-      color: '#000',
-      opacity: 0.5,
-      duration: 1,
-      delay: 0
-    });
-  }
-
   $interval(function () {
+    if (lines.length < n) {
+      lines.push({});
+    }
     var _iteratorNormalCompletion5 = true;
     var _didIteratorError5 = false;
     var _iteratorError5 = undefined;
@@ -29058,10 +29273,10 @@ _angular2['default'].module('hoge').factory('lines', function ($interval, width,
       for (var _iterator5 = _getIterator(lines), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
         var line = _step5.value;
 
-        line.x1 = Math.random() * width;
-        line.y1 = Math.random() * height;
-        line.x2 = Math.random() * width;
-        line.y2 = Math.random() * height;
+        line.x1 = Math.random() * size;
+        line.y1 = Math.random() * size;
+        line.x2 = Math.random() * size;
+        line.y2 = Math.random() * size;
         line.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
         line.opacity = Math.random();
         line.duration = Math.random() + 0.5;
@@ -29085,25 +29300,19 @@ _angular2['default'].module('hoge').factory('lines', function ($interval, width,
   return lines;
 });
 
-_angular2['default'].module('hoge').factory('paths', function ($interval, width, height, delay, count) {
+_angular2['default'].module('hoge').factory('paths', function ($interval, size, delay, count) {
   var n = 5,
       paths = [];
-  for (var i = 0; i < n; ++i) {
-    paths.push({
-      x1: width / 2,
-      y1: height / 2,
-      x2: width / 2,
-      y2: height / 2,
-      x3: width / 2,
-      y3: height / 2,
-      color: '#000',
-      opacity: 0.5,
-      duration: 1,
-      delay: 0
-    });
-  }
-
   $interval(function () {
+    if (paths.length < n) {
+      var points = [];
+      for (var j = 0; j < 3; ++j) {
+        points.push([size / 2, size / 2]);
+      }
+      paths.push({
+        points: points
+      });
+    }
     var _iteratorNormalCompletion6 = true;
     var _didIteratorError6 = false;
     var _iteratorError6 = undefined;
@@ -29111,13 +29320,32 @@ _angular2['default'].module('hoge').factory('paths', function ($interval, width,
     try {
       for (var _iterator6 = _getIterator(paths), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
         var path = _step6.value;
+        var _iteratorNormalCompletion7 = true;
+        var _didIteratorError7 = false;
+        var _iteratorError7 = undefined;
 
-        path.x1 = Math.random() * width;
-        path.y1 = Math.random() * height;
-        path.x2 = Math.random() * width;
-        path.y2 = Math.random() * height;
-        path.x3 = Math.random() * width;
-        path.y3 = Math.random() * height;
+        try {
+          for (var _iterator7 = _getIterator(path.points), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+            var point = _step7.value;
+
+            point[0] = Math.random() * size;
+            point[1] = Math.random() * size;
+          }
+        } catch (err) {
+          _didIteratorError7 = true;
+          _iteratorError7 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion7 && _iterator7['return']) {
+              _iterator7['return']();
+            }
+          } finally {
+            if (_didIteratorError7) {
+              throw _iteratorError7;
+            }
+          }
+        }
+
         path.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
         path.opacity = Math.random();
         path.duration = Math.random() + 0.5;
@@ -29141,77 +29369,68 @@ _angular2['default'].module('hoge').factory('paths', function ($interval, width,
   return paths;
 });
 
-_angular2['default'].module('hoge').factory('polygons', function ($interval, width, height, delay, count) {
+_angular2['default'].module('hoge').factory('polygons', function ($interval, size, delay, count) {
   var n = 5,
       polygons = [];
-  for (var i = 0; i < n; ++i) {
-    polygons.push({
-      points: [],
-      color: '#000',
-      opacity: 0.5,
-      duration: 1,
-      delay: 0
-    });
-    for (var j = 0; j < i + 3; ++j) {
-      polygons[i].points.push([width / 2, height / 2]);
-    }
-  }
-
   $interval(function () {
-    var _iteratorNormalCompletion7 = true;
-    var _didIteratorError7 = false;
-    var _iteratorError7 = undefined;
+    if (polygons.length < n) {
+      var points = [];
+      for (var j = 0; j < polygons.length + 3; ++j) {
+        points.push([size / 2, size / 2]);
+      }
+      polygons.push({
+        points: points
+      });
+    }
+    var _iteratorNormalCompletion8 = true;
+    var _didIteratorError8 = false;
+    var _iteratorError8 = undefined;
 
     try {
-      for (var _iterator7 = _getIterator(polygons), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-        var polygon = _step7.value;
-        var _iteratorNormalCompletion8 = true;
-        var _didIteratorError8 = false;
-        var _iteratorError8 = undefined;
+      for (var _iterator8 = _getIterator(polygons), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+        var polygon = _step8.value;
+        var _iteratorNormalCompletion9 = true;
+        var _didIteratorError9 = false;
+        var _iteratorError9 = undefined;
 
         try {
-          for (var _iterator8 = _getIterator(polygon.points), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-            var point = _step8.value;
+          for (var _iterator9 = _getIterator(polygon.points), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+            var point = _step9.value;
 
-            point[0] = Math.random() * width;
-            point[1] = Math.random() * height;
+            point[0] = Math.random() * size;
+            point[1] = Math.random() * size;
           }
         } catch (err) {
-          _didIteratorError8 = true;
-          _iteratorError8 = err;
+          _didIteratorError9 = true;
+          _iteratorError9 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion8 && _iterator8['return']) {
-              _iterator8['return']();
+            if (!_iteratorNormalCompletion9 && _iterator9['return']) {
+              _iterator9['return']();
             }
           } finally {
-            if (_didIteratorError8) {
-              throw _iteratorError8;
+            if (_didIteratorError9) {
+              throw _iteratorError9;
             }
           }
         }
 
-        polygon.y1 = Math.random() * height;
-        polygon.x2 = Math.random() * width;
-        polygon.y2 = Math.random() * height;
-        polygon.x3 = Math.random() * width;
-        polygon.y3 = Math.random() * height;
         polygon.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
         polygon.opacity = Math.random();
         polygon.duration = Math.random() + 0.5;
         polygon.delay = Math.random() * 0.5;
       }
     } catch (err) {
-      _didIteratorError7 = true;
-      _iteratorError7 = err;
+      _didIteratorError8 = true;
+      _iteratorError8 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion7 && _iterator7['return']) {
-          _iterator7['return']();
+        if (!_iteratorNormalCompletion8 && _iterator8['return']) {
+          _iterator8['return']();
         }
       } finally {
-        if (_didIteratorError7) {
-          throw _iteratorError7;
+        if (_didIteratorError8) {
+          throw _iteratorError8;
         }
       }
     }
@@ -29219,77 +29438,68 @@ _angular2['default'].module('hoge').factory('polygons', function ($interval, wid
   return polygons;
 });
 
-_angular2['default'].module('hoge').factory('polylines', function ($interval, width, height, delay, count) {
+_angular2['default'].module('hoge').factory('polylines', function ($interval, size, delay, count) {
   var n = 5,
       polylines = [];
-  for (var i = 0; i < n; ++i) {
-    polylines.push({
-      points: [],
-      color: '#000',
-      opacity: 0.5,
-      duration: 1,
-      delay: 0
-    });
-    for (var j = 0; j < i + 3; ++j) {
-      polylines[i].points.push([width / 2, height / 2]);
-    }
-  }
-
   $interval(function () {
-    var _iteratorNormalCompletion9 = true;
-    var _didIteratorError9 = false;
-    var _iteratorError9 = undefined;
+    if (polylines.length < n) {
+      var points = [];
+      for (var j = 0; j < polylines.length + 3; ++j) {
+        points.push([size / 2, size / 2]);
+      }
+      polylines.push({
+        points: points
+      });
+    }
+    var _iteratorNormalCompletion10 = true;
+    var _didIteratorError10 = false;
+    var _iteratorError10 = undefined;
 
     try {
-      for (var _iterator9 = _getIterator(polylines), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-        var polyline = _step9.value;
-        var _iteratorNormalCompletion10 = true;
-        var _didIteratorError10 = false;
-        var _iteratorError10 = undefined;
+      for (var _iterator10 = _getIterator(polylines), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+        var polyline = _step10.value;
+        var _iteratorNormalCompletion11 = true;
+        var _didIteratorError11 = false;
+        var _iteratorError11 = undefined;
 
         try {
-          for (var _iterator10 = _getIterator(polyline.points), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
-            var point = _step10.value;
+          for (var _iterator11 = _getIterator(polyline.points), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+            var point = _step11.value;
 
-            point[0] = Math.random() * width;
-            point[1] = Math.random() * height;
+            point[0] = Math.random() * size;
+            point[1] = Math.random() * size;
           }
         } catch (err) {
-          _didIteratorError10 = true;
-          _iteratorError10 = err;
+          _didIteratorError11 = true;
+          _iteratorError11 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion10 && _iterator10['return']) {
-              _iterator10['return']();
+            if (!_iteratorNormalCompletion11 && _iterator11['return']) {
+              _iterator11['return']();
             }
           } finally {
-            if (_didIteratorError10) {
-              throw _iteratorError10;
+            if (_didIteratorError11) {
+              throw _iteratorError11;
             }
           }
         }
 
-        polyline.y1 = Math.random() * height;
-        polyline.x2 = Math.random() * width;
-        polyline.y2 = Math.random() * height;
-        polyline.x3 = Math.random() * width;
-        polyline.y3 = Math.random() * height;
         polyline.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
         polyline.opacity = Math.random();
         polyline.duration = Math.random() + 0.5;
         polyline.delay = Math.random() * 0.5;
       }
     } catch (err) {
-      _didIteratorError9 = true;
-      _iteratorError9 = err;
+      _didIteratorError10 = true;
+      _iteratorError10 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion9 && _iterator9['return']) {
-          _iterator9['return']();
+        if (!_iteratorNormalCompletion10 && _iterator10['return']) {
+          _iterator10['return']();
         }
       } finally {
-        if (_didIteratorError9) {
-          throw _iteratorError9;
+        if (_didIteratorError10) {
+          throw _iteratorError10;
         }
       }
     }
@@ -29297,16 +29507,17 @@ _angular2['default'].module('hoge').factory('polylines', function ($interval, wi
   return polylines;
 });
 
-_angular2['default'].module('hoge').directive('main', function () {
+_angular2['default'].module('hoge').directive('main', function (Path, Scale) {
   return {
     restrict: 'E',
     templateUrl: 'main.html',
     scope: {},
     controllerAs: 'main',
     controller: (function () {
-      var _class = function controller(width, height, circles, ellipses, rects, lines, texts, paths, polygons, polylines) {
+      var _class = function controller(size, width, height, circles, ellipses, rects, lines, texts, paths, polygons, polylines) {
         _classCallCheck(this, _class);
 
+        this.size = size;
         this.width = width;
         this.height = height;
         this.circles = circles;
@@ -29317,19 +29528,41 @@ _angular2['default'].module('hoge').directive('main', function () {
         this.paths = paths;
         this.polygons = polygons;
         this.polylines = polylines;
+        this.xScale = new Scale().domain(0, size).range(0, width);
+        this.yScale = new Scale().domain(0, size).range(height, 0);
       };
 
       _createClass(_class, [{
-        key: 'pathFrom',
-        value: function pathFrom(x, y) {
-          return new _path2['default'](x, y);
+        key: 'path',
+        value: function path(points) {
+          var path = new Path(this.xScale.scale(points[0][0]), this.yScale.scale(points[0][1]));
+          for (var i = 1; i < points.length; ++i) {
+            path.lineTo(this.xScale.scale(points[i][0]), this.yScale.scale(points[i][1]));
+          }
+          return path.close().toString();
         }
       }, {
         key: 'points',
         value: function points(_points) {
+          var _this = this;
+
           return _points.map(function (p) {
-            return '' + p[0] + ',' + p[1];
+            return '' + _this.xScale.scale(p[0]) + ',' + _this.yScale.scale(p[1]);
           }).join(' ');
+        }
+      }, {
+        key: 'initialPath',
+        value: function initialPath(points) {
+          return this.path(points.map(function () {
+            return [0, 0];
+          }));
+        }
+      }, {
+        key: 'initialPoints',
+        value: function initialPoints(points) {
+          return this.points(points.map(function () {
+            return [0, 0];
+          }));
         }
       }]);
 
@@ -29338,4 +29571,4 @@ _angular2['default'].module('hoge').directive('main', function () {
   };
 });
 
-},{"./path":27,"./shinsekai":28,"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6,"babel-runtime/helpers/interop-require-default":7}]},{},[29]);
+},{"../src":28,"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6,"babel-runtime/helpers/interop-require-default":7}]},{},[33]);
