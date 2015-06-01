@@ -1,4 +1,1596 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
+
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
+
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
+
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _src = require('../../src');
+
+var _src2 = _interopRequireDefault(_src);
+
+var moduleName = 'shinsekai-example.bar-chart';
+
+_angular2['default'].module(moduleName, [_src2['default']]);
+
+_angular2['default'].module(moduleName).directive('barChart', function (Scale) {
+  var height = 500,
+      width = 800,
+      initialLabel = 'label',
+      initialValue = 50;
+  return {
+    restrict: 'E',
+    templateUrl: 'bar-chart.html',
+    scope: {},
+    controllerAs: 'barChart',
+    controller: (function () {
+      var _class = function controller() {
+        _classCallCheck(this, _class);
+
+        this.data = [];
+        this.newLabel = initialLabel;
+        this.newValue = initialValue;
+        this.height = height;
+        this.width = width;
+        this.yScale = new Scale().domain(0, 100).range(height, 0);
+      };
+
+      _createClass(_class, [{
+        key: 'add',
+        value: function add() {
+          this.data.push({
+            label: this.newLabel,
+            value: this.newValue,
+            color: 'hsl(' + Math.random() * 360 + ',100%,50%)'
+          });
+          this.newLabel = initialLabel;
+          this.newValue = +(Math.random() * 100).toFixed();
+        }
+      }, {
+        key: 'clear',
+        value: function clear() {
+          this.data = [];
+        }
+      }]);
+
+      return _class;
+    })()
+  };
+});
+exports['default'] = moduleName;
+module.exports = exports['default'];
+
+},{"../../src":32,"angular":6,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/class-call-check":9,"babel-runtime/helpers/create-class":10,"babel-runtime/helpers/interop-require-default":11}],2:[function(require,module,exports){
+'use strict';
+
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
+
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
+
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
+
+var _getIterator = require('babel-runtime/core-js/get-iterator')['default'];
+
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _src = require('../../src');
+
+var _src2 = _interopRequireDefault(_src);
+
+var moduleName = 'shinsekai-example.random';
+
+_angular2['default'].module(moduleName, [_src2['default']]);
+
+_angular2['default'].module(moduleName).constant('size', 100);
+_angular2['default'].module(moduleName).constant('width', 800);
+_angular2['default'].module(moduleName).constant('height', 800);
+_angular2['default'].module(moduleName).constant('delay', 2000);
+_angular2['default'].module(moduleName).constant('count', Infinity);
+
+_angular2['default'].module(moduleName).factory('circles', function ($interval, size, delay, count) {
+  var n = 10,
+      circles = [];
+  $interval(function () {
+    if (circles.length < n) {
+      circles.push({});
+    }
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = _getIterator(circles), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var circle = _step.value;
+
+        circle.x = Math.random() * size;
+        circle.y = Math.random() * size;
+        circle.r = Math.random() * 9 + 1;
+        circle.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        circle.strokeColor = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        circle.opacity = Math.random();
+        circle.duration = Math.random() + 0.5;
+        circle.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator['return']) {
+          _iterator['return']();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+  }, delay, count);
+  return circles;
+});
+
+_angular2['default'].module(moduleName).factory('ellipses', function ($interval, size, delay, count) {
+  var n = 10,
+      ellipses = [];
+  $interval(function () {
+    if (ellipses.length < n) {
+      ellipses.push({});
+    }
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = _getIterator(ellipses), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var ellipse = _step2.value;
+
+        ellipse.x = Math.random() * size;
+        ellipse.y = Math.random() * size;
+        ellipse.rx = Math.random() * 9 + 1;
+        ellipse.ry = Math.random() * 9 + 1;
+        ellipse.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        ellipse.strokeColor = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        ellipse.opacity = Math.random();
+        ellipse.duration = Math.random() + 0.5;
+        ellipse.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+          _iterator2['return']();
+        }
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
+      }
+    }
+  }, delay, count);
+  return ellipses;
+});
+
+_angular2['default'].module(moduleName).factory('rects', function ($interval, size, delay, count) {
+  var n = 10,
+      rects = [];
+  $interval(function () {
+    if (rects.length < n) {
+      rects.push({});
+    }
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
+
+    try {
+      for (var _iterator3 = _getIterator(rects), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        var rect = _step3.value;
+
+        rect.x = Math.random() * size;
+        rect.y = Math.random() * size;
+        rect.width = Math.random() * 15 + 5;
+        rect.height = Math.random() * 15 + 5;
+        rect.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        rect.strokeColor = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        rect.opacity = Math.random();
+        rect.duration = Math.random() + 0.5;
+        rect.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError3 = true;
+      _iteratorError3 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion3 && _iterator3['return']) {
+          _iterator3['return']();
+        }
+      } finally {
+        if (_didIteratorError3) {
+          throw _iteratorError3;
+        }
+      }
+    }
+  }, delay, count);
+  return rects;
+});
+
+_angular2['default'].module(moduleName).factory('texts', function ($interval, size, delay, count) {
+  var n = 10,
+      texts = [];
+  $interval(function () {
+    if (texts.length < n) {
+      texts.push({
+        text: 'imai'
+      });
+    }
+    var _iteratorNormalCompletion4 = true;
+    var _didIteratorError4 = false;
+    var _iteratorError4 = undefined;
+
+    try {
+      for (var _iterator4 = _getIterator(texts), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+        var text = _step4.value;
+
+        text.x = Math.random() * size;
+        text.y = Math.random() * size;
+        text.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        text.opacity = Math.random();
+        text.duration = Math.random() + 0.5;
+        text.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError4 = true;
+      _iteratorError4 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion4 && _iterator4['return']) {
+          _iterator4['return']();
+        }
+      } finally {
+        if (_didIteratorError4) {
+          throw _iteratorError4;
+        }
+      }
+    }
+  }, delay, count);
+  return texts;
+});
+
+_angular2['default'].module(moduleName).factory('lines', function ($interval, size, delay, count) {
+  var n = 10,
+      lines = [];
+  $interval(function () {
+    if (lines.length < n) {
+      lines.push({});
+    }
+    var _iteratorNormalCompletion5 = true;
+    var _didIteratorError5 = false;
+    var _iteratorError5 = undefined;
+
+    try {
+      for (var _iterator5 = _getIterator(lines), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+        var line = _step5.value;
+
+        line.x1 = Math.random() * size;
+        line.y1 = Math.random() * size;
+        line.x2 = Math.random() * size;
+        line.y2 = Math.random() * size;
+        line.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        line.opacity = Math.random();
+        line.duration = Math.random() + 0.5;
+        line.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError5 = true;
+      _iteratorError5 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion5 && _iterator5['return']) {
+          _iterator5['return']();
+        }
+      } finally {
+        if (_didIteratorError5) {
+          throw _iteratorError5;
+        }
+      }
+    }
+  }, delay, count);
+  return lines;
+});
+
+_angular2['default'].module(moduleName).factory('paths', function ($interval, size, delay, count) {
+  var n = 5,
+      paths = [];
+  $interval(function () {
+    if (paths.length < n) {
+      var points = [];
+      for (var j = 0; j < 3; ++j) {
+        points.push([size / 2, size / 2]);
+      }
+      paths.push({
+        points: points
+      });
+    }
+    var _iteratorNormalCompletion6 = true;
+    var _didIteratorError6 = false;
+    var _iteratorError6 = undefined;
+
+    try {
+      for (var _iterator6 = _getIterator(paths), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+        var path = _step6.value;
+        var _iteratorNormalCompletion7 = true;
+        var _didIteratorError7 = false;
+        var _iteratorError7 = undefined;
+
+        try {
+          for (var _iterator7 = _getIterator(path.points), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+            var point = _step7.value;
+
+            point[0] = Math.random() * size;
+            point[1] = Math.random() * size;
+          }
+        } catch (err) {
+          _didIteratorError7 = true;
+          _iteratorError7 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion7 && _iterator7['return']) {
+              _iterator7['return']();
+            }
+          } finally {
+            if (_didIteratorError7) {
+              throw _iteratorError7;
+            }
+          }
+        }
+
+        path.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        path.opacity = Math.random();
+        path.duration = Math.random() + 0.5;
+        path.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError6 = true;
+      _iteratorError6 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion6 && _iterator6['return']) {
+          _iterator6['return']();
+        }
+      } finally {
+        if (_didIteratorError6) {
+          throw _iteratorError6;
+        }
+      }
+    }
+  }, delay, count);
+  return paths;
+});
+
+_angular2['default'].module(moduleName).factory('polygons', function ($interval, size, delay, count) {
+  var n = 5,
+      polygons = [];
+  $interval(function () {
+    if (polygons.length < n) {
+      var points = [];
+      for (var j = 0; j < polygons.length + 3; ++j) {
+        points.push([size / 2, size / 2]);
+      }
+      polygons.push({
+        points: points
+      });
+    }
+    var _iteratorNormalCompletion8 = true;
+    var _didIteratorError8 = false;
+    var _iteratorError8 = undefined;
+
+    try {
+      for (var _iterator8 = _getIterator(polygons), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+        var polygon = _step8.value;
+        var _iteratorNormalCompletion9 = true;
+        var _didIteratorError9 = false;
+        var _iteratorError9 = undefined;
+
+        try {
+          for (var _iterator9 = _getIterator(polygon.points), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+            var point = _step9.value;
+
+            point[0] = Math.random() * size;
+            point[1] = Math.random() * size;
+          }
+        } catch (err) {
+          _didIteratorError9 = true;
+          _iteratorError9 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion9 && _iterator9['return']) {
+              _iterator9['return']();
+            }
+          } finally {
+            if (_didIteratorError9) {
+              throw _iteratorError9;
+            }
+          }
+        }
+
+        polygon.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        polygon.opacity = Math.random();
+        polygon.duration = Math.random() + 0.5;
+        polygon.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError8 = true;
+      _iteratorError8 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion8 && _iterator8['return']) {
+          _iterator8['return']();
+        }
+      } finally {
+        if (_didIteratorError8) {
+          throw _iteratorError8;
+        }
+      }
+    }
+  }, delay, count);
+  return polygons;
+});
+
+_angular2['default'].module(moduleName).factory('polylines', function ($interval, size, delay, count) {
+  var n = 5,
+      polylines = [];
+  $interval(function () {
+    if (polylines.length < n) {
+      var points = [];
+      for (var j = 0; j < polylines.length + 3; ++j) {
+        points.push([size / 2, size / 2]);
+      }
+      polylines.push({
+        points: points
+      });
+    }
+    var _iteratorNormalCompletion10 = true;
+    var _didIteratorError10 = false;
+    var _iteratorError10 = undefined;
+
+    try {
+      for (var _iterator10 = _getIterator(polylines), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+        var polyline = _step10.value;
+        var _iteratorNormalCompletion11 = true;
+        var _didIteratorError11 = false;
+        var _iteratorError11 = undefined;
+
+        try {
+          for (var _iterator11 = _getIterator(polyline.points), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+            var point = _step11.value;
+
+            point[0] = Math.random() * size;
+            point[1] = Math.random() * size;
+          }
+        } catch (err) {
+          _didIteratorError11 = true;
+          _iteratorError11 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion11 && _iterator11['return']) {
+              _iterator11['return']();
+            }
+          } finally {
+            if (_didIteratorError11) {
+              throw _iteratorError11;
+            }
+          }
+        }
+
+        polyline.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
+        polyline.opacity = Math.random();
+        polyline.duration = Math.random() + 0.5;
+        polyline.delay = Math.random() * 0.5;
+      }
+    } catch (err) {
+      _didIteratorError10 = true;
+      _iteratorError10 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion10 && _iterator10['return']) {
+          _iterator10['return']();
+        }
+      } finally {
+        if (_didIteratorError10) {
+          throw _iteratorError10;
+        }
+      }
+    }
+  }, delay, count);
+  return polylines;
+});
+
+_angular2['default'].module(moduleName).directive('random', function (Path, Scale) {
+  return {
+    restrict: 'E',
+    templateUrl: 'random.html',
+    scope: {},
+    controllerAs: 'random',
+    controller: (function () {
+      var _class = function controller(size, width, height, circles, ellipses, rects, lines, texts, paths, polygons, polylines) {
+        _classCallCheck(this, _class);
+
+        this.size = size;
+        this.width = width;
+        this.height = height;
+        this.circles = circles;
+        this.ellipses = ellipses;
+        this.rects = rects;
+        this.lines = lines;
+        this.texts = texts;
+        this.paths = paths;
+        this.polygons = polygons;
+        this.polylines = polylines;
+        this.xScale = new Scale().domain(0, size).range(0, width);
+        this.yScale = new Scale().domain(0, size).range(height, 0);
+      };
+
+      _createClass(_class, [{
+        key: 'path',
+        value: function path(points) {
+          var path = new Path(this.xScale.scale(points[0][0]), this.yScale.scale(points[0][1]));
+          for (var i = 1; i < points.length; ++i) {
+            path.lineTo(this.xScale.scale(points[i][0]), this.yScale.scale(points[i][1]));
+          }
+          return path.close().toString();
+        }
+      }, {
+        key: 'points',
+        value: function points(_points) {
+          var _this = this;
+
+          return _points.map(function (p) {
+            return '' + _this.xScale.scale(p[0]) + ',' + _this.yScale.scale(p[1]);
+          }).join(' ');
+        }
+      }, {
+        key: 'initialPath',
+        value: function initialPath(points) {
+          return this.path(points.map(function () {
+            return [0, 0];
+          }));
+        }
+      }, {
+        key: 'initialPoints',
+        value: function initialPoints(points) {
+          return this.points(points.map(function () {
+            return [0, 0];
+          }));
+        }
+      }]);
+
+      return _class;
+    })()
+  };
+});
+
+exports['default'] = moduleName;
+module.exports = exports['default'];
+
+},{"../../src":32,"angular":6,"babel-runtime/core-js/get-iterator":7,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/class-call-check":9,"babel-runtime/helpers/create-class":10,"babel-runtime/helpers/interop-require-default":11}],3:[function(require,module,exports){
+/**
+ * @license AngularJS v1.4.0
+ * (c) 2010-2015 Google, Inc. http://angularjs.org
+ * License: MIT
+ */
+(function(window, angular, undefined) {'use strict';
+
+/**
+ * @ngdoc module
+ * @name ngRoute
+ * @description
+ *
+ * # ngRoute
+ *
+ * The `ngRoute` module provides routing and deeplinking services and directives for angular apps.
+ *
+ * ## Example
+ * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
+ *
+ *
+ * <div doc-module-components="ngRoute"></div>
+ */
+ /* global -ngRouteModule */
+var ngRouteModule = angular.module('ngRoute', ['ng']).
+                        provider('$route', $RouteProvider),
+    $routeMinErr = angular.$$minErr('ngRoute');
+
+/**
+ * @ngdoc provider
+ * @name $routeProvider
+ *
+ * @description
+ *
+ * Used for configuring routes.
+ *
+ * ## Example
+ * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
+ *
+ * ## Dependencies
+ * Requires the {@link ngRoute `ngRoute`} module to be installed.
+ */
+function $RouteProvider() {
+  function inherit(parent, extra) {
+    return angular.extend(Object.create(parent), extra);
+  }
+
+  var routes = {};
+
+  /**
+   * @ngdoc method
+   * @name $routeProvider#when
+   *
+   * @param {string} path Route path (matched against `$location.path`). If `$location.path`
+   *    contains redundant trailing slash or is missing one, the route will still match and the
+   *    `$location.path` will be updated to add or drop the trailing slash to exactly match the
+   *    route definition.
+   *
+   *    * `path` can contain named groups starting with a colon: e.g. `:name`. All characters up
+   *        to the next slash are matched and stored in `$routeParams` under the given `name`
+   *        when the route matches.
+   *    * `path` can contain named groups starting with a colon and ending with a star:
+   *        e.g.`:name*`. All characters are eagerly stored in `$routeParams` under the given `name`
+   *        when the route matches.
+   *    * `path` can contain optional named groups with a question mark: e.g.`:name?`.
+   *
+   *    For example, routes like `/color/:color/largecode/:largecode*\/edit` will match
+   *    `/color/brown/largecode/code/with/slashes/edit` and extract:
+   *
+   *    * `color: brown`
+   *    * `largecode: code/with/slashes`.
+   *
+   *
+   * @param {Object} route Mapping information to be assigned to `$route.current` on route
+   *    match.
+   *
+   *    Object properties:
+   *
+   *    - `controller` – `{(string|function()=}` – Controller fn that should be associated with
+   *      newly created scope or the name of a {@link angular.Module#controller registered
+   *      controller} if passed as a string.
+   *    - `controllerAs` – `{string=}` – An identifier name for a reference to the controller.
+   *      If present, the controller will be published to scope under the `controllerAs` name.
+   *    - `template` – `{string=|function()=}` – html template as a string or a function that
+   *      returns an html template as a string which should be used by {@link
+   *      ngRoute.directive:ngView ngView} or {@link ng.directive:ngInclude ngInclude} directives.
+   *      This property takes precedence over `templateUrl`.
+   *
+   *      If `template` is a function, it will be called with the following parameters:
+   *
+   *      - `{Array.<Object>}` - route parameters extracted from the current
+   *        `$location.path()` by applying the current route
+   *
+   *    - `templateUrl` – `{string=|function()=}` – path or function that returns a path to an html
+   *      template that should be used by {@link ngRoute.directive:ngView ngView}.
+   *
+   *      If `templateUrl` is a function, it will be called with the following parameters:
+   *
+   *      - `{Array.<Object>}` - route parameters extracted from the current
+   *        `$location.path()` by applying the current route
+   *
+   *    - `resolve` - `{Object.<string, function>=}` - An optional map of dependencies which should
+   *      be injected into the controller. If any of these dependencies are promises, the router
+   *      will wait for them all to be resolved or one to be rejected before the controller is
+   *      instantiated.
+   *      If all the promises are resolved successfully, the values of the resolved promises are
+   *      injected and {@link ngRoute.$route#$routeChangeSuccess $routeChangeSuccess} event is
+   *      fired. If any of the promises are rejected the
+   *      {@link ngRoute.$route#$routeChangeError $routeChangeError} event is fired. The map object
+   *      is:
+   *
+   *      - `key` – `{string}`: a name of a dependency to be injected into the controller.
+   *      - `factory` - `{string|function}`: If `string` then it is an alias for a service.
+   *        Otherwise if function, then it is {@link auto.$injector#invoke injected}
+   *        and the return value is treated as the dependency. If the result is a promise, it is
+   *        resolved before its value is injected into the controller. Be aware that
+   *        `ngRoute.$routeParams` will still refer to the previous route within these resolve
+   *        functions.  Use `$route.current.params` to access the new route parameters, instead.
+   *
+   *    - `redirectTo` – {(string|function())=} – value to update
+   *      {@link ng.$location $location} path with and trigger route redirection.
+   *
+   *      If `redirectTo` is a function, it will be called with the following parameters:
+   *
+   *      - `{Object.<string>}` - route parameters extracted from the current
+   *        `$location.path()` by applying the current route templateUrl.
+   *      - `{string}` - current `$location.path()`
+   *      - `{Object}` - current `$location.search()`
+   *
+   *      The custom `redirectTo` function is expected to return a string which will be used
+   *      to update `$location.path()` and `$location.search()`.
+   *
+   *    - `[reloadOnSearch=true]` - {boolean=} - reload route when only `$location.search()`
+   *      or `$location.hash()` changes.
+   *
+   *      If the option is set to `false` and url in the browser changes, then
+   *      `$routeUpdate` event is broadcasted on the root scope.
+   *
+   *    - `[caseInsensitiveMatch=false]` - {boolean=} - match routes without being case sensitive
+   *
+   *      If the option is set to `true`, then the particular route can be matched without being
+   *      case sensitive
+   *
+   * @returns {Object} self
+   *
+   * @description
+   * Adds a new route definition to the `$route` service.
+   */
+  this.when = function(path, route) {
+    //copy original route object to preserve params inherited from proto chain
+    var routeCopy = angular.copy(route);
+    if (angular.isUndefined(routeCopy.reloadOnSearch)) {
+      routeCopy.reloadOnSearch = true;
+    }
+    if (angular.isUndefined(routeCopy.caseInsensitiveMatch)) {
+      routeCopy.caseInsensitiveMatch = this.caseInsensitiveMatch;
+    }
+    routes[path] = angular.extend(
+      routeCopy,
+      path && pathRegExp(path, routeCopy)
+    );
+
+    // create redirection for trailing slashes
+    if (path) {
+      var redirectPath = (path[path.length - 1] == '/')
+            ? path.substr(0, path.length - 1)
+            : path + '/';
+
+      routes[redirectPath] = angular.extend(
+        {redirectTo: path},
+        pathRegExp(redirectPath, routeCopy)
+      );
+    }
+
+    return this;
+  };
+
+  /**
+   * @ngdoc property
+   * @name $routeProvider#caseInsensitiveMatch
+   * @description
+   *
+   * A boolean property indicating if routes defined
+   * using this provider should be matched using a case insensitive
+   * algorithm. Defaults to `false`.
+   */
+  this.caseInsensitiveMatch = false;
+
+   /**
+    * @param path {string} path
+    * @param opts {Object} options
+    * @return {?Object}
+    *
+    * @description
+    * Normalizes the given path, returning a regular expression
+    * and the original path.
+    *
+    * Inspired by pathRexp in visionmedia/express/lib/utils.js.
+    */
+  function pathRegExp(path, opts) {
+    var insensitive = opts.caseInsensitiveMatch,
+        ret = {
+          originalPath: path,
+          regexp: path
+        },
+        keys = ret.keys = [];
+
+    path = path
+      .replace(/([().])/g, '\\$1')
+      .replace(/(\/)?:(\w+)([\?\*])?/g, function(_, slash, key, option) {
+        var optional = option === '?' ? option : null;
+        var star = option === '*' ? option : null;
+        keys.push({ name: key, optional: !!optional });
+        slash = slash || '';
+        return ''
+          + (optional ? '' : slash)
+          + '(?:'
+          + (optional ? slash : '')
+          + (star && '(.+?)' || '([^/]+)')
+          + (optional || '')
+          + ')'
+          + (optional || '');
+      })
+      .replace(/([\/$\*])/g, '\\$1');
+
+    ret.regexp = new RegExp('^' + path + '$', insensitive ? 'i' : '');
+    return ret;
+  }
+
+  /**
+   * @ngdoc method
+   * @name $routeProvider#otherwise
+   *
+   * @description
+   * Sets route definition that will be used on route change when no other route definition
+   * is matched.
+   *
+   * @param {Object|string} params Mapping information to be assigned to `$route.current`.
+   * If called with a string, the value maps to `redirectTo`.
+   * @returns {Object} self
+   */
+  this.otherwise = function(params) {
+    if (typeof params === 'string') {
+      params = {redirectTo: params};
+    }
+    this.when(null, params);
+    return this;
+  };
+
+
+  this.$get = ['$rootScope',
+               '$location',
+               '$routeParams',
+               '$q',
+               '$injector',
+               '$templateRequest',
+               '$sce',
+      function($rootScope, $location, $routeParams, $q, $injector, $templateRequest, $sce) {
+
+    /**
+     * @ngdoc service
+     * @name $route
+     * @requires $location
+     * @requires $routeParams
+     *
+     * @property {Object} current Reference to the current route definition.
+     * The route definition contains:
+     *
+     *   - `controller`: The controller constructor as define in route definition.
+     *   - `locals`: A map of locals which is used by {@link ng.$controller $controller} service for
+     *     controller instantiation. The `locals` contain
+     *     the resolved values of the `resolve` map. Additionally the `locals` also contain:
+     *
+     *     - `$scope` - The current route scope.
+     *     - `$template` - The current route template HTML.
+     *
+     * @property {Object} routes Object with all route configuration Objects as its properties.
+     *
+     * @description
+     * `$route` is used for deep-linking URLs to controllers and views (HTML partials).
+     * It watches `$location.url()` and tries to map the path to an existing route definition.
+     *
+     * Requires the {@link ngRoute `ngRoute`} module to be installed.
+     *
+     * You can define routes through {@link ngRoute.$routeProvider $routeProvider}'s API.
+     *
+     * The `$route` service is typically used in conjunction with the
+     * {@link ngRoute.directive:ngView `ngView`} directive and the
+     * {@link ngRoute.$routeParams `$routeParams`} service.
+     *
+     * @example
+     * This example shows how changing the URL hash causes the `$route` to match a route against the
+     * URL, and the `ngView` pulls in the partial.
+     *
+     * <example name="$route-service" module="ngRouteExample"
+     *          deps="angular-route.js" fixBase="true">
+     *   <file name="index.html">
+     *     <div ng-controller="MainController">
+     *       Choose:
+     *       <a href="Book/Moby">Moby</a> |
+     *       <a href="Book/Moby/ch/1">Moby: Ch1</a> |
+     *       <a href="Book/Gatsby">Gatsby</a> |
+     *       <a href="Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
+     *       <a href="Book/Scarlet">Scarlet Letter</a><br/>
+     *
+     *       <div ng-view></div>
+     *
+     *       <hr />
+     *
+     *       <pre>$location.path() = {{$location.path()}}</pre>
+     *       <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
+     *       <pre>$route.current.params = {{$route.current.params}}</pre>
+     *       <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
+     *       <pre>$routeParams = {{$routeParams}}</pre>
+     *     </div>
+     *   </file>
+     *
+     *   <file name="book.html">
+     *     controller: {{name}}<br />
+     *     Book Id: {{params.bookId}}<br />
+     *   </file>
+     *
+     *   <file name="chapter.html">
+     *     controller: {{name}}<br />
+     *     Book Id: {{params.bookId}}<br />
+     *     Chapter Id: {{params.chapterId}}
+     *   </file>
+     *
+     *   <file name="script.js">
+     *     angular.module('ngRouteExample', ['ngRoute'])
+     *
+     *      .controller('MainController', function($scope, $route, $routeParams, $location) {
+     *          $scope.$route = $route;
+     *          $scope.$location = $location;
+     *          $scope.$routeParams = $routeParams;
+     *      })
+     *
+     *      .controller('BookController', function($scope, $routeParams) {
+     *          $scope.name = "BookController";
+     *          $scope.params = $routeParams;
+     *      })
+     *
+     *      .controller('ChapterController', function($scope, $routeParams) {
+     *          $scope.name = "ChapterController";
+     *          $scope.params = $routeParams;
+     *      })
+     *
+     *     .config(function($routeProvider, $locationProvider) {
+     *       $routeProvider
+     *        .when('/Book/:bookId', {
+     *         templateUrl: 'book.html',
+     *         controller: 'BookController',
+     *         resolve: {
+     *           // I will cause a 1 second delay
+     *           delay: function($q, $timeout) {
+     *             var delay = $q.defer();
+     *             $timeout(delay.resolve, 1000);
+     *             return delay.promise;
+     *           }
+     *         }
+     *       })
+     *       .when('/Book/:bookId/ch/:chapterId', {
+     *         templateUrl: 'chapter.html',
+     *         controller: 'ChapterController'
+     *       });
+     *
+     *       // configure html5 to get links working on jsfiddle
+     *       $locationProvider.html5Mode(true);
+     *     });
+     *
+     *   </file>
+     *
+     *   <file name="protractor.js" type="protractor">
+     *     it('should load and compile correct template', function() {
+     *       element(by.linkText('Moby: Ch1')).click();
+     *       var content = element(by.css('[ng-view]')).getText();
+     *       expect(content).toMatch(/controller\: ChapterController/);
+     *       expect(content).toMatch(/Book Id\: Moby/);
+     *       expect(content).toMatch(/Chapter Id\: 1/);
+     *
+     *       element(by.partialLinkText('Scarlet')).click();
+     *
+     *       content = element(by.css('[ng-view]')).getText();
+     *       expect(content).toMatch(/controller\: BookController/);
+     *       expect(content).toMatch(/Book Id\: Scarlet/);
+     *     });
+     *   </file>
+     * </example>
+     */
+
+    /**
+     * @ngdoc event
+     * @name $route#$routeChangeStart
+     * @eventType broadcast on root scope
+     * @description
+     * Broadcasted before a route change. At this  point the route services starts
+     * resolving all of the dependencies needed for the route change to occur.
+     * Typically this involves fetching the view template as well as any dependencies
+     * defined in `resolve` route property. Once  all of the dependencies are resolved
+     * `$routeChangeSuccess` is fired.
+     *
+     * The route change (and the `$location` change that triggered it) can be prevented
+     * by calling `preventDefault` method of the event. See {@link ng.$rootScope.Scope#$on}
+     * for more details about event object.
+     *
+     * @param {Object} angularEvent Synthetic event object.
+     * @param {Route} next Future route information.
+     * @param {Route} current Current route information.
+     */
+
+    /**
+     * @ngdoc event
+     * @name $route#$routeChangeSuccess
+     * @eventType broadcast on root scope
+     * @description
+     * Broadcasted after a route dependencies are resolved.
+     * {@link ngRoute.directive:ngView ngView} listens for the directive
+     * to instantiate the controller and render the view.
+     *
+     * @param {Object} angularEvent Synthetic event object.
+     * @param {Route} current Current route information.
+     * @param {Route|Undefined} previous Previous route information, or undefined if current is
+     * first route entered.
+     */
+
+    /**
+     * @ngdoc event
+     * @name $route#$routeChangeError
+     * @eventType broadcast on root scope
+     * @description
+     * Broadcasted if any of the resolve promises are rejected.
+     *
+     * @param {Object} angularEvent Synthetic event object
+     * @param {Route} current Current route information.
+     * @param {Route} previous Previous route information.
+     * @param {Route} rejection Rejection of the promise. Usually the error of the failed promise.
+     */
+
+    /**
+     * @ngdoc event
+     * @name $route#$routeUpdate
+     * @eventType broadcast on root scope
+     * @description
+     * The `reloadOnSearch` property has been set to false, and we are reusing the same
+     * instance of the Controller.
+     *
+     * @param {Object} angularEvent Synthetic event object
+     * @param {Route} current Current/previous route information.
+     */
+
+    var forceReload = false,
+        preparedRoute,
+        preparedRouteIsUpdateOnly,
+        $route = {
+          routes: routes,
+
+          /**
+           * @ngdoc method
+           * @name $route#reload
+           *
+           * @description
+           * Causes `$route` service to reload the current route even if
+           * {@link ng.$location $location} hasn't changed.
+           *
+           * As a result of that, {@link ngRoute.directive:ngView ngView}
+           * creates new scope and reinstantiates the controller.
+           */
+          reload: function() {
+            forceReload = true;
+            $rootScope.$evalAsync(function() {
+              // Don't support cancellation of a reload for now...
+              prepareRoute();
+              commitRoute();
+            });
+          },
+
+          /**
+           * @ngdoc method
+           * @name $route#updateParams
+           *
+           * @description
+           * Causes `$route` service to update the current URL, replacing
+           * current route parameters with those specified in `newParams`.
+           * Provided property names that match the route's path segment
+           * definitions will be interpolated into the location's path, while
+           * remaining properties will be treated as query params.
+           *
+           * @param {!Object<string, string>} newParams mapping of URL parameter names to values
+           */
+          updateParams: function(newParams) {
+            if (this.current && this.current.$$route) {
+              newParams = angular.extend({}, this.current.params, newParams);
+              $location.path(interpolate(this.current.$$route.originalPath, newParams));
+              // interpolate modifies newParams, only query params are left
+              $location.search(newParams);
+            } else {
+              throw $routeMinErr('norout', 'Tried updating route when with no current route');
+            }
+          }
+        };
+
+    $rootScope.$on('$locationChangeStart', prepareRoute);
+    $rootScope.$on('$locationChangeSuccess', commitRoute);
+
+    return $route;
+
+    /////////////////////////////////////////////////////
+
+    /**
+     * @param on {string} current url
+     * @param route {Object} route regexp to match the url against
+     * @return {?Object}
+     *
+     * @description
+     * Check if the route matches the current url.
+     *
+     * Inspired by match in
+     * visionmedia/express/lib/router/router.js.
+     */
+    function switchRouteMatcher(on, route) {
+      var keys = route.keys,
+          params = {};
+
+      if (!route.regexp) return null;
+
+      var m = route.regexp.exec(on);
+      if (!m) return null;
+
+      for (var i = 1, len = m.length; i < len; ++i) {
+        var key = keys[i - 1];
+
+        var val = m[i];
+
+        if (key && val) {
+          params[key.name] = val;
+        }
+      }
+      return params;
+    }
+
+    function prepareRoute($locationEvent) {
+      var lastRoute = $route.current;
+
+      preparedRoute = parseRoute();
+      preparedRouteIsUpdateOnly = preparedRoute && lastRoute && preparedRoute.$$route === lastRoute.$$route
+          && angular.equals(preparedRoute.pathParams, lastRoute.pathParams)
+          && !preparedRoute.reloadOnSearch && !forceReload;
+
+      if (!preparedRouteIsUpdateOnly && (lastRoute || preparedRoute)) {
+        if ($rootScope.$broadcast('$routeChangeStart', preparedRoute, lastRoute).defaultPrevented) {
+          if ($locationEvent) {
+            $locationEvent.preventDefault();
+          }
+        }
+      }
+    }
+
+    function commitRoute() {
+      var lastRoute = $route.current;
+      var nextRoute = preparedRoute;
+
+      if (preparedRouteIsUpdateOnly) {
+        lastRoute.params = nextRoute.params;
+        angular.copy(lastRoute.params, $routeParams);
+        $rootScope.$broadcast('$routeUpdate', lastRoute);
+      } else if (nextRoute || lastRoute) {
+        forceReload = false;
+        $route.current = nextRoute;
+        if (nextRoute) {
+          if (nextRoute.redirectTo) {
+            if (angular.isString(nextRoute.redirectTo)) {
+              $location.path(interpolate(nextRoute.redirectTo, nextRoute.params)).search(nextRoute.params)
+                       .replace();
+            } else {
+              $location.url(nextRoute.redirectTo(nextRoute.pathParams, $location.path(), $location.search()))
+                       .replace();
+            }
+          }
+        }
+
+        $q.when(nextRoute).
+          then(function() {
+            if (nextRoute) {
+              var locals = angular.extend({}, nextRoute.resolve),
+                  template, templateUrl;
+
+              angular.forEach(locals, function(value, key) {
+                locals[key] = angular.isString(value) ?
+                    $injector.get(value) : $injector.invoke(value, null, null, key);
+              });
+
+              if (angular.isDefined(template = nextRoute.template)) {
+                if (angular.isFunction(template)) {
+                  template = template(nextRoute.params);
+                }
+              } else if (angular.isDefined(templateUrl = nextRoute.templateUrl)) {
+                if (angular.isFunction(templateUrl)) {
+                  templateUrl = templateUrl(nextRoute.params);
+                }
+                templateUrl = $sce.getTrustedResourceUrl(templateUrl);
+                if (angular.isDefined(templateUrl)) {
+                  nextRoute.loadedTemplateUrl = templateUrl;
+                  template = $templateRequest(templateUrl);
+                }
+              }
+              if (angular.isDefined(template)) {
+                locals['$template'] = template;
+              }
+              return $q.all(locals);
+            }
+          }).
+          then(function(locals) {
+            // after route change
+            if (nextRoute == $route.current) {
+              if (nextRoute) {
+                nextRoute.locals = locals;
+                angular.copy(nextRoute.params, $routeParams);
+              }
+              $rootScope.$broadcast('$routeChangeSuccess', nextRoute, lastRoute);
+            }
+          }, function(error) {
+            if (nextRoute == $route.current) {
+              $rootScope.$broadcast('$routeChangeError', nextRoute, lastRoute, error);
+            }
+          });
+      }
+    }
+
+
+    /**
+     * @returns {Object} the current active route, by matching it against the URL
+     */
+    function parseRoute() {
+      // Match a route
+      var params, match;
+      angular.forEach(routes, function(route, path) {
+        if (!match && (params = switchRouteMatcher($location.path(), route))) {
+          match = inherit(route, {
+            params: angular.extend({}, $location.search(), params),
+            pathParams: params});
+          match.$$route = route;
+        }
+      });
+      // No route matched; fallback to "otherwise" route
+      return match || routes[null] && inherit(routes[null], {params: {}, pathParams:{}});
+    }
+
+    /**
+     * @returns {string} interpolation of the redirect path with the parameters
+     */
+    function interpolate(string, params) {
+      var result = [];
+      angular.forEach((string || '').split(':'), function(segment, i) {
+        if (i === 0) {
+          result.push(segment);
+        } else {
+          var segmentMatch = segment.match(/(\w+)(?:[?*])?(.*)/);
+          var key = segmentMatch[1];
+          result.push(params[key]);
+          result.push(segmentMatch[2] || '');
+          delete params[key];
+        }
+      });
+      return result.join('');
+    }
+  }];
+}
+
+ngRouteModule.provider('$routeParams', $RouteParamsProvider);
+
+
+/**
+ * @ngdoc service
+ * @name $routeParams
+ * @requires $route
+ *
+ * @description
+ * The `$routeParams` service allows you to retrieve the current set of route parameters.
+ *
+ * Requires the {@link ngRoute `ngRoute`} module to be installed.
+ *
+ * The route parameters are a combination of {@link ng.$location `$location`}'s
+ * {@link ng.$location#search `search()`} and {@link ng.$location#path `path()`}.
+ * The `path` parameters are extracted when the {@link ngRoute.$route `$route`} path is matched.
+ *
+ * In case of parameter name collision, `path` params take precedence over `search` params.
+ *
+ * The service guarantees that the identity of the `$routeParams` object will remain unchanged
+ * (but its properties will likely change) even when a route change occurs.
+ *
+ * Note that the `$routeParams` are only updated *after* a route change completes successfully.
+ * This means that you cannot rely on `$routeParams` being correct in route resolve functions.
+ * Instead you can use `$route.current.params` to access the new route's parameters.
+ *
+ * @example
+ * ```js
+ *  // Given:
+ *  // URL: http://server.com/index.html#/Chapter/1/Section/2?search=moby
+ *  // Route: /Chapter/:chapterId/Section/:sectionId
+ *  //
+ *  // Then
+ *  $routeParams ==> {chapterId:'1', sectionId:'2', search:'moby'}
+ * ```
+ */
+function $RouteParamsProvider() {
+  this.$get = function() { return {}; };
+}
+
+ngRouteModule.directive('ngView', ngViewFactory);
+ngRouteModule.directive('ngView', ngViewFillContentFactory);
+
+
+/**
+ * @ngdoc directive
+ * @name ngView
+ * @restrict ECA
+ *
+ * @description
+ * # Overview
+ * `ngView` is a directive that complements the {@link ngRoute.$route $route} service by
+ * including the rendered template of the current route into the main layout (`index.html`) file.
+ * Every time the current route changes, the included view changes with it according to the
+ * configuration of the `$route` service.
+ *
+ * Requires the {@link ngRoute `ngRoute`} module to be installed.
+ *
+ * @animations
+ * enter - animation is used to bring new content into the browser.
+ * leave - animation is used to animate existing content away.
+ *
+ * The enter and leave animation occur concurrently.
+ *
+ * @scope
+ * @priority 400
+ * @param {string=} onload Expression to evaluate whenever the view updates.
+ *
+ * @param {string=} autoscroll Whether `ngView` should call {@link ng.$anchorScroll
+ *                  $anchorScroll} to scroll the viewport after the view is updated.
+ *
+ *                  - If the attribute is not set, disable scrolling.
+ *                  - If the attribute is set without value, enable scrolling.
+ *                  - Otherwise enable scrolling only if the `autoscroll` attribute value evaluated
+ *                    as an expression yields a truthy value.
+ * @example
+    <example name="ngView-directive" module="ngViewExample"
+             deps="angular-route.js;angular-animate.js"
+             animations="true" fixBase="true">
+      <file name="index.html">
+        <div ng-controller="MainCtrl as main">
+          Choose:
+          <a href="Book/Moby">Moby</a> |
+          <a href="Book/Moby/ch/1">Moby: Ch1</a> |
+          <a href="Book/Gatsby">Gatsby</a> |
+          <a href="Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
+          <a href="Book/Scarlet">Scarlet Letter</a><br/>
+
+          <div class="view-animate-container">
+            <div ng-view class="view-animate"></div>
+          </div>
+          <hr />
+
+          <pre>$location.path() = {{main.$location.path()}}</pre>
+          <pre>$route.current.templateUrl = {{main.$route.current.templateUrl}}</pre>
+          <pre>$route.current.params = {{main.$route.current.params}}</pre>
+          <pre>$routeParams = {{main.$routeParams}}</pre>
+        </div>
+      </file>
+
+      <file name="book.html">
+        <div>
+          controller: {{book.name}}<br />
+          Book Id: {{book.params.bookId}}<br />
+        </div>
+      </file>
+
+      <file name="chapter.html">
+        <div>
+          controller: {{chapter.name}}<br />
+          Book Id: {{chapter.params.bookId}}<br />
+          Chapter Id: {{chapter.params.chapterId}}
+        </div>
+      </file>
+
+      <file name="animations.css">
+        .view-animate-container {
+          position:relative;
+          height:100px!important;
+          background:white;
+          border:1px solid black;
+          height:40px;
+          overflow:hidden;
+        }
+
+        .view-animate {
+          padding:10px;
+        }
+
+        .view-animate.ng-enter, .view-animate.ng-leave {
+          -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+          transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+
+          display:block;
+          width:100%;
+          border-left:1px solid black;
+
+          position:absolute;
+          top:0;
+          left:0;
+          right:0;
+          bottom:0;
+          padding:10px;
+        }
+
+        .view-animate.ng-enter {
+          left:100%;
+        }
+        .view-animate.ng-enter.ng-enter-active {
+          left:0;
+        }
+        .view-animate.ng-leave.ng-leave-active {
+          left:-100%;
+        }
+      </file>
+
+      <file name="script.js">
+        angular.module('ngViewExample', ['ngRoute', 'ngAnimate'])
+          .config(['$routeProvider', '$locationProvider',
+            function($routeProvider, $locationProvider) {
+              $routeProvider
+                .when('/Book/:bookId', {
+                  templateUrl: 'book.html',
+                  controller: 'BookCtrl',
+                  controllerAs: 'book'
+                })
+                .when('/Book/:bookId/ch/:chapterId', {
+                  templateUrl: 'chapter.html',
+                  controller: 'ChapterCtrl',
+                  controllerAs: 'chapter'
+                });
+
+              $locationProvider.html5Mode(true);
+          }])
+          .controller('MainCtrl', ['$route', '$routeParams', '$location',
+            function($route, $routeParams, $location) {
+              this.$route = $route;
+              this.$location = $location;
+              this.$routeParams = $routeParams;
+          }])
+          .controller('BookCtrl', ['$routeParams', function($routeParams) {
+            this.name = "BookCtrl";
+            this.params = $routeParams;
+          }])
+          .controller('ChapterCtrl', ['$routeParams', function($routeParams) {
+            this.name = "ChapterCtrl";
+            this.params = $routeParams;
+          }]);
+
+      </file>
+
+      <file name="protractor.js" type="protractor">
+        it('should load and compile correct template', function() {
+          element(by.linkText('Moby: Ch1')).click();
+          var content = element(by.css('[ng-view]')).getText();
+          expect(content).toMatch(/controller\: ChapterCtrl/);
+          expect(content).toMatch(/Book Id\: Moby/);
+          expect(content).toMatch(/Chapter Id\: 1/);
+
+          element(by.partialLinkText('Scarlet')).click();
+
+          content = element(by.css('[ng-view]')).getText();
+          expect(content).toMatch(/controller\: BookCtrl/);
+          expect(content).toMatch(/Book Id\: Scarlet/);
+        });
+      </file>
+    </example>
+ */
+
+
+/**
+ * @ngdoc event
+ * @name ngView#$viewContentLoaded
+ * @eventType emit on the current ngView scope
+ * @description
+ * Emitted every time the ngView content is reloaded.
+ */
+ngViewFactory.$inject = ['$route', '$anchorScroll', '$animate'];
+function ngViewFactory($route, $anchorScroll, $animate) {
+  return {
+    restrict: 'ECA',
+    terminal: true,
+    priority: 400,
+    transclude: 'element',
+    link: function(scope, $element, attr, ctrl, $transclude) {
+        var currentScope,
+            currentElement,
+            previousLeaveAnimation,
+            autoScrollExp = attr.autoscroll,
+            onloadExp = attr.onload || '';
+
+        scope.$on('$routeChangeSuccess', update);
+        update();
+
+        function cleanupLastView() {
+          if (previousLeaveAnimation) {
+            $animate.cancel(previousLeaveAnimation);
+            previousLeaveAnimation = null;
+          }
+
+          if (currentScope) {
+            currentScope.$destroy();
+            currentScope = null;
+          }
+          if (currentElement) {
+            previousLeaveAnimation = $animate.leave(currentElement);
+            previousLeaveAnimation.then(function() {
+              previousLeaveAnimation = null;
+            });
+            currentElement = null;
+          }
+        }
+
+        function update() {
+          var locals = $route.current && $route.current.locals,
+              template = locals && locals.$template;
+
+          if (angular.isDefined(template)) {
+            var newScope = scope.$new();
+            var current = $route.current;
+
+            // Note: This will also link all children of ng-view that were contained in the original
+            // html. If that content contains controllers, ... they could pollute/change the scope.
+            // However, using ng-view on an element with additional content does not make sense...
+            // Note: We can't remove them in the cloneAttchFn of $transclude as that
+            // function is called before linking the content, which would apply child
+            // directives to non existing elements.
+            var clone = $transclude(newScope, function(clone) {
+              $animate.enter(clone, null, currentElement || $element).then(function onNgViewEnter() {
+                if (angular.isDefined(autoScrollExp)
+                  && (!autoScrollExp || scope.$eval(autoScrollExp))) {
+                  $anchorScroll();
+                }
+              });
+              cleanupLastView();
+            });
+
+            currentElement = clone;
+            currentScope = current.scope = newScope;
+            currentScope.$emit('$viewContentLoaded');
+            currentScope.$eval(onloadExp);
+          } else {
+            cleanupLastView();
+          }
+        }
+    }
+  };
+}
+
+// This directive is called during the $transclude call of the first `ngView` directive.
+// It will replace and compile the content of the element with the loaded template.
+// We need this directive so that the element content is already filled when
+// the link function of another directive on the same element as ngView
+// is called.
+ngViewFillContentFactory.$inject = ['$compile', '$controller', '$route'];
+function ngViewFillContentFactory($compile, $controller, $route) {
+  return {
+    restrict: 'ECA',
+    priority: -400,
+    link: function(scope, $element) {
+      var current = $route.current,
+          locals = current.locals;
+
+      $element.html(locals.$template);
+
+      var link = $compile($element.contents());
+
+      if (current.controller) {
+        locals.$scope = scope;
+        var controller = $controller(current.controller, locals);
+        if (current.controllerAs) {
+          scope[current.controllerAs] = controller;
+        }
+        $element.data('$ngControllerController', controller);
+        $element.children().data('$ngControllerController', controller);
+      }
+
+      link(scope);
+    }
+  };
+}
+
+
+})(window, window.angular);
+
+},{}],4:[function(require,module,exports){
+require('./angular-route');
+module.exports = 'ngRoute';
+
+},{"./angular-route":3}],5:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.0
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -28132,15 +29724,15 @@ var minlengthDirective = function() {
 })(window, document);
 
 !window.angular.$$csp() && window.angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],2:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":1}],3:[function(require,module,exports){
+},{"./angular":5}],7:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/get-iterator"), __esModule: true };
-},{"core-js/library/fn/get-iterator":8}],4:[function(require,module,exports){
+},{"core-js/library/fn/get-iterator":12}],8:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
-},{"core-js/library/fn/object/define-property":9}],5:[function(require,module,exports){
+},{"core-js/library/fn/object/define-property":13}],9:[function(require,module,exports){
 "use strict";
 
 exports["default"] = function (instance, Constructor) {
@@ -28150,7 +29742,7 @@ exports["default"] = function (instance, Constructor) {
 };
 
 exports.__esModule = true;
-},{}],6:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
@@ -28175,7 +29767,7 @@ exports["default"] = (function () {
 })();
 
 exports.__esModule = true;
-},{"babel-runtime/core-js/object/define-property":4}],7:[function(require,module,exports){
+},{"babel-runtime/core-js/object/define-property":8}],11:[function(require,module,exports){
 "use strict";
 
 exports["default"] = function (obj) {
@@ -28185,17 +29777,17 @@ exports["default"] = function (obj) {
 };
 
 exports.__esModule = true;
-},{}],8:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 require('../modules/web.dom.iterable');
 require('../modules/es6.string.iterator');
 require('../modules/core.iter-helpers');
 module.exports = require('../modules/$').core.getIterator;
-},{"../modules/$":16,"../modules/core.iter-helpers":23,"../modules/es6.string.iterator":25,"../modules/web.dom.iterable":26}],9:[function(require,module,exports){
+},{"../modules/$":20,"../modules/core.iter-helpers":27,"../modules/es6.string.iterator":29,"../modules/web.dom.iterable":30}],13:[function(require,module,exports){
 var $ = require('../../modules/$');
 module.exports = function defineProperty(it, key, desc){
   return $.setDesc(it, key, desc);
 };
-},{"../../modules/$":16}],10:[function(require,module,exports){
+},{"../../modules/$":20}],14:[function(require,module,exports){
 var $ = require('./$');
 function assert(condition, msg1, msg2){
   if(!condition)throw TypeError(msg2 ? msg1 + msg2 : msg1);
@@ -28214,7 +29806,7 @@ assert.inst = function(it, Constructor, name){
   return it;
 };
 module.exports = assert;
-},{"./$":16}],11:[function(require,module,exports){
+},{"./$":20}],15:[function(require,module,exports){
 var $        = require('./$')
   , TAG      = require('./$.wks')('toStringTag')
   , toString = {}.toString;
@@ -28230,7 +29822,7 @@ cof.set = function(it, tag, stat){
   if(it && !$.has(it = stat ? it : it.prototype, TAG))$.hide(it, TAG, tag);
 };
 module.exports = cof;
-},{"./$":16,"./$.wks":22}],12:[function(require,module,exports){
+},{"./$":20,"./$.wks":26}],16:[function(require,module,exports){
 var $          = require('./$')
   , global     = $.g
   , core       = $.core
@@ -28279,13 +29871,13 @@ function $def(type, name, source){
   }
 }
 module.exports = $def;
-},{"./$":16}],13:[function(require,module,exports){
+},{"./$":20}],17:[function(require,module,exports){
 module.exports = function($){
   $.FW   = false;
   $.path = $.core;
   return $;
 };
-},{}],14:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var $def            = require('./$.def')
   , $redef          = require('./$.redef')
   , $               = require('./$')
@@ -28336,7 +29928,7 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE)
     } else $def($def.P + $def.F * $iter.BUGGY, NAME, methods);
   }
 };
-},{"./$":16,"./$.cof":11,"./$.def":12,"./$.iter":15,"./$.redef":17,"./$.wks":22}],15:[function(require,module,exports){
+},{"./$":20,"./$.cof":15,"./$.def":16,"./$.iter":19,"./$.redef":21,"./$.wks":26}],19:[function(require,module,exports){
 'use strict';
 var $                 = require('./$')
   , cof               = require('./$.cof')
@@ -28378,7 +29970,7 @@ module.exports = {
     cof.set(Constructor, NAME + ' Iterator');
   }
 };
-},{"./$":16,"./$.assert":10,"./$.cof":11,"./$.shared":18,"./$.wks":22}],16:[function(require,module,exports){
+},{"./$":20,"./$.assert":14,"./$.cof":15,"./$.shared":22,"./$.wks":26}],20:[function(require,module,exports){
 'use strict';
 var global = typeof self != 'undefined' ? self : Function('return this')()
   , core   = {}
@@ -28475,16 +30067,16 @@ var $ = module.exports = require('./$.fw')({
 /* eslint-disable no-undef */
 if(typeof __e != 'undefined')__e = core;
 if(typeof __g != 'undefined')__g = global;
-},{"./$.fw":13}],17:[function(require,module,exports){
+},{"./$.fw":17}],21:[function(require,module,exports){
 module.exports = require('./$').hide;
-},{"./$":16}],18:[function(require,module,exports){
+},{"./$":20}],22:[function(require,module,exports){
 var $      = require('./$')
   , SHARED = '__core-js_shared__'
   , store  = $.g[SHARED] || $.hide($.g, SHARED, {})[SHARED];
 module.exports = function(key){
   return store[key] || (store[key] = {});
 };
-},{"./$":16}],19:[function(require,module,exports){
+},{"./$":20}],23:[function(require,module,exports){
 // true  -> String#at
 // false -> String#codePointAt
 var $ = require('./$');
@@ -28502,14 +30094,14 @@ module.exports = function(TO_STRING){
         : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
   };
 };
-},{"./$":16}],20:[function(require,module,exports){
+},{"./$":20}],24:[function(require,module,exports){
 var sid = 0;
 function uid(key){
   return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++sid + Math.random()).toString(36));
 }
 uid.safe = require('./$').g.Symbol || uid;
 module.exports = uid;
-},{"./$":16}],21:[function(require,module,exports){
+},{"./$":20}],25:[function(require,module,exports){
 // 22.1.3.31 Array.prototype[@@unscopables]
 var $           = require('./$')
   , UNSCOPABLES = require('./$.wks')('unscopables');
@@ -28517,19 +30109,19 @@ if($.FW && !(UNSCOPABLES in []))$.hide(Array.prototype, UNSCOPABLES, {});
 module.exports = function(key){
   if($.FW)[][UNSCOPABLES][key] = true;
 };
-},{"./$":16,"./$.wks":22}],22:[function(require,module,exports){
+},{"./$":20,"./$.wks":26}],26:[function(require,module,exports){
 var global = require('./$').g
   , store  = require('./$.shared')('wks');
 module.exports = function(name){
   return store[name] || (store[name] =
     global.Symbol && global.Symbol[name] || require('./$.uid').safe('Symbol.' + name));
 };
-},{"./$":16,"./$.shared":18,"./$.uid":20}],23:[function(require,module,exports){
+},{"./$":20,"./$.shared":22,"./$.uid":24}],27:[function(require,module,exports){
 var core  = require('./$').core
   , $iter = require('./$.iter');
 core.isIterable  = $iter.is;
 core.getIterator = $iter.get;
-},{"./$":16,"./$.iter":15}],24:[function(require,module,exports){
+},{"./$":20,"./$.iter":19}],28:[function(require,module,exports){
 var $          = require('./$')
   , setUnscope = require('./$.unscope')
   , ITER       = require('./$.uid').safe('iter')
@@ -28564,7 +30156,7 @@ Iterators.Arguments = Iterators.Array;
 setUnscope('keys');
 setUnscope('values');
 setUnscope('entries');
-},{"./$":16,"./$.iter":15,"./$.iter-define":14,"./$.uid":20,"./$.unscope":21}],25:[function(require,module,exports){
+},{"./$":20,"./$.iter":19,"./$.iter-define":18,"./$.uid":24,"./$.unscope":25}],29:[function(require,module,exports){
 var set   = require('./$').set
   , $at   = require('./$.string-at')(true)
   , ITER  = require('./$.uid').safe('iter')
@@ -28585,7 +30177,7 @@ require('./$.iter-define')(String, 'String', function(iterated){
   iter.i += point.length;
   return step(0, point);
 });
-},{"./$":16,"./$.iter":15,"./$.iter-define":14,"./$.string-at":19,"./$.uid":20}],26:[function(require,module,exports){
+},{"./$":20,"./$.iter":19,"./$.iter-define":18,"./$.string-at":23,"./$.uid":24}],30:[function(require,module,exports){
 require('./es6.array.iterator');
 var $           = require('./$')
   , Iterators   = require('./$.iter').Iterators
@@ -28600,7 +30192,7 @@ if($.FW){
   if(HTC && !(ITERATOR in HTCProto))$.hide(HTCProto, ITERATOR, ArrayValues);
 }
 Iterators.NodeList = Iterators.HTMLCollection = ArrayValues;
-},{"./$":16,"./$.iter":15,"./$.wks":22,"./es6.array.iterator":24}],27:[function(require,module,exports){
+},{"./$":20,"./$.iter":19,"./$.wks":26,"./es6.array.iterator":28}],31:[function(require,module,exports){
 'use strict';
 
 var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
@@ -28646,7 +30238,7 @@ _angular2['default'].module('shinsekai.ss-axis', []).directive('ssAxis', [functi
 exports['default'] = 'shinsekai.ss-axis';
 module.exports = exports['default'];
 
-},{"angular":2,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/interop-require-default":7}],28:[function(require,module,exports){
+},{"angular":6,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/class-call-check":9,"babel-runtime/helpers/interop-require-default":11}],32:[function(require,module,exports){
 'use strict';
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
@@ -28686,7 +30278,7 @@ _angular2['default'].module('shinsekai', [_svg2['default'], _axis2['default'], _
 exports['default'] = 'shinsekai';
 module.exports = exports['default'];
 
-},{"./axis":27,"./path":29,"./scale":30,"./svg":31,"./transform":32,"angular":2,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/interop-require-default":7}],29:[function(require,module,exports){
+},{"./axis":31,"./path":33,"./scale":34,"./svg":35,"./transform":36,"angular":6,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/interop-require-default":11}],33:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -28741,7 +30333,7 @@ _angular2['default'].module('shinsekai.path', []).factory('Path', [function () {
 exports['default'] = 'shinsekai.path';
 module.exports = exports['default'];
 
-},{"angular":2,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6,"babel-runtime/helpers/interop-require-default":7}],30:[function(require,module,exports){
+},{"angular":6,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/class-call-check":9,"babel-runtime/helpers/create-class":10,"babel-runtime/helpers/interop-require-default":11}],34:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -28806,7 +30398,7 @@ _angular2['default'].module('shinsekai.scale', []).factory('Scale', [function ()
 exports['default'] = 'shinsekai.scale';
 module.exports = exports['default'];
 
-},{"angular":2,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6,"babel-runtime/helpers/interop-require-default":7}],31:[function(require,module,exports){
+},{"angular":6,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/class-call-check":9,"babel-runtime/helpers/create-class":10,"babel-runtime/helpers/interop-require-default":11}],35:[function(require,module,exports){
 'use strict';
 
 var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
@@ -28959,7 +30551,7 @@ _angular2['default'].module('shinsekai.ssvg', []).directive('ssvg', ['$window', 
 exports['default'] = 'shinsekai.ssvg';
 module.exports = exports['default'];
 
-},{"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/interop-require-default":7}],32:[function(require,module,exports){
+},{"angular":6,"babel-runtime/core-js/get-iterator":7,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/interop-require-default":11}],36:[function(require,module,exports){
 'use strict';
 
 var _createClass = require('babel-runtime/helpers/create-class')['default'];
@@ -29061,14 +30653,8 @@ _angular2['default'].module('shinsekai.transform', []).factory('Transform', [fun
 exports['default'] = 'shinsekai.transform';
 module.exports = exports['default'];
 
-},{"angular":2,"babel-runtime/core-js/object/define-property":4,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6,"babel-runtime/helpers/interop-require-default":7}],33:[function(require,module,exports){
+},{"angular":6,"babel-runtime/core-js/object/define-property":8,"babel-runtime/helpers/class-call-check":9,"babel-runtime/helpers/create-class":10,"babel-runtime/helpers/interop-require-default":11}],37:[function(require,module,exports){
 'use strict';
-
-var _createClass = require('babel-runtime/helpers/create-class')['default'];
-
-var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
-
-var _getIterator = require('babel-runtime/core-js/get-iterator')['default'];
 
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
@@ -29076,499 +30662,28 @@ var _angular = require('angular');
 
 var _angular2 = _interopRequireDefault(_angular);
 
-var _src = require('../src');
+var _angularRoute = require('angular-route');
 
-var _src2 = _interopRequireDefault(_src);
+var _angularRoute2 = _interopRequireDefault(_angularRoute);
 
-_angular2['default'].module('hoge', [_src2['default']]);
+var _random = require('./random');
 
-_angular2['default'].module('hoge').constant('size', 100);
-_angular2['default'].module('hoge').constant('width', 800);
-_angular2['default'].module('hoge').constant('height', 800);
-_angular2['default'].module('hoge').constant('delay', 2000);
-_angular2['default'].module('hoge').constant('count', Infinity);
+var _random2 = _interopRequireDefault(_random);
 
-_angular2['default'].module('hoge').factory('circles', function ($interval, size, delay, count) {
-  var n = 10,
-      circles = [];
-  $interval(function () {
-    if (circles.length < n) {
-      circles.push({});
-    }
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
+var _barChart = require('./bar-chart');
 
-    try {
-      for (var _iterator = _getIterator(circles), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var circle = _step.value;
+var _barChart2 = _interopRequireDefault(_barChart);
 
-        circle.x = Math.random() * size;
-        circle.y = Math.random() * size;
-        circle.r = Math.random() * 9 + 1;
-        circle.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
-        circle.strokeColor = 'hsl(' + Math.random() * 360 + ',100%,50%)';
-        circle.opacity = Math.random();
-        circle.duration = Math.random() + 0.5;
-        circle.delay = Math.random() * 0.5;
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator['return']) {
-          _iterator['return']();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
-      }
-    }
-  }, delay, count);
-  return circles;
+var moduleName = 'shinsekai-example';
+
+_angular2['default'].module(moduleName, [_angularRoute2['default'], _random2['default'], _barChart2['default']]);
+
+_angular2['default'].module(moduleName).config(function ($routeProvider) {
+  $routeProvider.when('/random', {
+    template: '<random></random>'
+  }).when('/bar-chart', {
+    template: '<bar-chart></bar-chart>'
+  }).otherwise('/random');
 });
 
-_angular2['default'].module('hoge').factory('ellipses', function ($interval, size, delay, count) {
-  var n = 10,
-      ellipses = [];
-  $interval(function () {
-    if (ellipses.length < n) {
-      ellipses.push({});
-    }
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
-
-    try {
-      for (var _iterator2 = _getIterator(ellipses), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-        var ellipse = _step2.value;
-
-        ellipse.x = Math.random() * size;
-        ellipse.y = Math.random() * size;
-        ellipse.rx = Math.random() * 9 + 1;
-        ellipse.ry = Math.random() * 9 + 1;
-        ellipse.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
-        ellipse.strokeColor = 'hsl(' + Math.random() * 360 + ',100%,50%)';
-        ellipse.opacity = Math.random();
-        ellipse.duration = Math.random() + 0.5;
-        ellipse.delay = Math.random() * 0.5;
-      }
-    } catch (err) {
-      _didIteratorError2 = true;
-      _iteratorError2 = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-          _iterator2['return']();
-        }
-      } finally {
-        if (_didIteratorError2) {
-          throw _iteratorError2;
-        }
-      }
-    }
-  }, delay, count);
-  return ellipses;
-});
-
-_angular2['default'].module('hoge').factory('rects', function ($interval, size, delay, count) {
-  var n = 10,
-      rects = [];
-  $interval(function () {
-    if (rects.length < n) {
-      rects.push({});
-    }
-    var _iteratorNormalCompletion3 = true;
-    var _didIteratorError3 = false;
-    var _iteratorError3 = undefined;
-
-    try {
-      for (var _iterator3 = _getIterator(rects), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-        var rect = _step3.value;
-
-        rect.x = Math.random() * size;
-        rect.y = Math.random() * size;
-        rect.width = Math.random() * 15 + 5;
-        rect.height = Math.random() * 15 + 5;
-        rect.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
-        rect.strokeColor = 'hsl(' + Math.random() * 360 + ',100%,50%)';
-        rect.opacity = Math.random();
-        rect.duration = Math.random() + 0.5;
-        rect.delay = Math.random() * 0.5;
-      }
-    } catch (err) {
-      _didIteratorError3 = true;
-      _iteratorError3 = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion3 && _iterator3['return']) {
-          _iterator3['return']();
-        }
-      } finally {
-        if (_didIteratorError3) {
-          throw _iteratorError3;
-        }
-      }
-    }
-  }, delay, count);
-  return rects;
-});
-
-_angular2['default'].module('hoge').factory('texts', function ($interval, size, delay, count) {
-  var n = 10,
-      texts = [];
-  $interval(function () {
-    if (texts.length < n) {
-      texts.push({
-        text: 'imai'
-      });
-    }
-    var _iteratorNormalCompletion4 = true;
-    var _didIteratorError4 = false;
-    var _iteratorError4 = undefined;
-
-    try {
-      for (var _iterator4 = _getIterator(texts), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-        var text = _step4.value;
-
-        text.x = Math.random() * size;
-        text.y = Math.random() * size;
-        text.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
-        text.opacity = Math.random();
-        text.duration = Math.random() + 0.5;
-        text.delay = Math.random() * 0.5;
-      }
-    } catch (err) {
-      _didIteratorError4 = true;
-      _iteratorError4 = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion4 && _iterator4['return']) {
-          _iterator4['return']();
-        }
-      } finally {
-        if (_didIteratorError4) {
-          throw _iteratorError4;
-        }
-      }
-    }
-  }, delay, count);
-  return texts;
-});
-
-_angular2['default'].module('hoge').factory('lines', function ($interval, size, delay, count) {
-  var n = 10,
-      lines = [];
-  $interval(function () {
-    if (lines.length < n) {
-      lines.push({});
-    }
-    var _iteratorNormalCompletion5 = true;
-    var _didIteratorError5 = false;
-    var _iteratorError5 = undefined;
-
-    try {
-      for (var _iterator5 = _getIterator(lines), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-        var line = _step5.value;
-
-        line.x1 = Math.random() * size;
-        line.y1 = Math.random() * size;
-        line.x2 = Math.random() * size;
-        line.y2 = Math.random() * size;
-        line.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
-        line.opacity = Math.random();
-        line.duration = Math.random() + 0.5;
-        line.delay = Math.random() * 0.5;
-      }
-    } catch (err) {
-      _didIteratorError5 = true;
-      _iteratorError5 = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion5 && _iterator5['return']) {
-          _iterator5['return']();
-        }
-      } finally {
-        if (_didIteratorError5) {
-          throw _iteratorError5;
-        }
-      }
-    }
-  }, delay, count);
-  return lines;
-});
-
-_angular2['default'].module('hoge').factory('paths', function ($interval, size, delay, count) {
-  var n = 5,
-      paths = [];
-  $interval(function () {
-    if (paths.length < n) {
-      var points = [];
-      for (var j = 0; j < 3; ++j) {
-        points.push([size / 2, size / 2]);
-      }
-      paths.push({
-        points: points
-      });
-    }
-    var _iteratorNormalCompletion6 = true;
-    var _didIteratorError6 = false;
-    var _iteratorError6 = undefined;
-
-    try {
-      for (var _iterator6 = _getIterator(paths), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-        var path = _step6.value;
-        var _iteratorNormalCompletion7 = true;
-        var _didIteratorError7 = false;
-        var _iteratorError7 = undefined;
-
-        try {
-          for (var _iterator7 = _getIterator(path.points), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-            var point = _step7.value;
-
-            point[0] = Math.random() * size;
-            point[1] = Math.random() * size;
-          }
-        } catch (err) {
-          _didIteratorError7 = true;
-          _iteratorError7 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion7 && _iterator7['return']) {
-              _iterator7['return']();
-            }
-          } finally {
-            if (_didIteratorError7) {
-              throw _iteratorError7;
-            }
-          }
-        }
-
-        path.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
-        path.opacity = Math.random();
-        path.duration = Math.random() + 0.5;
-        path.delay = Math.random() * 0.5;
-      }
-    } catch (err) {
-      _didIteratorError6 = true;
-      _iteratorError6 = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion6 && _iterator6['return']) {
-          _iterator6['return']();
-        }
-      } finally {
-        if (_didIteratorError6) {
-          throw _iteratorError6;
-        }
-      }
-    }
-  }, delay, count);
-  return paths;
-});
-
-_angular2['default'].module('hoge').factory('polygons', function ($interval, size, delay, count) {
-  var n = 5,
-      polygons = [];
-  $interval(function () {
-    if (polygons.length < n) {
-      var points = [];
-      for (var j = 0; j < polygons.length + 3; ++j) {
-        points.push([size / 2, size / 2]);
-      }
-      polygons.push({
-        points: points
-      });
-    }
-    var _iteratorNormalCompletion8 = true;
-    var _didIteratorError8 = false;
-    var _iteratorError8 = undefined;
-
-    try {
-      for (var _iterator8 = _getIterator(polygons), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-        var polygon = _step8.value;
-        var _iteratorNormalCompletion9 = true;
-        var _didIteratorError9 = false;
-        var _iteratorError9 = undefined;
-
-        try {
-          for (var _iterator9 = _getIterator(polygon.points), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-            var point = _step9.value;
-
-            point[0] = Math.random() * size;
-            point[1] = Math.random() * size;
-          }
-        } catch (err) {
-          _didIteratorError9 = true;
-          _iteratorError9 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion9 && _iterator9['return']) {
-              _iterator9['return']();
-            }
-          } finally {
-            if (_didIteratorError9) {
-              throw _iteratorError9;
-            }
-          }
-        }
-
-        polygon.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
-        polygon.opacity = Math.random();
-        polygon.duration = Math.random() + 0.5;
-        polygon.delay = Math.random() * 0.5;
-      }
-    } catch (err) {
-      _didIteratorError8 = true;
-      _iteratorError8 = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion8 && _iterator8['return']) {
-          _iterator8['return']();
-        }
-      } finally {
-        if (_didIteratorError8) {
-          throw _iteratorError8;
-        }
-      }
-    }
-  }, delay, count);
-  return polygons;
-});
-
-_angular2['default'].module('hoge').factory('polylines', function ($interval, size, delay, count) {
-  var n = 5,
-      polylines = [];
-  $interval(function () {
-    if (polylines.length < n) {
-      var points = [];
-      for (var j = 0; j < polylines.length + 3; ++j) {
-        points.push([size / 2, size / 2]);
-      }
-      polylines.push({
-        points: points
-      });
-    }
-    var _iteratorNormalCompletion10 = true;
-    var _didIteratorError10 = false;
-    var _iteratorError10 = undefined;
-
-    try {
-      for (var _iterator10 = _getIterator(polylines), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
-        var polyline = _step10.value;
-        var _iteratorNormalCompletion11 = true;
-        var _didIteratorError11 = false;
-        var _iteratorError11 = undefined;
-
-        try {
-          for (var _iterator11 = _getIterator(polyline.points), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
-            var point = _step11.value;
-
-            point[0] = Math.random() * size;
-            point[1] = Math.random() * size;
-          }
-        } catch (err) {
-          _didIteratorError11 = true;
-          _iteratorError11 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion11 && _iterator11['return']) {
-              _iterator11['return']();
-            }
-          } finally {
-            if (_didIteratorError11) {
-              throw _iteratorError11;
-            }
-          }
-        }
-
-        polyline.color = 'hsl(' + Math.random() * 360 + ',100%,50%)';
-        polyline.opacity = Math.random();
-        polyline.duration = Math.random() + 0.5;
-        polyline.delay = Math.random() * 0.5;
-      }
-    } catch (err) {
-      _didIteratorError10 = true;
-      _iteratorError10 = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion10 && _iterator10['return']) {
-          _iterator10['return']();
-        }
-      } finally {
-        if (_didIteratorError10) {
-          throw _iteratorError10;
-        }
-      }
-    }
-  }, delay, count);
-  return polylines;
-});
-
-_angular2['default'].module('hoge').directive('main', function (Path, Scale) {
-  return {
-    restrict: 'E',
-    templateUrl: 'main.html',
-    scope: {},
-    controllerAs: 'main',
-    controller: (function () {
-      var _class = function controller(size, width, height, circles, ellipses, rects, lines, texts, paths, polygons, polylines) {
-        _classCallCheck(this, _class);
-
-        this.size = size;
-        this.width = width;
-        this.height = height;
-        this.circles = circles;
-        this.ellipses = ellipses;
-        this.rects = rects;
-        this.lines = lines;
-        this.texts = texts;
-        this.paths = paths;
-        this.polygons = polygons;
-        this.polylines = polylines;
-        this.xScale = new Scale().domain(0, size).range(0, width);
-        this.yScale = new Scale().domain(0, size).range(height, 0);
-      };
-
-      _createClass(_class, [{
-        key: 'path',
-        value: function path(points) {
-          var path = new Path(this.xScale.scale(points[0][0]), this.yScale.scale(points[0][1]));
-          for (var i = 1; i < points.length; ++i) {
-            path.lineTo(this.xScale.scale(points[i][0]), this.yScale.scale(points[i][1]));
-          }
-          return path.close().toString();
-        }
-      }, {
-        key: 'points',
-        value: function points(_points) {
-          var _this = this;
-
-          return _points.map(function (p) {
-            return '' + _this.xScale.scale(p[0]) + ',' + _this.yScale.scale(p[1]);
-          }).join(' ');
-        }
-      }, {
-        key: 'initialPath',
-        value: function initialPath(points) {
-          return this.path(points.map(function () {
-            return [0, 0];
-          }));
-        }
-      }, {
-        key: 'initialPoints',
-        value: function initialPoints(points) {
-          return this.points(points.map(function () {
-            return [0, 0];
-          }));
-        }
-      }]);
-
-      return _class;
-    })()
-  };
-});
-
-},{"../src":28,"angular":2,"babel-runtime/core-js/get-iterator":3,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/create-class":6,"babel-runtime/helpers/interop-require-default":7}]},{},[33]);
+},{"./bar-chart":1,"./random":2,"angular":6,"angular-route":4,"babel-runtime/helpers/interop-require-default":11}]},{},[37]);
