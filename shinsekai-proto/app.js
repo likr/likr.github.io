@@ -648,6 +648,8 @@ _angular2['default'].module(moduleName).directive('scatterPlot', function (Trans
         this.variables = ['sepalLength', 'sepalWidth', 'petalLength', 'petalWidth'];
         this.xVariable = this.variables[0];
         this.yVariable = this.variables[1];
+        this.xTicks = 10;
+        this.yTicks = 10;
         this.xScale = new Scale().range(0, width);
         this.yScale = new Scale().range(height, 0);
         this.updateXVariable();
@@ -30442,7 +30444,7 @@ var _angular2 = _interopRequireDefault(_angular);
 _angular2['default'].module('shinsekai.ss-axis', []).directive('ssAxis', [function () {
   return {
     restrict: 'A',
-    template: '\n      <line\n          stroke="#000"\n          ssvg\n          ss-x1="axis.orient === \'left\' ? 0 : axis.scale.yMin"\n          ss-y1="axis.orient === \'left\' ? axis.scale.yMin : 0"\n          ss-x2="axis.orient === \'left\' ? 0 : axis.scale.yMax"\n          ss-y2="axis.orient === \'left\' ? axis.scale.yMax : 0"/>\n      <g ng-repeat="i in axis.indices">\n        <line\n            stroke="#000"\n            ssvg\n            ss-x1="axis.orient === \'left\' ? -10 : axis.y(i)"\n            ss-y1="axis.orient === \'left\' ? axis.y(i) : 0"\n            ss-x2="axis.orient === \'left\' ? 0 : axis.y(i)"\n            ss-y2="axis.orient === \'left\' ? axis.y(i) : 10"/>\n        <text\n            ng-attr-text-anchor="{{axis.orient === \'left\' ? \'end\' : \'middle\'}}"\n            ssvg\n            ss-x="axis.orient === \'left\' ? -10 : axis.y(i)"\n            ss-y="axis.orient === \'left\' ? axis.y(i) : 30">\n          {{axis.format(axis.x(i))}}\n        </text>\n      </g>\n    ',
+    template: '\n      <line\n          stroke="#000"\n          ssvg\n          ss-x1="axis.orient === \'left\' ? 0 : axis.scale.yMin"\n          ss-y1="axis.orient === \'left\' ? axis.scale.yMin : 0"\n          ss-x2="axis.orient === \'left\' ? 0 : axis.scale.yMax"\n          ss-y2="axis.orient === \'left\' ? axis.scale.yMax : 0"/>\n      <g ng-repeat="i in axis.indices()">\n        <line\n            stroke="#000"\n            ssvg\n            ss-x1="axis.orient === \'left\' ? -10 : axis.y(i)"\n            ss-y1="axis.orient === \'left\' ? axis.y(i) : 0"\n            ss-x2="axis.orient === \'left\' ? 0 : axis.y(i)"\n            ss-y2="axis.orient === \'left\' ? axis.y(i) : 10"\n            ss-dur="0.3"\n            ss-delay="0"/>\n        <text\n            ng-attr-text-anchor="{{axis.orient === \'left\' ? \'end\' : \'middle\'}}"\n            ssvg\n            ss-x="axis.orient === \'left\' ? -10 : axis.y(i)"\n            ss-y="axis.orient === \'left\' ? axis.y(i) : 30"\n            ss-dur="0.3"\n            ss-delay="0">\n          {{axis.format(axis.x(i))}}\n        </text>\n      </g>\n    ',
     scope: {},
     bindToController: {
       orient: '=ssAxis',
@@ -30460,14 +30462,18 @@ _angular2['default'].module('shinsekai.ss-axis', []).directive('ssAxis', [functi
             return x;
           };
         }
-
-        this.indices = [];
-        for (var i = 0; i <= this.ticks; ++i) {
-          this.indices.push(i);
-        }
       }
 
       _createClass(AxisController, [{
+        key: 'indices',
+        value: function indices() {
+          var indices = [];
+          for (var i = 0; i <= this.ticks; ++i) {
+            indices.push(i);
+          }
+          return indices;
+        }
+      }, {
         key: 'x',
         value: function x(i) {
           return (this.scale.xMax - this.scale.xMin) * i / this.ticks + this.scale.xMin;
