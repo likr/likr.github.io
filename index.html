@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A layout example that shows off a responsive product landing page.">
+    <title>Yosuke Onoue's Web Site</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="img/favicon.ico">
+  </head>
+  <body>
+    <div class="header">
+      <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <a class="pure-menu-heading" href="#top">likr's page</a>
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item"><a href="#profile" class="pure-menu-link">Profile</a></li>
+          <li class="pure-menu-item"><a href="#portfolio" class="pure-menu-link">Portfolio</a></li>
+          <li class="pure-menu-item"><a href="#links" class="pure-menu-link">Links</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="top" class="splash-container">
+      <div class="splash">
+        <h1 class="splash-head">Yosuke Onoue</h1>
+        <p class="splash-subhead">Researcher, Software Developer</p>
+      </div>
+    </div>
+
+    <div id="profile" class="content">
+      <div class="pure-g" style="padding: 0 2em;">
+        <div class="pure-u-md-1-5"></div>
+        <div class="pure-u-1 pure-u-md-3-5">
+          <h2 class="content-head is-center">Profile</h2>
+          <div>
+            <p>
+              Yosuke Onoue is currently an assistant professor at the Center for the Promotion of Interdisciplinary Education and Research, Kyoto University.
+              He received the M.S. degree in informatics from Kansai University in 2013, and the Ph.D. degree in engineering from Kyoto University in 2016.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ribbon l-box-lrg pure-g">
+      <div class="l-box-lrg is-center pure-u-1 pure-u-md-1-2 pure-u-lg-2-5">
+        <img class="pure-img-responsive" alt="Bio image" width="300" src="img/bio-onoue.jpg">
+      </div>
+      <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-3-5">
+        <h3 class="content-head content-head-ribbon">Research Interests</h3>
+        <ul>
+          <li>Information Visualization</li>
+          <li>Graph Drawing</li>
+          <li>Combinatorial Optimization</li>
+          <li>Decision Support</li>
+        </ul>
+        <h3 class="content-head content-head-ribbon">Skills</h3>
+        <ul>
+          <li>Front-End Web Development &ndash; HTML, CSS, JavaScript</li>
+          <li>Data Visualization &ndash; D3.js, THREE.js</li>
+          <li>Data Analysis &ndash; C++, Python</li>
+          <li>Performance Tuning &ndash; SIMD, GPGPU</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="portfolio" class="content">
+      <h2 class="content-head is-center">Portfolio</h2>
+      <div class="l-box-lrg pure-g">
+        <div class="l-box-lrg is-center pure-u-1 pure-u-md-1-2 pure-u-lg-2-5">
+          <img class="pure-img-responsive" alt="E-Grid" src="img/egrid.png">
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-3-5">
+          <h2 class="content-head">E-Grid</h2>
+          <p>
+            E-Grid is a visual analytics system for laddering interviews.
+            E-Grid realizes effective analysis using network analysis and graph drawing techniques.
+            E-Grid is published in <a href="https://chrome.google.com/webstore/detail/e-grid/pehikclbemopiakglepnklhedocajidk">Chrome Web Store</a>.
+          </p>
+        </div>
+      </div>
+      <div class="l-box-lrg pure-g">
+        <div class="l-box-lrg is-center pure-u-1 pure-u-md-1-2 pure-u-lg-2-5">
+          <img class="pure-img-responsive" alt="CausalNet" src="img/causalnet.png">
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-3-5">
+          <h2 class="content-head">CausalNet</h2>
+          <p>
+            CausalNet is a visual analytics system for causal graphs.
+            CausalNet visualizes causal graphs using layered graph drawing.
+            Edge concentration techniques are employed to reduce visual clutter.
+            Statistical analysis is also integrated in CausalNet.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="links" class="content">
+      <h2 class="content-head is-center">Links</h2>
+      <div class="pure-g" style="margin: auto; width: 90%;">
+        <div class="link pure-u-1 pure-u-md-1-2">
+          <a href="mailto:onoue@likr-lab.com">
+            <i class="fa fa-envelope"></i> E-Mail &ndash; onoue@likr-lab.com
+          </a>
+        </div>
+        <div class="link pure-u-1 pure-u-md-1-2">
+          <a href="https://github.com/likr">
+            <i class="fa fa-github-square"></i> GitHub &ndash; https://github.com/likr
+          </a>
+        </div>
+        <div class="link pure-u-1 pure-u-md-1-2">
+          <a href="https://twitter.com/_likr">
+            <i class="fa fa-twitter-square"></i> Twitter &ndash; https://twitter.com/_likr
+          </a>
+        </div>
+        <div class="link pure-u-1 pure-u-md-1-2">
+          <a href="https://www.facebook.com/likr0">
+            <i class="fa fa-facebook-square"></i> Facebook &ndash; https://www.facebook.com/likr0
+          </a>
+        </div>
+        <div class="link pure-u-1 pure-u-md-1-2">
+          <a href="https://www.linkedin.com/in/yosuke-onoue-1025b258">
+            <i class="fa fa-linkedin-square"></i> LinkedIn &ndash; https://www.linkedin.com/in/yosuke-onoue-1025b258
+          </a>
+        </div>
+        <div class="link pure-u-1 pure-u-md-1-2">
+          <a href="https://scholar.google.co.jp/citations?user=sdlDSdcAAAAJ">
+            <i class="fa fa-google"></i> Google Scholar &ndash; https://scholar.google.co.jp/citations?user=sdlDSdcAAAAJ
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer l-box is-center">
+      &copy; Copyright 2016, Yosuke Onoue.
+    </div>
+  </body>
+</html>
